@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import '../widgets/box_input_field.dart';
+import '../widgets/app_logo.dart';
+import '../theme/app_theme.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<LoginScreen> createState() => LoginScreenState();
+  State<LoginPage> createState() => LoginPageState();
 }
 
-class LoginScreenState extends State<LoginScreen> {
+class LoginPageState extends State<LoginPage> {
   bool rememberMe = false;
 
   @override
@@ -16,8 +19,7 @@ class LoginScreenState extends State<LoginScreen> {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          colorSchemeSeed: const Color(0xff6750a4), useMaterial3: true),
+      theme: AppTheme.buildThemeData(),
       title: appTitle,
       home: Scaffold(
           body: Padding(
@@ -30,36 +32,11 @@ class LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26)
                   ),
                   const SizedBox(height: 24),
-                  const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image(
-                          image: AssetImage('assets/logo.png'),
-                          width: 135,
-                          height: 101.8,
-                        ),
-                      ]
-                  ),
+                  const AppLogo(),
                   const SizedBox(height: 32),
-                  const SizedBox(
-                    width: 325,
-                    child: TextField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Email",
-                      ),
-                    ),
-                  ),
+                  const BoxInputField(text: "Email"),
                   const SizedBox(height: 32),
-                  const SizedBox(
-                    width: 325,
-                    child: TextField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Password",
-                      ),
-                    ),
-                  ),
+                  const BoxInputField(text: "Password"),
                   const SizedBox(height: 20),
                   CheckboxListTile(
                       controlAffinity: ListTileControlAffinity.leading,
@@ -74,19 +51,12 @@ class LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 40),
                   FilledButton(
                     onPressed: () {},
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all<Color>(Colors.purple),
-                      foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
-                    ),
                     child: const Text("LOGIN"),
                   ),
                   const SizedBox(height: 20),
                   TextButton(
-                      style: ButtonStyle(
-                          foregroundColor: WidgetStateProperty.all<Color>(Colors.purple)
-                      ),
                       onPressed: () {},
-                      child: Text("Non hai un account? Registrati")
+                      child: const Text("Non hai un account? Registrati")
                   )
                 ]
             ),
