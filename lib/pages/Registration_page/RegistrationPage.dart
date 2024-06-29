@@ -1,9 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:game_tracker/controller/playerService.dart';
 import 'package:game_tracker/models/player.dart';
 import 'package:game_tracker/utilities/Utilities.dart';
+import 'package:game_tracker/widgets/RegistrationLoadingScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RegistrationPage extends StatefulWidget{
@@ -17,14 +16,26 @@ class RegistrationPage extends StatefulWidget{
 class _RegistrationPage extends State<RegistrationPage> {
   
    final Playerservice playerService = Playerservice();
-   Player? player;
+   Player player= Player();
    String? username;
    String? password;
    String? email;
+   bool _showRegistrationLoadingScreen = false;
+
+   void _switchScreen(){
+    setState(() {
+       player.username = username;
+       player.email = email;
+       player.password = password;
+      _showRegistrationLoadingScreen = !_showRegistrationLoadingScreen;                 
+    });
+   }
 
    @override
      Widget build(BuildContext context) {
-   return Scaffold(
+   return 
+   !_showRegistrationLoadingScreen ?
+   Scaffold(
         appBar: AppBar(
           toolbarHeight: 150.0,
           flexibleSpace: const MyContainerWidget(),
@@ -89,31 +100,20 @@ class _RegistrationPage extends State<RegistrationPage> {
                     ),
                         );
                       }
-                    else {
-                      Player player = Player();
-                      player.username = username;
-                      player.email = email;
-
-                      String salt = Utilities.generateSalt();
-                      password = Utilities.hashPassword(password!, salt);
-
-                      player.password = password;
-
-                      var JsonPlayer = jsonEncode(player);
-                      try{
-                       playerService.addPlayer(JsonPlayer);
-                      }
-                      catch(errore){
-                        print(errore);
-                      }
+                    else {                
+                      _switchScreen();
                     }
                     },
                     child: const Text("PROSEGUI"),
 
                   ),
         ]),
-        ),
-        );
+        )
+       
+        
+   ) 
+   : RegistrationLoadingScreen(player: player);
+        
   }
 }
 

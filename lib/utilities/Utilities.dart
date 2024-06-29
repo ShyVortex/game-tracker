@@ -1,22 +1,25 @@
-import 'dart:convert';
-import 'dart:math';
-import 'package:pointycastle/pointycastle.dart';
+import 'dart:async';
+import 'package:bcrypt/bcrypt.dart';
+import 'package:flutter/foundation.dart';
 
 class Utilities {
   
-
- static String generateSalt([int length = 32]) {
-  final Random _random = Random.secure();
-  final List<int> salt = List<int>.generate(length, (i) => _random.nextInt(256));
-  return base64Url.encode(salt);
+static Future<String> hashPassword(String password) async {
+  // Hash la password asincronamente
+  return  Future(() => BCrypt.hashpw(password, BCrypt.gensalt()));
 }
 
-  static String hashPassword(String password, String salt) {
-  final pbkdf2 = KeyDerivator('SHA-1/HMAC/PBKDF2');
-  final params = Pbkdf2Parameters(utf8.encode(salt), 10000, 32);
-  pbkdf2.init(params);
-  final key = pbkdf2.process(utf8.encode(password));
-  return base64Url.encode(key);
+static Future<bool> verifyPassword(String password, String hashedPassword) async {
+  // Verifica la password asincronamente
+  return await Future(() => BCrypt.checkpw(password, hashedPassword));
+}
+static String _hashPasswordSync(String password) {
+  // Esegui l'hashing della password in modo sincrono
+  return BCrypt.hashpw(password, BCrypt.gensalt());
+}
+
+static Future<String> hashPasswordAsync(String password) {
+  return compute(_hashPasswordSync, password);
 }
   static bool isValidEmail(String email) {
   String emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
