@@ -5,8 +5,7 @@ import 'package:flutter/foundation.dart';
 class Utilities {
   
 static Future<String> hashPassword(String password) async {
-  // Hash la password asincronamente
-  return  Future(() => BCrypt.hashpw(password, BCrypt.gensalt()));
+  return BCrypt.hashpw(password, BCrypt.gensalt());
 }
 
 static Future<bool> verifyPassword(String password, String hashedPassword) async {

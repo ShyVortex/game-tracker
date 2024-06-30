@@ -13,30 +13,41 @@ class Playerservice {
     'Accept': 'application/json',
   };
 
-    Future<Player?>? addPlayer(Player player) async {
-
+    Future addPlayer(Player player) async {
       Uri uri = Uri.parse('${playerURL}addPlayer');
 
-      return await  Future(() {
-        Utilities.hashPassword(player.password!).then((value) async {
-          player.password = value;
-          var jsonObject = jsonEncode(player);
-            http.post(uri,body: jsonObject, headers: headers).then((response){
-                if(response.statusCode == 200){
+      player.password = await Utilities.hashPassword(player.password!);
+
+      var jsonObject = jsonEncode(player);
+
+      http.Response response = await http.post(uri,body: jsonObject, headers: headers);
+
+      if(response.statusCode == 200){
         var data = jsonDecode(response.body);
         print(data);
-
+        return Player.fromJson(data);
       }
       else {
         print("C'è stato un errore nella chiamata");
+        return null;
       }
-      });
-          });
-      
-  });
+  
 
-      
+    }
+    Future getPlayerByEmail(String email) async {
+      Uri uri = Uri.parse('${playerURL}getPlayerByEmail/$email');
 
+      http.Response response = await http.get(uri,headers:headers);
 
+       if(response.statusCode == 200){
+        var data = jsonDecode(response.body);
+        print(data);
+
+        return Player.fromJson(data);
+      }
+      else {
+        print("C'è stato un errore nella chiamata");
+        return null;
+      }
     }
 }

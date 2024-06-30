@@ -1,5 +1,4 @@
 
-
 import 'package:game_tracker/models/Piattaforma.dart';
 import 'package:game_tracker/models/sesso.dart';
 
@@ -11,8 +10,18 @@ class Player {
   Sesso? _sesso;
   String? _birthday;
   Piattaforma? _piattaformaPreferita;
-
-  Player(){}
+   
+  Player.withParameters({required int? id,required String? username, required String? email,required String? password,required Sesso? sesso,required String? birthday,required Piattaforma? piattaformaPreferita}){
+    _id = id;
+    _username = username;
+    _email = email;
+    _password = password;
+    _sesso = sesso;
+    _birthday = birthday;
+    _piattaformaPreferita = piattaformaPreferita;
+  }
+  Player(){
+  }
 
   int? get id => _id;
   String? get username => _username;
@@ -49,4 +58,15 @@ class Player {
     'birthday': _birthday,
     'piattaformaPreferita': _piattaformaPreferita
   };
+   factory Player.fromJson(Map<String, dynamic> json) {
+    return Player.withParameters(
+      id: json['id'],
+      username: json['username'],
+      email: json['email'],
+      password:json['password'],
+      sesso: json['sesso'],
+      birthday: json['birthday'],
+      piattaformaPreferita : json['piattaformaPreferita']
+    );
+  }
 }

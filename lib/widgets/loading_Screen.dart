@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:game_tracker/controller/playerService.dart';
 import 'package:game_tracker/models/player.dart';
 
-class RegistrationLoadingScreen extends StatelessWidget{
+class LoadingScreen extends StatelessWidget{
   final Player player;
-  final Playerservice _playerservice = Playerservice();
+  final Future httpOperation; 
 
-   RegistrationLoadingScreen({super.key, required this.player});
+   const LoadingScreen({super.key, required this.player, required this.httpOperation});
 
 
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      appBar: AppBar(title: const Text("Registrazione avvenuta")),
       body: 
       FutureBuilder(
-        future: _playerservice.addPlayer(player),
+        future: httpOperation.then((onValue){
+          print("valore ottenuto");
+        }),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(

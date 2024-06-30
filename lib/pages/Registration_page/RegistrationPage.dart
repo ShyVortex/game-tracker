@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:game_tracker/controller/playerService.dart';
 import 'package:game_tracker/models/player.dart';
 import 'package:game_tracker/utilities/Utilities.dart';
-import 'package:game_tracker/widgets/RegistrationLoadingScreen.dart';
+import 'package:game_tracker/widgets/loading_Screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RegistrationPage extends StatefulWidget{
 
-     const RegistrationPage({super.key,});
+     const RegistrationPage({Key? key}) : super(key: key);
 
      @override
      _RegistrationPage createState() => _RegistrationPage();
@@ -34,56 +34,62 @@ class _RegistrationPage extends State<RegistrationPage> {
    @override
      Widget build(BuildContext context) {
    return 
-   !_showRegistrationLoadingScreen ?
+   !_showRegistrationLoadingScreen ? 
    Scaffold(
         appBar: AppBar(
           toolbarHeight: 150.0,
           flexibleSpace: const MyContainerWidget(),
+          leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          }
+          
+        )
         ),
         body:  
          Center(
         child: Column(
           children:[
-             Padding(
-          padding: const EdgeInsets.all(16.0),
+          SizedBox(
+          width: 325,
           child: TextField(
-            textAlign: TextAlign.start,
-            decoration: const InputDecoration(
-              hintText: 'Username',
-              border: OutlineInputBorder(),
-            ),
-             onChanged: (value) {
+          decoration: const InputDecoration(
+          border:  OutlineInputBorder(),
+          labelText: "Username",
+        ),
+        onChanged: (value) {
               username = value;
             },
+      ),      
           ),
-        ),
-         Padding(
-          padding: const EdgeInsets.all(16.0),
+        const SizedBox(height: 32),
+        SizedBox(
+          width: 325,
           child: TextField(
-            textAlign: TextAlign.start,
-            decoration: const InputDecoration(
-              hintText: 'Email',
-              border: OutlineInputBorder(),
-            ),
+          decoration: const InputDecoration(
+          border:  OutlineInputBorder(),
+          labelText: "Email",
+        ),
             onChanged: (value) {
               email = value;
             },
           ),
         ),
-          Padding(
-          padding: const EdgeInsets.all(16.0),
+         const SizedBox(height: 32),
+         SizedBox(
+          width: 325,
           child: TextField(
-            textAlign: TextAlign.start,
-            decoration: const InputDecoration(
-              hintText: 'Password',
-              border: OutlineInputBorder(),
-            ),
+          decoration: const InputDecoration(
+          border:  OutlineInputBorder(),
+          labelText: "Password",
+        ),
             onChanged: (value) {
               password = value;
             },
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 40),
         FilledButton(
                     onPressed: () async {
                       if(password == null||email==null||username==null||password ==''||email == ''||username == ''){
@@ -110,11 +116,14 @@ class _RegistrationPage extends State<RegistrationPage> {
         ]),
         )
        
-        
-   ) 
-   : RegistrationLoadingScreen(player: player);
-        
+   )
+
+  
+   
+   
+      : LoadingScreen(player: player,httpOperation:playerService.addPlayer(player)); 
   }
+   
 }
 
 class MyContainerWidget extends StatelessWidget {
