@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:game_tracker/pages/Registration_page/RegistrationPage.dart';
 
 void main() {
@@ -14,4 +15,10 @@ class MainApp extends StatelessWidget {
       home:  RegistrationPage()
     );
   }
+=======
+import 'package:game_tracker/pages/login.dart';
+
+void main() {
+  runApp(const LoginPage());
+>>>>>>> origin/master
 }
