@@ -16,13 +16,13 @@ class Playerservice {
     Future addPlayer(Player player) async {
       Uri uri = Uri.parse('${playerURL}addPlayer');
 
+      
+      return Future.delayed(const Duration(seconds: 3), () async {
+        
       player.password = await Utilities.hashPassword(player.password!);
-
       var jsonObject = jsonEncode(player);
-
       http.Response response = await http.post(uri,body: jsonObject, headers: headers);
-
-      if(response.statusCode == 200){
+        if(response.statusCode == 200){
         var data = jsonDecode(response.body);
         print(data);
         return Player.fromJson(data);
@@ -31,6 +31,9 @@ class Playerservice {
         print("C'è stato un errore nella chiamata");
         return null;
       }
+    });
+
+      
   
 
     }
@@ -42,12 +45,10 @@ class Playerservice {
        if(response.statusCode == 200){
         var data = jsonDecode(response.body);
         print(data);
-
         return Player.fromJson(data);
       }
       else {
-        print("C'è stato un errore nella chiamata");
-        return null;
+        throw Error();
       }
     }
 }

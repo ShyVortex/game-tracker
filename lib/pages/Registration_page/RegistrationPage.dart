@@ -91,7 +91,7 @@ class _RegistrationPage extends State<RegistrationPage> {
         ),
         const SizedBox(height: 40),
         FilledButton(
-                    onPressed: () async {
+                    onPressed: ()  {
                       if(password == null||email==null||username==null||password ==''||email == ''||username == ''){
                          ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

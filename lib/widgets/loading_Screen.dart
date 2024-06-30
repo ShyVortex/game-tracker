@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:game_tracker/models/player.dart';
+import 'package:game_tracker/pages/Registration_page/selection_game_page.dart';
 
 class LoadingScreen extends StatelessWidget{
   final Player player;
@@ -10,27 +11,23 @@ class LoadingScreen extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      body: 
+    return
       FutureBuilder(
-        future: httpOperation.then((onValue){
-          print("valore ottenuto");
-        }),
+        future: httpOperation,
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+          if (snapshot.hasData) {
+            return SelectionGamePage();
           } else if (snapshot.hasError) {
             return Center(
               child: Text('Error: ${snapshot.error}'),
             );
           } else {
-            return const Placeholder();
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
         },
-      ),
-    );
+      );
   }
 
 }
