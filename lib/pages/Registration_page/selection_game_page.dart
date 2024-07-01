@@ -33,6 +33,15 @@ class _SelectionGamePage extends State<SelectionGamePage> {
     super.initState();
     fetchData();
   }
+  List<Game> _selectedGames(){
+    List<Game> games = [];
+    _games.forEach((element){
+      if(element.isSelected!){
+        games.add(element);
+      }
+    });
+    return games;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,7 +94,7 @@ SizedBox(
        const SizedBox(height:30),
        FilledButton(
                     onPressed: () {
-                      Navigator.push(context,MaterialPageRoute(builder: (context) => LoadingScreen( httpOperation: _gamePlayerservice.performSelection(widget.data, _games)!,widget: const Placeholder(),  )));
+                      Navigator.push(context,MaterialPageRoute(builder: (context) => LoadingScreen( httpOperation: _gamePlayerservice.performSelection(widget.data, _selectedGames())!,widget: const Placeholder(),  )));
                     },
                     child: const Text("CONFERMA"),
                   ),
