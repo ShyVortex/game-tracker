@@ -1,20 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:game_tracker/controller/gamePlayerService.dart';
+import 'package:game_tracker/controller/gameService.dart';
+import 'package:game_tracker/models/game.dart';
 import 'package:game_tracker/widgets/app_logo.dart';
+import 'package:game_tracker/widgets/loading_Screen.dart';
 
 class SelectionGamePage extends StatefulWidget {
+final String? data;
+
+const SelectionGamePage({super.key, required this.data });
+  
+
+
   @override
   _SelectionGamePage createState() => _SelectionGamePage();
 }
 
 class _SelectionGamePage extends State<SelectionGamePage> {
-   final List<ListItem> _listItems = [
-    ListItem(title: 'Item 1'),
-    ListItem(title: 'Item 2'),
-    ListItem(title: 'Item 3'),
-    ListItem(title: 'Item 4'),
-    ListItem(title: 'Item 5'),
-  ];
+   bool isLoading = true;
+   List<Game> _games = [];
+   final Gameservice _gameservice = Gameservice();
+   final GamePlayerservice _gamePlayerservice = GamePlayerservice();
 
+     Future<List<Game>?> fetchData() async {
+    _games = await _gameservice.getAll();
+    setState(() {
+    isLoading = false;
+    });
+     }
+      @override
+    void initState() {
+    super.initState();
+    fetchData();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +40,9 @@ class _SelectionGamePage extends State<SelectionGamePage> {
         automaticallyImplyLeading: false,
         flexibleSpace: const AppLogo(),
       ),
-      body:
+      body: isLoading ? const Center(
+        child: CircularProgressIndicator(),
+      ) :
        Column(children: [
         const Text(
   "QUALI DI QUESTI GIOCHI POSSIEDI?",
@@ -35,37 +55,37 @@ SizedBox(
   height: 430,
   child: 
        ListView.separated(
-        itemCount: _listItems.length,
+        itemCount: _games.length,
         separatorBuilder: (context, index) => Divider(), 
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(_listItems[index].title),
-            subtitle: const Text('Subtitle'),
-            leading: const CircleAvatar(
-              backgroundImage: AssetImage("logo.png"),
+            title: Text(_games[index].nome!),
+            subtitle:  Text(_games[index].sviluppatore!),
+            leading:  CircleAvatar(
+              backgroundImage: NetworkImage(_games[index].immagineURL!),
             ),
             trailing: Checkbox(
-              value: _listItems[index].isSelected,
+              value: _games[index].isSelected,
               onChanged: (bool? value) {
                 setState(() {
-                  _listItems[index].isSelected = value ?? false;
+                  _games[index].isSelected = value ?? false;
                 });
               },
             ),
             
             onTap: () {
               setState(() {
-                _listItems[index].isSelected = !_listItems[index].isSelected;
+                _games[index].isSelected = !_games[index].isSelected!;
               });
             },
           );
         },
       )
       ),
-
+       const SizedBox(height:30),
        FilledButton(
                     onPressed: () {
-
+                      Navigator.push(context,MaterialPageRoute(builder: (context) => LoadingScreen( httpOperation: _gamePlayerservice.performSelection(widget.data, _games)!,widget: const Placeholder(),  )));
                     },
                     child: const Text("CONFERMA"),
                   ),
@@ -75,9 +95,5 @@ SizedBox(
     
   }
   }
-  class ListItem {
-  String title;
-  bool isSelected;
-
-  ListItem({required this.title, this.isSelected = false});
-}
+  
+  

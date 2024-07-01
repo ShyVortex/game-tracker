@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:game_tracker/controller/playerService.dart';
 import 'package:game_tracker/models/player.dart';
+import 'package:game_tracker/pages/Registration_page/selection_game_page.dart';
 import 'package:game_tracker/utilities/Utilities.dart';
 import 'package:game_tracker/widgets/loading_Screen.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -121,7 +122,7 @@ class _RegistrationPage extends State<RegistrationPage> {
   
    
    
-      : LoadingScreen(player: player,httpOperation:playerService.addPlayer(player)); 
+      : LoadingScreen(httpOperation:playerService.addPlayer(player),widget:  SelectionGamePage(data: email )); 
   }
    
 }

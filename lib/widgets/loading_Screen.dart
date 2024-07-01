@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:game_tracker/models/player.dart';
-import 'package:game_tracker/pages/Registration_page/selection_game_page.dart';
 
-class LoadingScreen extends StatelessWidget{
-  final Player player;
+
+class LoadingScreen extends StatelessWidget{ 
+  int? id;
   final Future httpOperation; 
+  final Widget widget;
 
-   const LoadingScreen({super.key, required this.player, required this.httpOperation});
+  LoadingScreen({super.key,  this.id, required this.httpOperation,required this.widget});
 
 
   @override
@@ -16,17 +16,18 @@ class LoadingScreen extends StatelessWidget{
         future: httpOperation,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return SelectionGamePage();
+            print(snapshot.data);
+            return widget;
           } else if (snapshot.hasError) {
             return Center(
               child: Text('Error: ${snapshot.error}'),
             );
-          } else {
+          } else   {
             return const Center(
               child: CircularProgressIndicator(),
             );
           }
-        },
+        }
       );
   }
 
