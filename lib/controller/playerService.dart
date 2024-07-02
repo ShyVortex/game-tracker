@@ -5,7 +5,7 @@ import 'package:game_tracker/utilities/Utilities.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/player.dart';
-class Playerservice {
+class PlayerService {
     final String playerURL = 'http://localhost:8080/api/game-manager/player/';
 
     final  headers = {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:game_tracker/controller/playerService.dart';
 import 'package:game_tracker/models/player.dart';
+import 'package:game_tracker/pages/library/library_page.dart';
 import 'package:game_tracker/pages/registration/signup/signup_page.dart';
 import 'package:game_tracker/utilities/Utilities.dart';
 import '../../../widgets/app_logo.dart';
@@ -16,7 +17,7 @@ class LoginPageState extends State<LoginPage> {
   bool rememberMe = false;
   String? email; 
   String? password;
-  final Playerservice _playerservice = Playerservice();
+  final PlayerService _playerservice = PlayerService();
   Player _player = Player();
   
 
@@ -32,7 +33,11 @@ class LoginPageState extends State<LoginPage> {
                 children: [
                   const Text(
                       "Login",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26)
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 26,
+                        fontFamily: 'Inter'
+                      )
                   ),
                   const SizedBox(height: 24),
                   const AppLogo(),
@@ -43,6 +48,7 @@ class LoginPageState extends State<LoginPage> {
           decoration: const InputDecoration(
           border:  OutlineInputBorder(),
           labelText: "Email",
+              labelStyle: TextStyle(fontFamily: 'Inter')
         ),
             onChanged: (value) {
               email = value;
@@ -56,6 +62,7 @@ class LoginPageState extends State<LoginPage> {
           decoration: const InputDecoration(
           border:  OutlineInputBorder(),
           labelText: "Password",
+            labelStyle: TextStyle(fontFamily: 'Inter')
         ),
             onChanged: (value) {
               password = value;
@@ -65,7 +72,11 @@ class LoginPageState extends State<LoginPage> {
         const SizedBox(height: 20),
         CheckboxListTile(
             controlAffinity: ListTileControlAffinity.leading,
-            title: const Text('Rimani connesso'),
+            title: const Text('Rimani connesso',
+                style: TextStyle(
+                    fontFamily: 'Inter'
+                )
+            ),
             value: rememberMe,
             onChanged: (bool? value) {
               setState(() {
@@ -74,7 +85,12 @@ class LoginPageState extends State<LoginPage> {
             }),
         const SizedBox(height: 40),
         FilledButton(
-            child: const Text("LOGIN"),
+            child: const Text("LOGIN",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                    fontFamily: 'Inter'
+                )
+            ),
             onPressed: () async {
               if (password == null ||
                   email == null ||
@@ -114,7 +130,12 @@ class LoginPageState extends State<LoginPage> {
                       builder: (context) => const SignupPage()),
                 );
               },
-              child: const Text("Non hai un account? Registrati"));
+              child: const Text("Non hai un account? Registrati",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                      fontFamily: 'Inter'
+                  )
+              ));
         })
       ]),
     ));

@@ -5,16 +5,16 @@ import 'package:game_tracker/models/game.dart';
 import 'package:game_tracker/widgets/app_logo.dart';
 import 'package:game_tracker/widgets/loading_Screen.dart';
 
-class GameSelectionPage extends StatefulWidget {
+class GameSelectPage extends StatefulWidget {
 final String? data;
 
-const GameSelectionPage({super.key, required this.data });
+const GameSelectPage({super.key, required this.data });
 
   @override
-  _GameSelectionPage createState() => _GameSelectionPage();
+  GameSelectPageState createState() => GameSelectPageState();
 }
 
-class _GameSelectionPage extends State<GameSelectionPage> {
+class GameSelectPageState extends State<GameSelectPage> {
    bool isLoading = true;
    List<Game> _games = [];
    final Gameservice _gameservice = Gameservice();

@@ -11,12 +11,12 @@ class SignupPage extends StatefulWidget{
      const SignupPage({super.key});
 
      @override
-     _SignupPage createState() => _SignupPage();
+     SignupPageState createState() => SignupPageState();
 }
 
-class _SignupPage extends State<SignupPage> {
+class SignupPageState extends State<SignupPage> {
 
-   final Playerservice playerService = Playerservice();
+   final PlayerService playerService = PlayerService();
    Player player= Player();
    String? username;
    String? password;
@@ -57,6 +57,7 @@ class _SignupPage extends State<SignupPage> {
           decoration: const InputDecoration(
           border:  OutlineInputBorder(),
           labelText: "Username",
+              labelStyle: TextStyle(fontFamily: 'Inter')
         ),
         onChanged: (value) {
               username = value;
@@ -70,6 +71,7 @@ class _SignupPage extends State<SignupPage> {
           decoration: const InputDecoration(
           border:  OutlineInputBorder(),
           labelText: "Email",
+              labelStyle: TextStyle(fontFamily: 'Inter')
         ),
             onChanged: (value) {
               email = value;
@@ -83,6 +85,7 @@ class _SignupPage extends State<SignupPage> {
           decoration: const InputDecoration(
           border:  OutlineInputBorder(),
           labelText: "Password",
+              labelStyle: TextStyle(fontFamily: 'Inter')
         ),
             onChanged: (value) {
               password = value;
@@ -114,7 +117,12 @@ class _SignupPage extends State<SignupPage> {
                       _switchScreen();
                     }
                   },
-                  child: const Text("PROSEGUI"),
+                  child: const Text("PROSEGUI",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Inter'
+                      )
+                  ),
                 ),
             const SizedBox(height: 20),
             Builder(builder: (BuildContext context) {
@@ -126,17 +134,21 @@ class _SignupPage extends State<SignupPage> {
                           builder: (context) => const LoginPage()),
                     );
                   },
-                  child: const Text("Hai già un account? Effettua il login"));
+                  child: const Text("Hai già un account? Effettua il login",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Inter'
+                      )
+                  ));
             })
               ]),
         )
 
    )
-
-
-
-
-      : LoadingScreen(httpOperation:playerService.addPlayer(player),widget:  GameSelectionPage(data: email ));
+        : LoadingScreen(
+            httpOperation: playerService.addPlayer(player),
+            widget: GameSelectPage(data: email)
+   );
   }
 
 }
@@ -151,7 +163,7 @@ class MyContainerWidget extends StatelessWidget {
       child: Column( children:
       [
             Transform.translate(offset: const Offset(0, 30),
-      child: const Text("Registrazione", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26))),
+      child: const Text("Registrazione", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26, fontFamily: 'Inter'))),
             Transform.translate(
         offset: const Offset(0, 30),
         child: Container(
@@ -159,7 +171,7 @@ class MyContainerWidget extends StatelessWidget {
         height: 70,
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('logo1.jpg'),
+            image: AssetImage('assets/logo1.jpg'),
             opacity: 1,
             fit: BoxFit.scaleDown
         ),
@@ -168,7 +180,5 @@ class MyContainerWidget extends StatelessWidget {
       ),
       ])
     );
-
-
   }
 }

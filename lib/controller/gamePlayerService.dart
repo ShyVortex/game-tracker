@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 class GamePlayerservice {
     final String gamePlayerURL = 'http://localhost:8080/api/game-manager/gamePlayer/';
-    final playerservice = Playerservice();
+    final playerservice = PlayerService();
 
     final  headers = {
     'Content-Type': 'application/json',
