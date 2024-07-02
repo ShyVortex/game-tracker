@@ -1,0 +1,4 @@
+enum Sesso{
+  MASCHIO,
+  FEMMINA
+}
