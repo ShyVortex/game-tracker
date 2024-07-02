@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:game_tracker/utilities/Utilities.dart';
-import 'package:http/http.dart ' as http;
+import 'package:http/http.dart' as http;
 
 import '../models/player.dart';
 class Playerservice {

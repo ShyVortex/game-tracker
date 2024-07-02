@@ -1,11 +1,10 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:game_tracker/controller/playerService.dart';
 import 'package:game_tracker/models/game.dart';
 import 'package:game_tracker/models/gamePlayer.dart';
 import 'package:game_tracker/models/player.dart';
-import 'package:http/http.dart%20' as http;
+import 'package:http/http.dart' as http;
 
 class GamePlayerservice {
     final String gamePlayerURL = 'http://localhost:8080/api/game-manager/gamePlayer/';

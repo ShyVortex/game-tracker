@@ -20,8 +20,7 @@ class Player {
     _birthday = birthday;
     _piattaformaPreferita = piattaformaPreferita;
   }
-  Player(){
-  }
+  Player();
 
   int? get id => _id;
   String? get username => _username;

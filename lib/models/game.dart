@@ -1,4 +1,3 @@
-import 'package:game_tracker/models/Piattaforma.dart';
 
 class Game {
   int? _id;

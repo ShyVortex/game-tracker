@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:game_tracker/controller/playerService.dart';
 import 'package:game_tracker/models/player.dart';
-import 'package:game_tracker/pages/Registration_page/selection_game_page.dart';
+import 'package:game_tracker/pages/registration/signup/game_selection_page.dart';
+import 'package:game_tracker/pages/registration/login/login_page.dart';
 import 'package:game_tracker/utilities/Utilities.dart';
 import 'package:game_tracker/widgets/loading_Screen.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-class RegistrationPage extends StatefulWidget{
+class SignupPage extends StatefulWidget{
 
-     const RegistrationPage({Key? key}) : super(key: key);
+     const SignupPage({super.key});
 
      @override
-     _RegistrationPage createState() => _RegistrationPage();
+     _SignupPage createState() => _SignupPage();
 }
 
-class _RegistrationPage extends State<RegistrationPage> {
-  
+class _SignupPage extends State<SignupPage> {
+
    final Playerservice playerService = Playerservice();
    Player player= Player();
    String? username;
@@ -28,14 +28,14 @@ class _RegistrationPage extends State<RegistrationPage> {
        player.username = username;
        player.email = email;
        player.password = password;
-      _showRegistrationLoadingScreen = !_showRegistrationLoadingScreen;                 
+      _showRegistrationLoadingScreen = !_showRegistrationLoadingScreen;
     });
    }
 
    @override
      Widget build(BuildContext context) {
-   return 
-   !_showRegistrationLoadingScreen ? 
+   return
+   !_showRegistrationLoadingScreen ?
    Scaffold(
         appBar: AppBar(
           toolbarHeight: 150.0,
@@ -45,10 +45,9 @@ class _RegistrationPage extends State<RegistrationPage> {
           onPressed: () {
             Navigator.pop(context);
           }
-          
         )
         ),
-        body:  
+        body:
          Center(
         child: Column(
           children:[
@@ -62,7 +61,7 @@ class _RegistrationPage extends State<RegistrationPage> {
         onChanged: (value) {
               username = value;
             },
-      ),      
+      ),
           ),
         const SizedBox(height: 32),
         SizedBox(
@@ -91,40 +90,55 @@ class _RegistrationPage extends State<RegistrationPage> {
           ),
         ),
         const SizedBox(height: 40),
-        FilledButton(
-                    onPressed: ()  {
-                      if(password == null||email==null||username==null||password ==''||email == ''||username == ''){
-                         ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Compilare tutti i campi'),
-                    ),
-                  );
-                      }
-                      else if(Utilities.isValidEmail(email!)){
-                        ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Email non valida, inserire una email valida'),
-                    ),
-                        );
-                      }
-                    else {                
+            FilledButton(
+                  onPressed: () {
+                    if (password == null ||
+                        email == null ||
+                        username == null ||
+                        password == '' ||
+                        email == '' ||
+                        username == '') {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Compilare tutti i campi'),
+                        ),
+                      );
+                    } else if (Utilities.isValidEmail(email!)) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                              'Email non valida, inserire una email valida'),
+                        ),
+                      );
+                    } else {
                       _switchScreen();
                     }
-                    },
-                    child: const Text("PROSEGUI"),
-
-                  ),
-        ]),
+                  },
+                  child: const Text("PROSEGUI"),
+                ),
+            const SizedBox(height: 20),
+            Builder(builder: (BuildContext context) {
+              return TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginPage()),
+                    );
+                  },
+                  child: const Text("Hai già un account? Effettua il login"));
+            })
+              ]),
         )
-       
+
    )
 
-  
-   
-   
-      : LoadingScreen(httpOperation:playerService.addPlayer(player),widget:  SelectionGamePage(data: email )); 
+
+
+
+      : LoadingScreen(httpOperation:playerService.addPlayer(player),widget:  GameSelectionPage(data: email ));
   }
-   
+
 }
 
 class MyContainerWidget extends StatelessWidget {
@@ -134,12 +148,12 @@ class MyContainerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.topCenter,
-      child: Column( children: 
-      [ 
+      child: Column( children:
+      [
             Transform.translate(offset: const Offset(0, 30),
-      child: Text("Registrazione", style: GoogleFonts.aBeeZee(fontSize: 35,color: Colors.black,decoration: TextDecoration.none,))),
+      child: const Text("Registrazione", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26))),
             Transform.translate(
-        offset: const Offset(0, 30), 
+        offset: const Offset(0, 30),
         child: Container(
         width: 70,
         height: 70,
@@ -154,7 +168,7 @@ class MyContainerWidget extends StatelessWidget {
       ),
       ])
     );
-    
-    
+
+
   }
 }

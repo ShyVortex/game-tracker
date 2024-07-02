@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:game_tracker/pages/login.dart';
+import 'package:game_tracker/pages/registration/login/login_page.dart';
 import 'package:game_tracker/theme/app_theme.dart';
 
 void main() {

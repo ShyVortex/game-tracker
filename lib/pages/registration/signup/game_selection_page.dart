@@ -5,18 +5,16 @@ import 'package:game_tracker/models/game.dart';
 import 'package:game_tracker/widgets/app_logo.dart';
 import 'package:game_tracker/widgets/loading_Screen.dart';
 
-class SelectionGamePage extends StatefulWidget {
+class GameSelectionPage extends StatefulWidget {
 final String? data;
 
-const SelectionGamePage({super.key, required this.data });
-  
-
+const GameSelectionPage({super.key, required this.data });
 
   @override
-  _SelectionGamePage createState() => _SelectionGamePage();
+  _GameSelectionPage createState() => _GameSelectionPage();
 }
 
-class _SelectionGamePage extends State<SelectionGamePage> {
+class _GameSelectionPage extends State<GameSelectionPage> {
    bool isLoading = true;
    List<Game> _games = [];
    final Gameservice _gameservice = Gameservice();
@@ -27,6 +25,7 @@ class _SelectionGamePage extends State<SelectionGamePage> {
     setState(() {
     isLoading = false;
     });
+    return null;
      }
       @override
     void initState() {
@@ -35,11 +34,11 @@ class _SelectionGamePage extends State<SelectionGamePage> {
   }
   List<Game> _selectedGames(){
     List<Game> games = [];
-    _games.forEach((element){
+    for (var element in _games) {
       if(element.isSelected!){
         games.add(element);
       }
-    });
+    }
     return games;
   }
   @override
@@ -65,7 +64,7 @@ SizedBox(
   child: 
        ListView.separated(
         itemCount: _games.length,
-        separatorBuilder: (context, index) => Divider(), 
+        separatorBuilder: (context, index) => const Divider(), 
         itemBuilder: (context, index) {
           return ListTile(
             title: Text(_games[index].nome!),
