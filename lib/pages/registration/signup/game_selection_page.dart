@@ -53,22 +53,23 @@ class GameSelectPageState extends State<GameSelectPage> {
       ) :
        Column(children: [
         const Text(
-  "QUALI DI QUESTI GIOCHI POSSIEDI?",
-  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+  "Quali di questi giochi possiedi?",
+  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, fontFamily: 'Inter'),
   textAlign: TextAlign.center, // Allineamento del testo al centro
   maxLines: 2, // Numero massimo di righe
   overflow: TextOverflow.ellipsis, // Troncamento con ellissi se il testo supera le 2 righe
 ),
+  const Padding(padding: EdgeInsets.only(top: 16)),
 SizedBox(
-  height: 430,
+  height: 500,
   child: 
        ListView.separated(
         itemCount: _games.length,
         separatorBuilder: (context, index) => const Divider(), 
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(_games[index].nome!),
-            subtitle:  Text(_games[index].sviluppatore!),
+            title: Text(_games[index].nome!, style: const TextStyle(fontWeight: FontWeight.w600, fontFamily: 'Inter')),
+            subtitle:  Text(_games[index].sviluppatore!, style: const TextStyle(fontFamily: 'Inter')),
             leading:  CircleAvatar(
               backgroundImage: NetworkImage(_games[index].immagineURL!),
             ),
@@ -95,7 +96,11 @@ SizedBox(
                     onPressed: () {
                       Navigator.push(context,MaterialPageRoute(builder: (context) => LoadingScreen( httpOperation: _gamePlayerservice.performSelection(widget.data, _selectedGames())!,widget: const Placeholder(),  )));
                     },
-                    child: const Text("CONFERMA"),
+                    child: const Text("CONFERMA",
+                        style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Inter'
+                    )),
                   ),
     ]
        )
