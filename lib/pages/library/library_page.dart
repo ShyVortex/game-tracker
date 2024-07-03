@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:game_tracker/pages/library/add_game_page.dart';
+import 'package:game_tracker/theme/app_theme.dart';
 
 class LibraryPage extends StatefulWidget {
   const LibraryPage({super.key});
@@ -11,6 +12,7 @@ class LibraryPage extends StatefulWidget {
 class LibraryPageState extends State<LibraryPage> {
   int navigationIndex = 0;
   int addedGames = 0; // variabile placeholder
+  ThemeData themeData = AppTheme.buildThemeData();
 
   void onItemTapped(int index) {
     setState(() {
@@ -91,31 +93,41 @@ class LibraryPageState extends State<LibraryPage> {
           onPressed: onAddPress,
           child: const Icon(Icons.add, color: Colors.white, size: 30),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.library_books),
-              label: 'Libreria'
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                color: themeData.dividerColor.withOpacity(0.12),
+                width: 2.0,
+              ),
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.star),
-              label: 'Preferiti',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profilo',
-            ),
-          ],
-          currentIndex: navigationIndex,
-          unselectedItemColor: Colors.black,
-          unselectedLabelStyle: const TextStyle(
-              fontWeight: FontWeight.w600, fontFamily: 'Inter'
           ),
-          selectedItemColor: Colors.purple,
-          selectedLabelStyle: const TextStyle(
-              fontWeight: FontWeight.w600, fontFamily: 'Inter'
-          ),
-          onTap: onItemTapped,
+          child: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.library_books),
+                  label: 'Libreria'
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.star),
+                label: 'Preferiti',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: 'Profilo',
+              ),
+            ],
+            currentIndex: navigationIndex,
+            unselectedItemColor: Colors.black,
+            unselectedLabelStyle: const TextStyle(
+                fontWeight: FontWeight.w600, fontFamily: 'Inter'
+            ),
+            selectedItemColor: Colors.purple,
+            selectedLabelStyle: const TextStyle(
+                fontWeight: FontWeight.w600, fontFamily: 'Inter'
+            ),
+            onTap: onItemTapped,
+          )
         )
     );
   }

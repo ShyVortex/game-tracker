@@ -1,5 +1,5 @@
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import '../../theme/app_theme.dart';
 
 class AddGamePage extends StatefulWidget {
   const AddGamePage({super.key});
@@ -10,6 +10,7 @@ class AddGamePage extends StatefulWidget {
 
 class AddGamePageState extends State<AddGamePage> {
   int navigationIndex = 0;
+  ThemeData themeData = AppTheme.buildThemeData();
 
   void onItemTapped(int index) {
     setState(() {
@@ -36,46 +37,42 @@ class AddGamePageState extends State<AddGamePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight + 1), // Adjust height to include the divider
+          child: Column(
+            children: [
+              AppBar(
+                title: const Text(
+                  "Aggiunta gioco",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 26,
+                    fontFamily: 'Inter',
+                  ),
+                ),
+                // Impedisce di cambiare colore quando il contenuto viene scrollato
+                forceMaterialTransparency: true
+              ),
+              Divider(
+                height: 1,
+                thickness: 1,
+                color: themeData.dividerColor.withOpacity(0.35), // Divider color
+              ),
+            ],
+          ),
+        ),
         body: Padding(
             padding: const EdgeInsets.only(top: 4),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-              const Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                    onPressed: null,
-                    icon: Icon(Icons.settings, size: 28, color: Colors.black)
-                )
-              ],
-            ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: Row(
-                          children: [
-                            IconButton(onPressed: navigateBack, icon: const Icon(Icons.arrow_back)),
-                            const Padding(padding: EdgeInsets.only(left: 10),
-                              child: Text(
-                                  "Aggiunta gioco",
-                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26, fontFamily: 'Inter')
-                              )
-                            )
-                          ],
-                        )
-                    ),
-                  ],
-                ),
-                const Divider(),
-                Expanded(child: Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+              Expanded(
                   child: SingleChildScrollView(
-                    child:                   Column(
-                      children: [
-                        Row(
+                      child: Padding(
+                padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+                child: Column(
+                  children: [
+                    Row(
                           children: [
                             Card.outlined(
                                 shape: RoundedRectangleBorder(
@@ -251,31 +248,41 @@ class AddGamePageState extends State<AddGamePage> {
           onPressed: onConfirmPress,
           child: const Icon(Icons.check, color: Colors.white, size: 30),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-                icon: Icon(Icons.library_books),
-                label: 'Libreria'
+        bottomNavigationBar: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: themeData.dividerColor.withOpacity(0.12),
+                  width: 2.0,
+                ),
+              ),
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.star),
-              label: 'Preferiti',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profilo',
-            ),
-          ],
-          currentIndex: navigationIndex,
-          unselectedItemColor: Colors.black,
-          unselectedLabelStyle: const TextStyle(
-              fontWeight: FontWeight.w600, fontFamily: 'Inter'
-          ),
-          selectedItemColor: Colors.purple,
-          selectedLabelStyle: const TextStyle(
-              fontWeight: FontWeight.w600, fontFamily: 'Inter'
-          ),
-          onTap: onItemTapped,
+            child: BottomNavigationBar(
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.library_books),
+                    label: 'Libreria'
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.star),
+                  label: 'Preferiti',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person),
+                  label: 'Profilo',
+                ),
+              ],
+              currentIndex: navigationIndex,
+              unselectedItemColor: Colors.black,
+              unselectedLabelStyle: const TextStyle(
+                  fontWeight: FontWeight.w600, fontFamily: 'Inter'
+              ),
+              selectedItemColor: Colors.purple,
+              selectedLabelStyle: const TextStyle(
+                  fontWeight: FontWeight.w600, fontFamily: 'Inter'
+              ),
+              onTap: onItemTapped,
+            )
         )
     );
   }
