@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:game_tracker/pages/library/add_game_page.dart';
 
 class LibraryPage extends StatefulWidget {
   const LibraryPage({super.key});
@@ -15,6 +16,12 @@ class LibraryPageState extends State<LibraryPage> {
     setState(() {
       navigationIndex = index;
     });
+  }
+
+  void onAddPress() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const AddGamePage())
+    );
   }
 
   @override
@@ -81,9 +88,7 @@ class LibraryPageState extends State<LibraryPage> {
         floatingActionButton: FloatingActionButton(
           shape: const CircleBorder(),
           backgroundColor: Colors.purple,
-          onPressed: () {
-            // Add your onPressed code here!
-          },
+          onPressed: onAddPress,
           child: const Icon(Icons.add, color: Colors.white, size: 30),
         ),
         bottomNavigationBar: BottomNavigationBar(
