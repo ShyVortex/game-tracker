@@ -17,6 +17,9 @@ dependencies:
   dotted_border: ^2.1.0
   geolocator: ^10.1.0
   osm_nominatim: ^3.0.0
+  flutter_localizations:
+    sdk: flutter
+  intl: any
 
 dev_dependencies:
   flutter_test:

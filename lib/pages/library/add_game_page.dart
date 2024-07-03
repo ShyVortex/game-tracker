@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:game_tracker/widgets/date_picker_field.dart';
 import '../../theme/app_theme.dart';
 
 class AddGamePage extends StatefulWidget {
@@ -56,7 +57,7 @@ class AddGamePageState extends State<AddGamePage> {
               Divider(
                 height: 1,
                 thickness: 1,
-                color: themeData.dividerColor.withOpacity(0.35), // Divider color
+                color: themeData.dividerColor.withOpacity(0.35),
               ),
             ],
           ),
@@ -204,16 +205,7 @@ class AddGamePageState extends State<AddGamePage> {
                           ],
                         ),
                         const SizedBox(height: 10),
-                        const SizedBox(
-                            width: 300,
-                            child: TextField(
-                                decoration: InputDecoration(
-                                    border:  OutlineInputBorder(),
-                                    labelText: "Data completamento",
-                                    labelStyle: TextStyle(fontFamily: 'Inter')
-                                )
-                            )
-                        ),
+                        const DatePickerField(),
                         const SizedBox(height: 24),
                         SizedBox(
                           width: 300,

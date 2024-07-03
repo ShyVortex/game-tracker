@@ -3,7 +3,7 @@ import 'package:game_tracker/controller/gamePlayerService.dart';
 import 'package:game_tracker/controller/gameService.dart';
 import 'package:game_tracker/models/game.dart';
 import 'package:game_tracker/widgets/app_logo.dart';
-import 'package:game_tracker/widgets/loading_Screen.dart';
+import 'package:game_tracker/widgets/loading_screen.dart';
 
 class GameSelectPage extends StatefulWidget {
 final String? data;

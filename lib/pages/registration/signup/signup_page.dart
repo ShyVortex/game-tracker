@@ -4,7 +4,7 @@ import 'package:game_tracker/models/player.dart';
 import 'package:game_tracker/pages/registration/signup/game_selection_page.dart';
 import 'package:game_tracker/pages/registration/login/login_page.dart';
 import 'package:game_tracker/utilities/Utilities.dart';
-import 'package:game_tracker/widgets/loading_Screen.dart';
+import 'package:game_tracker/widgets/loading_screen.dart';
 
 class SignupPage extends StatefulWidget{
 
