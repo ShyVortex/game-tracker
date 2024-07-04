@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_tracker/controller/playerService.dart';
+import 'package:game_tracker/main.dart';
 import 'package:game_tracker/models/player.dart';
-import 'package:game_tracker/pages/library/library_page.dart';
+import 'package:game_tracker/pages/navigationBar/navigation_page.dart';
 import 'package:game_tracker/pages/registration/signup/signup_page.dart';
 import 'package:game_tracker/utilities/Utilities.dart';
 import '../../../widgets/app_logo.dart';
@@ -20,7 +22,6 @@ class LoginPageState extends State<LoginPage> {
   final PlayerService _playerservice = PlayerService();
   Player _player = Player();
   
-
   @override
   Widget build(BuildContext context) {
     
@@ -84,7 +85,9 @@ class LoginPageState extends State<LoginPage> {
               });
             }),
         const SizedBox(height: 40),
-        FilledButton(
+        Consumer(
+          builder: (context, ref,child){
+        return FilledButton(
             child: const Text("LOGIN",
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
@@ -104,10 +107,13 @@ class LoginPageState extends State<LoginPage> {
                   _player = await _playerservice.getPlayerByEmail(email!);
                   if (await Utilities.verifyPassword(
                       password!, _player.password!)) {
+
+                    ref.read(playerProvider.notifier).state = _player;
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const LibraryPage()),
+                          builder: (context) =>  const NavigationPage())
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -119,7 +125,8 @@ class LoginPageState extends State<LoginPage> {
                   ));
                 }
               }
-            }),
+        });
+          }),
         const SizedBox(height: 20),
         Builder(builder: (BuildContext context) {
           return TextButton(

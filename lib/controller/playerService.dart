@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:game_tracker/models/gamePlayer.dart';
 import 'package:game_tracker/utilities/Utilities.dart';
 import 'package:http/http.dart' as http;
 
@@ -51,4 +52,54 @@ class PlayerService {
         throw Error();
       }
     }
+    Future getAllGiochiPosseduti(int id) async {
+      Uri uri = Uri.parse('${playerURL}getGiochiPosseduti/$id');
+
+      http.Response response = await http.get(uri,headers:headers);
+      List<Gameplayer> games = [];
+      if(response.statusCode == 200){
+        List<dynamic> data = jsonDecode(response.body);
+        
+
+        games = data.map((json) => Gameplayer.fromJson(json)).toList();
+        
+       
+        return games;
+      }
+      else {
+        throw Error();
+      }
+
+    }
+  Future getAllGiochiPreferiti(int id) async {
+     Uri uri = Uri.parse('${playerURL}getGiochiPreferiti/$id');
+
+      http.Response response = await http.get(uri,headers:headers);
+      List<Gameplayer> games = [];
+      if(response.statusCode == 200){
+        List<dynamic> data = jsonDecode(response.body);
+        
+
+        games = data.map((json) => Gameplayer.fromJson(json)).toList();
+        
+       
+        return games;
+      }
+      else {
+        throw Error();
+      }
+  }
+  Future setPreferito(int idGame, int idPlayer,bool preferito) async {
+    Uri uri = Uri.parse('${playerURL}setPreferito/$idGame/$idPlayer/$preferito');
+
+    http.Response response = await http.put(uri,headers:headers);
+
+    if(response.statusCode == 200){
+         var data = jsonDecode(response.body);
+         return  Gameplayer.fromJson(data);
+      }
+      else {
+        throw Error();
+      }
+  }
 }

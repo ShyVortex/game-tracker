@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_tracker/controller/gamePlayerService.dart';
 import 'package:game_tracker/controller/gameService.dart';
+import 'package:game_tracker/controller/playerService.dart';
+import 'package:game_tracker/main.dart';
 import 'package:game_tracker/models/game.dart';
+import 'package:game_tracker/models/player.dart';
+import 'package:game_tracker/pages/navigationBar/navigation_page.dart';
 import 'package:game_tracker/widgets/app_logo.dart';
 import 'package:game_tracker/widgets/loading_screen.dart';
 
@@ -17,15 +22,18 @@ const GameSelectPage({super.key, required this.data });
 class GameSelectPageState extends State<GameSelectPage> {
    bool isLoading = true;
    List<Game> _games = [];
+   Player _player = Player();
+   final PlayerService _playerService = PlayerService();
    final Gameservice _gameservice = Gameservice();
    final GamePlayerservice _gamePlayerservice = GamePlayerservice();
 
      Future<List<Game>?> fetchData() async {
     _games = await _gameservice.getAll();
+    _player = await _playerService.getPlayerByEmail(widget.data!);
     setState(() {
     isLoading = false;
     });
-    return null;
+    return _games;
      }
       @override
     void initState() {
@@ -92,16 +100,20 @@ SizedBox(
       )
       ),
        const SizedBox(height:30),
-       FilledButton(
+       Consumer(builder: (context,ref,child){
+        return FilledButton(
                     onPressed: () {
-                      Navigator.push(context,MaterialPageRoute(builder: (context) => LoadingScreen( httpOperation: _gamePlayerservice.performSelection(widget.data, _selectedGames())!,widget: const Placeholder(),  )));
+                      ref.read(playerProvider.notifier).state = _player;
+                      Navigator.push(context,MaterialPageRoute(builder: (context) => LoadingScreen( httpOperation: _gamePlayerservice.performSelection(widget.data, _selectedGames())!,widget: const NavigationPage())));
                     },
                     child: const Text("CONFERMA",
                         style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Inter'
                     )),
-                  ),
+                  );
+       })
+       
     ]
        )
     );
