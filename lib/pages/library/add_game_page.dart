@@ -11,19 +11,12 @@ class AddGamePage extends StatefulWidget {
 }
 
 class AddGamePageState extends State<AddGamePage> {
-  int navigationIndex = 0;
   ThemeData themeData = AppTheme.buildThemeData();
   static const List<String> list = <String>[
     '0/10', '1/10', '2/10', '3/10', '4/10', '5/10', '6/10', '7/10', '8/10',
     '9/10', '10/10'
   ];
   String dropdownValue = "";
-
-  void onItemTapped(int index) {
-    setState(() {
-      navigationIndex = index;
-    });
-  }
 
   void navigateBack() {
     Navigator.pop(context);
@@ -257,42 +250,6 @@ class AddGamePageState extends State<AddGamePage> {
           onPressed: onConfirmPress,
           child: const Icon(Icons.check, color: Colors.white, size: 30),
         ),
-        bottomNavigationBar: Container(
-            decoration: BoxDecoration(
-              border: Border(
-                top: BorderSide(
-                  color: themeData.dividerColor.withOpacity(0.12),
-                  width: 2.0,
-                ),
-              ),
-            ),
-            child: BottomNavigationBar(
-              items: const <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.library_books),
-                    label: 'Libreria'
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.star),
-                  label: 'Preferiti',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  label: 'Profilo',
-                ),
-              ],
-              currentIndex: navigationIndex,
-              unselectedItemColor: Colors.black,
-              unselectedLabelStyle: const TextStyle(
-                  fontWeight: FontWeight.w600, fontFamily: 'Inter'
-              ),
-              selectedItemColor: Colors.purple,
-              selectedLabelStyle: const TextStyle(
-                  fontWeight: FontWeight.w600, fontFamily: 'Inter'
-              ),
-              onTap: onItemTapped,
-            )
-        )
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:game_tracker/pages/library/add_game_page.dart';
-import 'package:game_tracker/theme/app_theme.dart';
 import 'package:game_tracker/controller/playerService.dart';
 import 'package:game_tracker/models/gamePlayer.dart';
 import 'package:game_tracker/widgets/square_avatar.dart';
@@ -14,10 +13,8 @@ class LibraryPage extends StatefulWidget {
 }
 
 class LibraryPageState extends State<LibraryPage> {
-  int navigationIndex = 0;
   List<Gameplayer> _games = [];
-  PlayerService _playerService = PlayerService();
-  ThemeData themeData = AppTheme.buildThemeData();
+  final PlayerService _playerService = PlayerService();
 
   @override
   void initState()  {
@@ -130,42 +127,6 @@ class LibraryPageState extends State<LibraryPage> {
           onPressed: onAddPress,
           child: const Icon(Icons.add, color: Colors.white, size: 30),
         ),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                color: themeData.dividerColor.withOpacity(0.12),
-                width: 2.0,
-              ),
-            ),
-          ),
-          child: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.library_books),
-                  label: 'Libreria'
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.star),
-                label: 'Preferiti',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                label: 'Profilo',
-              ),
-            ],
-            currentIndex: navigationIndex,
-            unselectedItemColor: Colors.black,
-            unselectedLabelStyle: const TextStyle(
-                fontWeight: FontWeight.w600, fontFamily: 'Inter'
-            ),
-            selectedItemColor: Colors.purple,
-            selectedLabelStyle: const TextStyle(
-                fontWeight: FontWeight.w600, fontFamily: 'Inter'
-            ),
-            onTap: onItemTapped,
-          )
-        )
     );
   }
 }

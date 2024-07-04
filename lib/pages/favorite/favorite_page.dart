@@ -74,7 +74,7 @@ class _FavoritePageState extends State<FavoritePage> {
                               textAlign: TextAlign.center,
                             ),
                             SizedBox(height: 20),
-                            Text("Vai nella libreria per aggiungerne uno",
+                            Text("Aggiungine uno dalla libreria!",
                               style: TextStyle(
                                   fontSize: 22,
                                   fontFamily: 'Inter'),
@@ -114,14 +114,6 @@ class _FavoritePageState extends State<FavoritePage> {
             ]
             )
             ),
-          floatingActionButton: FloatingActionButton(
-          shape: const CircleBorder(),
-          backgroundColor: Colors.purple,
-          onPressed: () {
-            // Add your onPressed code here!
-          },
-          child: const Icon(Icons.add, color: Colors.white, size: 30),
-        ),
     );
   }
   
