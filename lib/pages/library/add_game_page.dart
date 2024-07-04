@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:game_tracker/widgets/date_picker_field.dart';
+import 'package:game_tracker/widgets/location_field.dart';
 import '../../theme/app_theme.dart';
 
 class AddGamePage extends StatefulWidget {
@@ -12,6 +13,11 @@ class AddGamePage extends StatefulWidget {
 class AddGamePageState extends State<AddGamePage> {
   int navigationIndex = 0;
   ThemeData themeData = AppTheme.buildThemeData();
+  static const List<String> list = <String>[
+    '0/10', '1/10', '2/10', '3/10', '4/10', '5/10', '6/10', '7/10', '8/10',
+    '9/10', '10/10'
+  ];
+  String dropdownValue = "";
 
   void onItemTapped(int index) {
     setState(() {
@@ -39,7 +45,7 @@ class AddGamePageState extends State<AddGamePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(kToolbarHeight + 1), // Adjust height to include the divider
+          preferredSize: const Size.fromHeight(kToolbarHeight + 1), // +1 è lo spazio dedicato al Divider
           child: Column(
             children: [
               AppBar(
@@ -207,28 +213,39 @@ class AddGamePageState extends State<AddGamePage> {
                         const SizedBox(height: 10),
                         const DatePickerField(),
                         const SizedBox(height: 24),
-                        SizedBox(
-                          width: 300,
-                          child: OutlinedButton.icon(
-                              onPressed: onAddPlace,
-                              icon: const Icon(Icons.location_on),
-                              label: const Text("Dove hai completato il gioco?")
+                        const LocationField(),
+                        const SizedBox(height: 24),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 9),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Column(
+                                children: [
+                                  const Text("Valutazione", style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'Inter'
+                                  )),
+                                  DropdownMenu<String>(
+                                    initialSelection: "",
+                                    onSelected: (String? value) {
+                                      setState(() {
+                                        dropdownValue = value!;
+                                      });
+                                    },
+                                    dropdownMenuEntries: list.map<DropdownMenuEntry<String>>((String value) {
+                                      return DropdownMenuEntry<String>(value: value, label: value);
+                                    }).toList(),
+                                  )
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 24),
-                        const SizedBox(
-                            width: 300,
-                            child: TextField(
-                                decoration: InputDecoration(
-                                    border:  OutlineInputBorder(),
-                                    labelText: "Valutazione",
-                                    labelStyle: TextStyle(fontFamily: 'Inter')
-                                )
-                            )
-                        ),
-                        const SizedBox(height: 84)
-                      ],
-                    ),
+                    const SizedBox(height: 84)
+                          ],
+                        )
                   )
                 ))
             ]
