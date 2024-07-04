@@ -15,6 +15,7 @@ class LibraryPage extends StatefulWidget {
 class LibraryPageState extends State<LibraryPage> {
   List<Gameplayer> _games = [];
   final PlayerService _playerService = PlayerService();
+  bool _isLoading = true;
 
   @override
   void initState()  {
@@ -22,6 +23,7 @@ class LibraryPageState extends State<LibraryPage> {
        _playerService.getAllGiochiPosseduti(widget.idPlayer).then((onValue){
        setState(() {
          _games = onValue;
+         _isLoading = false;
        });
 
     });
@@ -63,10 +65,11 @@ class LibraryPageState extends State<LibraryPage> {
               ],
             ),
               const Divider(),
-
               (_games.isEmpty) ?
-                const Expanded(
-                    child: Center(
+                 Expanded(
+                  child: _isLoading ?
+              const Center(child: 
+               CircularProgressIndicator.adaptive()):const Center(
                   child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 32),
                       child: Center(
@@ -92,7 +95,9 @@ class LibraryPageState extends State<LibraryPage> {
                         ),
                       )),
                 ))
-            :  Expanded(child:
+            :  _isLoading ?
+              const Center(child: 
+               CircularProgressIndicator.adaptive()): Expanded(child:
             ListView.separated(
         itemCount: _games.length,
         separatorBuilder: (context, index) => const Divider(),

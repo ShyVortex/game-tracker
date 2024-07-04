@@ -6,6 +6,7 @@ import 'package:game_tracker/models/player.dart';
 import 'package:game_tracker/pages/navigationBar/navigation_page.dart';
 import 'package:game_tracker/pages/registration/signup/signup_page.dart';
 import 'package:game_tracker/utilities/Utilities.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../widgets/app_logo.dart';
 
 class LoginPage extends StatefulWidget {
@@ -109,6 +110,13 @@ class LoginPageState extends State<LoginPage> {
                       password!, _player.password!)) {
 
                     ref.read(playerProvider.notifier).state = _player;
+
+                    final prefs = await SharedPreferences.getInstance();
+
+                    if(rememberMe){
+                    await prefs.setString("password", _player.password!);
+                    await prefs.setString("email", _player.email!);
+                    }
 
                     Navigator.push(
                       context,
