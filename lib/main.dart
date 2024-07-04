@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_tracker/models/player.dart';
 import 'package:game_tracker/pages/registration/login/login_page.dart';
@@ -18,6 +19,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     const String appTitle = 'Game Tracker';
     return  MaterialApp(
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en'),
+          Locale('it', 'IT')
+        ],
       debugShowCheckedModeBanner: false,
       theme: AppTheme.buildThemeData(),
       home: const LoginPage(),

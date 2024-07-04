@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
 
-class LoadingScreen extends StatelessWidget{ 
-  final Future? httpOperation; 
+class LoadingScreen extends StatelessWidget {
+  final Future? httpOperation;
   final Widget widget;
 
   LoadingScreen({super.key,this.httpOperation,required this.widget});
-
 
   @override
   Widget build(BuildContext context) {

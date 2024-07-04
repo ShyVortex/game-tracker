@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:game_tracker/pages/library/add_game_page.dart';
+import 'package:game_tracker/theme/app_theme.dart';
 import 'package:game_tracker/controller/playerService.dart';
 import 'package:game_tracker/models/gamePlayer.dart';
 import 'package:game_tracker/widgets/square_avatar.dart';
@@ -13,9 +15,9 @@ class LibraryPage extends StatefulWidget {
 
 class LibraryPageState extends State<LibraryPage> {
   int navigationIndex = 0;
-  int addedGames = 0; // variabile placeholder
   List<Gameplayer> _games = [];
   PlayerService _playerService = PlayerService();
+  ThemeData themeData = AppTheme.buildThemeData();
 
   @override
   void initState()  {
@@ -24,8 +26,14 @@ class LibraryPageState extends State<LibraryPage> {
        setState(() {
          _games = onValue;
        });
-      
+
     });
+  }
+
+  void onAddPress() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const AddGamePage())
+    );
   }
 
   @override
@@ -60,7 +68,6 @@ class LibraryPageState extends State<LibraryPage> {
               const Divider(),
 
               (_games.isEmpty) ?
-
                 const Expanded(
                     child: Center(
                   child: Padding(
@@ -88,10 +95,10 @@ class LibraryPageState extends State<LibraryPage> {
                         ),
                       )),
                 ))
-            :  Expanded(child: 
+            :  Expanded(child:
             ListView.separated(
         itemCount: _games.length,
-        separatorBuilder: (context, index) => const Divider(), 
+        separatorBuilder: (context, index) => const Divider(),
         itemBuilder: (context, index) {
           return ListTile(
             title: Text(_games[index].game!.nome!, style: const TextStyle(fontWeight: FontWeight.w600, fontFamily: 'Inter')),
@@ -120,12 +127,45 @@ class LibraryPageState extends State<LibraryPage> {
           floatingActionButton: FloatingActionButton(
           shape: const CircleBorder(),
           backgroundColor: Colors.purple,
-          onPressed: () {
-            // Add your onPressed code here!
-          },
+          onPressed: onAddPress,
           child: const Icon(Icons.add, color: Colors.white, size: 30),
         ),
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                color: themeData.dividerColor.withOpacity(0.12),
+                width: 2.0,
+              ),
+            ),
+          ),
+          child: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.library_books),
+                  label: 'Libreria'
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.star),
+                label: 'Preferiti',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: 'Profilo',
+              ),
+            ],
+            currentIndex: navigationIndex,
+            unselectedItemColor: Colors.black,
+            unselectedLabelStyle: const TextStyle(
+                fontWeight: FontWeight.w600, fontFamily: 'Inter'
+            ),
+            selectedItemColor: Colors.purple,
+            selectedLabelStyle: const TextStyle(
+                fontWeight: FontWeight.w600, fontFamily: 'Inter'
+            ),
+            onTap: onItemTapped,
+          )
+        )
     );
-       
   }
 }
