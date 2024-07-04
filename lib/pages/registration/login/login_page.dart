@@ -107,7 +107,7 @@ class LoginPageState extends State<LoginPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const Placeholder()),
+                          builder: (context) => const LibraryPage()),
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
