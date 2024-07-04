@@ -8,8 +8,8 @@ import 'package:game_tracker/theme/app_theme.dart';
 
 final playerProvider = StateProvider<Player>((ref) => Player());
 void main() {
-  runApp(
-    const ProviderScope(child: MyApp()) );
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

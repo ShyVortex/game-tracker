@@ -35,10 +35,6 @@ class AddGamePageState extends State<AddGamePage> {
 
   }
 
-  void onAddPlace() {
-
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
