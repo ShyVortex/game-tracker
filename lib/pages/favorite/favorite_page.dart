@@ -13,6 +13,7 @@ class FavoritePage extends StatefulWidget {
 
 class _FavoritePageState extends State<FavoritePage> {
  List<Gameplayer> _favoritesGame = [];
+ bool _isLoading = true;
  final PlayerService _playerService = PlayerService();
    @override
   void initState()  {
@@ -20,6 +21,7 @@ class _FavoritePageState extends State<FavoritePage> {
        _playerService.getAllGiochiPreferiti(widget.idPlayer).then((onValue){
        setState(() {
          _favoritesGame = onValue;
+         _isLoading = false;
        });
       
     });
@@ -57,8 +59,11 @@ class _FavoritePageState extends State<FavoritePage> {
 
               (_favoritesGame.isEmpty) ?
 
-                const Expanded(
-                    child: Center(
+                 Expanded(
+                    child: 
+                     _isLoading ?
+              const Center(child: 
+               CircularProgressIndicator.adaptive()):const Center(
                   child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 32),
                       child: Center(
@@ -84,7 +89,10 @@ class _FavoritePageState extends State<FavoritePage> {
                         ),
                       )),
                 ))
-            :  Expanded(child: 
+            :   _isLoading ?
+              const Center(child: 
+               CircularProgressIndicator.adaptive()):
+               Expanded(child: 
             ListView.separated(
         itemCount: _favoritesGame.length,
         separatorBuilder: (context, index) => const Divider(), 

@@ -118,7 +118,8 @@ class AddGamePageState extends State<AddGamePage> {
                                         border:  OutlineInputBorder(),
                                         labelText: "Nome",
                                         labelStyle: TextStyle(fontFamily: 'Inter')
-                                    )
+                                    ),
+                                    keyboardType: TextInputType.text,
                                 )
                             )
                           ],
@@ -131,7 +132,8 @@ class AddGamePageState extends State<AddGamePage> {
                                     border:  OutlineInputBorder(),
                                     labelText: "Sviluppatore",
                                     labelStyle: TextStyle(fontFamily: 'Inter')
-                                )
+                                ),
+                                keyboardType: TextInputType.text,
                             )
                         ),
                         const SizedBox(height: 24),
@@ -173,7 +175,8 @@ class AddGamePageState extends State<AddGamePage> {
                                     border:  OutlineInputBorder(),
                                     labelText: "Ore di gioco",
                                     labelStyle: TextStyle(fontFamily: 'Inter')
-                                )
+                                ),
+                                keyboardType: TextInputType.number,
                             )
                         ),
                         const SizedBox(height: 24),
@@ -183,8 +186,9 @@ class AddGamePageState extends State<AddGamePage> {
                                 decoration: const InputDecoration(
                                     border:  OutlineInputBorder(),
                                     labelText: "Trofei ottenuti",
-                                    labelStyle: TextStyle(fontFamily: 'Inter')
-                                )
+                                    labelStyle: TextStyle(fontFamily: 'Inter'),
+                                ),
+                                keyboardType: TextInputType.number,
                             )
                         ),
                         const SizedBox(height: 24),
