@@ -14,6 +14,8 @@ final playerProvider = StateProvider<Player>((ref) => Player());
 void main() {
   runApp(
      ProviderScope(child: MyApp()) );
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

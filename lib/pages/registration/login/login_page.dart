@@ -18,6 +18,7 @@ class LoginPage extends StatefulWidget {
 
 class LoginPageState extends State<LoginPage> {
   bool rememberMe = false;
+  bool isPasswordHidden = true;
   String? email; 
   String? password;
   final PlayerService _playerservice = PlayerService();
@@ -25,8 +26,6 @@ class LoginPageState extends State<LoginPage> {
   
   @override
   Widget build(BuildContext context) {
-    
-
     return Scaffold(
           body: Padding(
             padding: const EdgeInsets.only(top: 32),
@@ -57,15 +56,23 @@ class LoginPageState extends State<LoginPage> {
             },
           ),
         ),
-                  const SizedBox(height: 32),
-                  SizedBox(
+        const SizedBox(height: 32),
+        SizedBox(
           width: 325,
           child: TextField(
-          decoration: const InputDecoration(
-          border:  OutlineInputBorder(),
-          labelText: "Password",
-            labelStyle: TextStyle(fontFamily: 'Inter')
-        ),
+            decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: "Password",
+                labelStyle: const TextStyle(fontFamily: 'Inter'),
+                suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isPasswordHidden = !isPasswordHidden;
+                      });
+                    },
+                    icon: const Icon(Icons.remove_red_eye)
+                )),
+            obscureText: isPasswordHidden,
             onChanged: (value) {
               password = value;
             },

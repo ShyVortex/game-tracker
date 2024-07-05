@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:game_tracker/pages/library/location_page.dart';
+import 'package:game_tracker/pages/library/map_page.dart';
 
 class LocationField extends StatefulWidget {
   const LocationField({super.key});
@@ -9,11 +9,16 @@ class LocationField extends StatefulWidget {
 }
 
 class LocationFieldState extends State<LocationField> {
+  final TextEditingController placeController = TextEditingController();
 
-  void onButtonPress() {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const LocationPage())
+  Future<void> onButtonPress() async {
+    String location = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const MapPage())
     );
+
+    setState(() {
+      placeController.text = location;
+    });
   }
 
   @override
@@ -22,9 +27,10 @@ class LocationFieldState extends State<LocationField> {
       width: 300,
       child: Row(
         children: <Widget>[
-          const Expanded(
+          Expanded(
             child: TextField(
-              decoration: InputDecoration(
+              controller: placeController,
+              decoration: const InputDecoration(
                 labelText: 'Dove hai completato il gioco?',
                 border: OutlineInputBorder(),
               ),
