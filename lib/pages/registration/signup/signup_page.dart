@@ -15,13 +15,13 @@ class SignupPage extends StatefulWidget{
 }
 
 class SignupPageState extends State<SignupPage> {
-
    final PlayerService playerService = PlayerService();
    Player player= Player();
    String? username;
    String? password;
    String? email;
    bool _showRegistrationLoadingScreen = false;
+   bool isPasswordHidden = true;
 
    void _switchScreen(){
     setState(() {
@@ -79,19 +79,27 @@ class SignupPageState extends State<SignupPage> {
           ),
         ),
          const SizedBox(height: 32),
-         SizedBox(
-          width: 325,
-          child: TextField(
-          decoration: const InputDecoration(
-          border:  OutlineInputBorder(),
-          labelText: "Password",
-              labelStyle: TextStyle(fontFamily: 'Inter')
-        ),
-            onChanged: (value) {
-              password = value;
-            },
-          ),
-        ),
+            SizedBox(
+              width: 325,
+              child: TextField(
+                decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: "Password",
+                    labelStyle: const TextStyle(fontFamily: 'Inter'),
+                    suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            isPasswordHidden = !isPasswordHidden;
+                          });
+                        },
+                        icon: const Icon(Icons.remove_red_eye)
+                    )),
+                obscureText: isPasswordHidden,
+                onChanged: (value) {
+                  password = value;
+                },
+              ),
+            ),
         const SizedBox(height: 40),
             FilledButton(
                   onPressed: () {

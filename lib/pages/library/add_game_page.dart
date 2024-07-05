@@ -12,7 +12,12 @@ class AddGamePage extends StatefulWidget {
 
 class AddGamePageState extends State<AddGamePage> {
   ThemeData themeData = AppTheme.buildThemeData();
-  static const List<String> list = <String>[
+  static const List<String> platformList = <String>['PC', 'Steam Deck', 'PS5',
+    'Xbox Series S/X', 'Nintendo Switch', 'PS4', 'PS Vita', 'Xbox One', 'PS3',
+    'PSP', 'Xbox 360', 'Nintendo Wii U', 'Nintendo 3DS', 'Nintendo Wii', 'PS2',
+    'Xbox', 'Nintendo DS', 'Nintendo GameCube', 'Nintendo GBA', 'Retro console'
+  ];
+  static const List<String> scoreList = <String>[
     '0/10', '1/10', '2/10', '3/10', '4/10', '5/10', '6/10', '7/10', '8/10',
     '9/10', '10/10'
   ];
@@ -27,10 +32,6 @@ class AddGamePageState extends State<AddGamePage> {
   }
 
   void onConfirmPress() {
-
-  }
-
-  void onAddPlace() {
 
   }
 
@@ -110,10 +111,10 @@ class AddGamePageState extends State<AddGamePage> {
                                   ),
                                 )),
                             const SizedBox(width: 24),
-                            const SizedBox(
+                            SizedBox(
                                 width: 170,
-                                child: TextField(
-                                    decoration: InputDecoration(
+                                child: TextFormField(
+                                    decoration: const InputDecoration(
                                         border:  OutlineInputBorder(),
                                         labelText: "Nome",
                                         labelStyle: TextStyle(fontFamily: 'Inter')
@@ -123,10 +124,10 @@ class AddGamePageState extends State<AddGamePage> {
                           ],
                         ),
                         const SizedBox(height: 24),
-                        const SizedBox(
+                        SizedBox(
                             width: 300,
-                            child: TextField(
-                                decoration: InputDecoration(
+                            child: TextFormField(
+                                decoration: const InputDecoration(
                                     border:  OutlineInputBorder(),
                                     labelText: "Sviluppatore",
                                     labelStyle: TextStyle(fontFamily: 'Inter')
@@ -134,21 +135,41 @@ class AddGamePageState extends State<AddGamePage> {
                             )
                         ),
                         const SizedBox(height: 24),
-                        const SizedBox(
-                            width: 300,
-                            child: TextField(
-                                decoration: InputDecoration(
-                                    border:  OutlineInputBorder(),
-                                    labelText: "Piattaforma",
-                                    labelStyle: TextStyle(fontFamily: 'Inter')
-                                )
-                            )
-                        ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 9),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text("Piattaforma", style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Inter'
+                              )),
+                              DropdownMenu<String>(
+                                width: 300,
+                                initialSelection: "",
+                                onSelected: (String? value) {
+                                  setState(() {
+                                    dropdownValue = value!;
+                                  });
+                                },
+                                dropdownMenuEntries: platformList.map<DropdownMenuEntry<String>>((String value) {
+                                  return DropdownMenuEntry<String>(value: value, label: value);
+                                }).toList(),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                         const SizedBox(height: 24),
-                        const SizedBox(
+                        SizedBox(
                             width: 300,
-                            child: TextField(
-                                decoration: InputDecoration(
+                            child: TextFormField(
+                                decoration: const InputDecoration(
                                     border:  OutlineInputBorder(),
                                     labelText: "Ore di gioco",
                                     labelStyle: TextStyle(fontFamily: 'Inter')
@@ -156,10 +177,10 @@ class AddGamePageState extends State<AddGamePage> {
                             )
                         ),
                         const SizedBox(height: 24),
-                        const SizedBox(
+                        SizedBox(
                             width: 300,
-                            child: TextField(
-                                decoration: InputDecoration(
+                            child: TextFormField(
+                                decoration: const InputDecoration(
                                     border:  OutlineInputBorder(),
                                     labelText: "Trofei ottenuti",
                                     labelStyle: TextStyle(fontFamily: 'Inter')
@@ -227,7 +248,7 @@ class AddGamePageState extends State<AddGamePage> {
                                         dropdownValue = value!;
                                       });
                                     },
-                                    dropdownMenuEntries: list.map<DropdownMenuEntry<String>>((String value) {
+                                    dropdownMenuEntries: scoreList.map<DropdownMenuEntry<String>>((String value) {
                                       return DropdownMenuEntry<String>(value: value, label: value);
                                     }).toList(),
                                   )
