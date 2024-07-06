@@ -15,7 +15,7 @@ void main() {
   runApp(
      ProviderScope(child: MyApp()) );
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -62,8 +62,8 @@ class MyApp extends StatelessWidget {
       return const LoginPage();
     }
     else {
-      Player _player = await _playerService.getPlayerByEmail(prefs.getString("email")!);
-      ref.read(playerProvider.notifier).state = _player;
+      Player player = await _playerService.getPlayerByEmail(prefs.getString("email")!);
+      ref.read(playerProvider.notifier).state = player;
       return const NavigationPage();
     }
   }

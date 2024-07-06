@@ -5,7 +5,7 @@ class LoadingScreen extends StatelessWidget {
   final Future? httpOperation;
   final Widget widget;
 
-  LoadingScreen({super.key,this.httpOperation,required this.widget});
+  const LoadingScreen({super.key,this.httpOperation,required this.widget});
 
   @override
   Widget build(BuildContext context) {

@@ -59,7 +59,9 @@ class GameSelectPageState extends State<GameSelectPage> {
       body: isLoading ? const Center(
         child: CircularProgressIndicator(),
       ) :
-       Column(children: [
+
+      SingleChildScrollView( child:
+        Column(children: [
         const Text(
   "Quali di questi giochi possiedi?",
   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, fontFamily: 'Inter'),
@@ -116,7 +118,7 @@ SizedBox(
        
     ]
        )
-    );
+    ));
     
   }
   }

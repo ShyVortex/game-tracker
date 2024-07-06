@@ -37,7 +37,7 @@ class SignupPageState extends State<SignupPage> {
    return
    !_showRegistrationLoadingScreen ?
    Scaffold(
-        appBar: AppBar(
+          appBar: AppBar(
           toolbarHeight: 150.0,
           flexibleSpace: const MyContainerWidget(),
           leading: IconButton(
@@ -47,7 +47,8 @@ class SignupPageState extends State<SignupPage> {
           }
         )
         ),
-        body:
+        body: SingleChildScrollView(
+          child: 
          Center(
         child: Column(
           children:[
@@ -152,7 +153,7 @@ class SignupPageState extends State<SignupPage> {
               ]),
         )
 
-   )
+   ))
         : LoadingScreen(
             httpOperation: playerService.addPlayer(player),
             widget: GameSelectPage(data: email)

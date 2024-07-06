@@ -7,7 +7,7 @@ import 'package:game_tracker/models/player.dart';
 import 'package:http/http.dart' as http;
 
 class GamePlayerservice {
-    final String gamePlayerURL = 'http://localhost:8080/api/game-manager/gamePlayer/';
+    final String gamePlayerURL = 'https://gamemanager-backend.onrender.com/api/game-manager/gamePlayer/';
     final playerservice = PlayerService();
 
     final  headers = {
