@@ -42,6 +42,7 @@ class GamePlayerservice {
       gameplayer.trofeiOttenuti = 0;
       gameplayer.oreDiGioco = 0;
       gameplayer.valutazione = 0;
+      gameplayer.luogoCompletamento = "";
       await _addGameToPlayer(element.id,player.id!,gameplayer);
      });
      return "operazione eseguita";

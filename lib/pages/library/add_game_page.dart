@@ -12,6 +12,7 @@ class AddGamePage extends StatefulWidget {
 
 class AddGamePageState extends State<AddGamePage> {
   ThemeData themeData = AppTheme.buildThemeData();
+  
   static const List<String> platformList = <String>['PC', 'Steam Deck', 'PS5',
     'Xbox Series S/X', 'Nintendo Switch', 'PS4', 'PS Vita', 'Xbox One', 'PS3',
     'PSP', 'Xbox 360', 'Nintendo Wii U', 'Nintendo 3DS', 'Nintendo Wii', 'PS2',

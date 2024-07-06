@@ -53,13 +53,16 @@ class GameSelectPageState extends State<GameSelectPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        forceMaterialTransparency: true,
         automaticallyImplyLeading: false,
         flexibleSpace: const AppLogo(),
       ),
       body: isLoading ? const Center(
         child: CircularProgressIndicator(),
       ) :
-       Column(children: [
+
+      SingleChildScrollView( child:
+        Column(children: [
         const Text(
   "Quali di questi giochi possiedi?",
   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, fontFamily: 'Inter'),
@@ -116,6 +119,7 @@ SizedBox(
        
     ]
        )
+    )
     );
     
   }

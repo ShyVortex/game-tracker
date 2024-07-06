@@ -25,6 +25,7 @@ dependencies:
   geolocator_web: ^4.0.0
   geolocator_linux: ^0.2.1
   geolocator_windows: ^0.2.3
+  image_picker: ^1.1.2
 
   flutter_map: ^7.0.2
   latlong2: ^0.9.1

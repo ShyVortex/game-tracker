@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:game_tracker/pages/library/add_game_page.dart';
 import 'package:game_tracker/controller/playerService.dart';
 import 'package:game_tracker/models/gamePlayer.dart';
+import 'package:game_tracker/pages/library/edit_game_page.dart';
 import 'package:game_tracker/widgets/square_avatar.dart';
 
 class LibraryPage extends StatefulWidget {
@@ -103,6 +104,11 @@ class LibraryPageState extends State<LibraryPage> {
         separatorBuilder: (context, index) => const Divider(),
         itemBuilder: (context, index) {
           return ListTile(
+            onTap: () {
+              Navigator.push(context,
+       MaterialPageRoute(builder: (context) => EditGamePage(gameplayer: _games[index]))
+    );
+            },
             title: Text(_games[index].game!.nome!, style: const TextStyle(fontWeight: FontWeight.w600, fontFamily: 'Inter')),
             subtitle:  Text(_games[index].game!.sviluppatore!, style: const TextStyle(fontFamily: 'Inter')),
             leading:  SquareAvatar(imageUrl: _games[index].game!.immagineURL!, size: 50 ),

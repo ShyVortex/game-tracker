@@ -4,7 +4,7 @@ class SquareAvatar extends StatelessWidget {
   final String imageUrl;
   final double size;
 
-  SquareAvatar({required this.imageUrl, required this.size});
+  const SquareAvatar({required this.imageUrl, required this.size});
 
   @override
   Widget build(BuildContext context) {
