@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:game_tracker/models/gamePlayer.dart';
 import 'package:game_tracker/pages/library/map_page.dart';
 import 'package:game_tracker/theme/app_theme.dart';
+import 'package:game_tracker/widgets/images_list.dart';
 import 'package:game_tracker/widgets/square_avatar.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -59,7 +60,7 @@ class _EditGamePageState extends State<EditGamePage> {
 
   if (pickedFile != null) {
      final File imagesPath = File(pickedFile.path); 
-     widget.gameplayer.immagini?.add(imagesPath);
+     widget.gameplayer.immagini?.add(imagesPath.path);
   } 
   else {
 
@@ -104,7 +105,8 @@ class _EditGamePageState extends State<EditGamePage> {
                     children: [
                       SquareAvatar(
                           imageUrl: widget.gameplayer.game!.immagineURL!,
-                          size: 70),
+                          size: 70,
+                          isNetworkImage: widget.gameplayer.game!.isNetworkImage!,),
                       const SizedBox(
                         width: 40,
                       ),
@@ -216,7 +218,7 @@ class _EditGamePageState extends State<EditGamePage> {
                       TextFormField(
                     controller: _trofeiController,
                     decoration: InputDecoration(
-                        hintText: "${widget.gameplayer.trofeiOttenuti!}/${widget.gameplayer.trofeiTotali!}",
+                        hintText: "${widget.gameplayer.trofeiOttenuti!}/${widget.gameplayer.game!.trofeiTotali}",
                         border: const OutlineInputBorder(),
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.edit), 
@@ -270,29 +272,7 @@ class _EditGamePageState extends State<EditGamePage> {
                 height: 30,
              ),
             widget.gameplayer.immagini!.isNotEmpty ? 
-       SizedBox(
-        height: 200,
-        width: 400,
-        child: 
-        ListView.builder(
-    scrollDirection :Axis.horizontal,   
-    itemCount: widget.gameplayer.immagini!.length,
-    itemBuilder: (context, index) {
-      return Container(
-        width: 200, // Larghezza di ogni immagine
-        margin: const EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.0),
-          color: Colors.grey[200], 
-          image: DecorationImage(
-              image: FileImage(widget.gameplayer.immagini![index]),
-              fit: BoxFit.cover,
-            ),
-        ),
-      );
-    },
-        )
-            )  
+       ImagesList(imagesPaths:widget.gameplayer.immagini!)
       : Column(
         children: [
        const Text("Highlights", style: TextStyle(

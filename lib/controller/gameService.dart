@@ -29,4 +29,23 @@ class Gameservice {
         throw Error();
       }
     }
+    Future addGame(Game game) async {
+
+      Uri uri = Uri.parse('${gameURL}addGame');
+
+      
+        
+      var jsonObject = jsonEncode(game);
+
+      http.Response response = await http.post(uri,body: jsonObject, headers: headers);
+        if(response.statusCode == 200){
+        var data = jsonDecode(response.body);
+        print(data);
+        return Game.fromJson(data);
+      }
+      else {
+        print("C'è stato un errore nella chiamata");
+        return null;
+      }
+    }
 }

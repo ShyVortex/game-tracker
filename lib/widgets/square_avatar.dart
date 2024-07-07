@@ -1,10 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class SquareAvatar extends StatelessWidget {
   final String imageUrl;
   final double size;
-
-  const SquareAvatar({required this.imageUrl, required this.size});
+  final bool isNetworkImage;
+  
+  const SquareAvatar({super.key, required this.imageUrl, required this.size, required this.isNetworkImage});
 
   @override
   Widget build(BuildContext context) {
@@ -13,10 +16,13 @@ class SquareAvatar extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.rectangle, // Makes the avatar square
-        image: DecorationImage(
+        image: isNetworkImage? DecorationImage(
           image: NetworkImage(imageUrl),
           fit: BoxFit.cover,
-        ),
+        ): DecorationImage(
+              image: FileImage(File(imageUrl)),
+              fit: BoxFit.cover,
+            ),
       ),
     );
   }

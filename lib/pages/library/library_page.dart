@@ -111,7 +111,7 @@ class LibraryPageState extends State<LibraryPage> {
             },
             title: Text(_games[index].game!.nome!, style: const TextStyle(fontWeight: FontWeight.w600, fontFamily: 'Inter')),
             subtitle:  Text(_games[index].game!.sviluppatore!, style: const TextStyle(fontFamily: 'Inter')),
-            leading:  SquareAvatar(imageUrl: _games[index].game!.immagineURL!, size: 50 ),
+            leading:  SquareAvatar(imageUrl: _games[index].game!.immagineURL!, size: 50 ,isNetworkImage: _games[index].game!.isNetworkImage!,),
             trailing: IconButton(
           icon: Icon(
             _games[index].preferito! ? Icons.star : Icons.star_border,

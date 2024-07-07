@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:game_tracker/controller/gameService.dart';
 import 'package:game_tracker/controller/playerService.dart';
 import 'package:game_tracker/models/game.dart';
 import 'package:game_tracker/models/gamePlayer.dart';
@@ -9,6 +10,7 @@ import 'package:http/http.dart' as http;
 class GamePlayerservice {
     final String gamePlayerURL = 'http://localhost:8080/api/game-manager/gamePlayer/';
     final playerservice = PlayerService();
+    final gameService = Gameservice();
 
     final  headers = {
     'Content-Type': 'application/json',
@@ -37,17 +39,17 @@ class GamePlayerservice {
     return await  Future((){
       games.forEach((element) async {
       Gameplayer gameplayer = Gameplayer();
-      gameplayer.preferito = false;
-      gameplayer.trofeiTotali = 60;
-      gameplayer.trofeiOttenuti = 0;
-      gameplayer.oreDiGioco = 0;
-      gameplayer.valutazione = 0;
-      gameplayer.luogoCompletamento = "";
       await _addGameToPlayer(element.id,player.id!,gameplayer);
      });
      return "operazione eseguita";
     });
     
     
+  }
+
+  Future performGameInsert(Game game,int idPlayer,Gameplayer gamePlayer) async {
+    game = await gameService.addGame(game);
+
+    return await _addGameToPlayer(game.id, idPlayer, gamePlayer);
   }
 }

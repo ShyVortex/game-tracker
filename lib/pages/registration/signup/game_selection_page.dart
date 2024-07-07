@@ -78,6 +78,7 @@ SizedBox(
         itemCount: _games.length,
         separatorBuilder: (context, index) => const Divider(), 
         itemBuilder: (context, index) {
+          if(_games[index].isNetworkImage!){
           return ListTile(
             title: Text(_games[index].nome!, style: const TextStyle(fontWeight: FontWeight.w600, fontFamily: 'Inter')),
             subtitle:  Text(_games[index].sviluppatore!, style: const TextStyle(fontFamily: 'Inter')),
@@ -99,6 +100,7 @@ SizedBox(
               });
             },
           );
+        }
         },
       )
       ),

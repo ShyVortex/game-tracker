@@ -48,6 +48,7 @@ class SignupPageState extends State<SignupPage> {
         )
         ),
         body:
+        SingleChildScrollView(child: 
          Center(
         child: Column(
           children:[
@@ -151,7 +152,7 @@ class SignupPageState extends State<SignupPage> {
             })
               ]),
         )
-
+        )
    )
         : LoadingScreen(
             httpOperation: playerService.addPlayer(player),

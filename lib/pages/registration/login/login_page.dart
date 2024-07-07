@@ -27,7 +27,7 @@ class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-          body: Padding(
+          body: SingleChildScrollView(child: Padding(
             padding: const EdgeInsets.only(top: 32),
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -160,6 +160,7 @@ class LoginPageState extends State<LoginPage> {
               ));
         })
       ]),
-    ));
+    ))
+    );
   }
 }
