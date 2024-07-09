@@ -229,7 +229,7 @@ class AddGamePageState extends State<AddGamePage> {
                           ],
                         ),
                         const SizedBox(height: 10),
-                        const DatePickerField(),
+                        const DatePickerField(label: "Data di completamento"),
                         const SizedBox(height: 24),
                         const LocationField(),
                         const SizedBox(height: 24),
