@@ -3,9 +3,12 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:game_tracker/controller/gamePlayerService.dart';
 import 'package:game_tracker/models/gamePlayer.dart';
 import 'package:game_tracker/pages/library/map_page.dart';
+import 'package:game_tracker/pages/navigationBar/navigation_page.dart';
 import 'package:game_tracker/theme/app_theme.dart';
+import 'package:game_tracker/utilities/Utilities.dart';
 import 'package:game_tracker/widgets/images_list.dart';
 import 'package:game_tracker/widgets/square_avatar.dart';
 import 'package:image_picker/image_picker.dart';
@@ -30,7 +33,37 @@ class _EditGamePageState extends State<EditGamePage> {
   final TextEditingController placeController = TextEditingController();
   final TextEditingController _trofeiController = TextEditingController();
   final TextEditingController _oreDiGiocoController = TextEditingController();
-  void onConfirmPress() {
+  final TextEditingController _valutazioneController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
+
+  List<String> initialImages = [];
+
+  final GamePlayerservice _gamePlayerservice = GamePlayerservice();
+
+ 
+  Future<void> onConfirmPress() async {
+    try {
+      
+      if(placeController.text!= "") widget.gameplayer.luogoCompletamento = placeController.text;
+      if(dateController.text!= "") widget.gameplayer.dataCompletamento = dateController.text;
+      if(_oreDiGiocoController.text!= "") widget.gameplayer.oreDiGioco = int.parse(_oreDiGiocoController.text);
+      if(_valutazioneController.text!= "") widget.gameplayer.valutazione = Utilities.valutazioneIntValue(_valutazioneController.text);
+      if(_trofeiController.text!= "") widget.gameplayer.trofeiOttenuti = int.parse(_trofeiController.text);
+
+      await _gamePlayerservice.updateGamePlayer(widget.gameplayer, widget.gameplayer.id!);
+
+       Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>   const NavigationPage())
+                    );
+    }
+    catch(error){
+      print(error);
+       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Errore nella modifica, riprova più tardi'),
+                ));
+    }
   }
   Future<void> onButtonPress() async {
     String location = await Navigator.push(context,
@@ -51,9 +84,22 @@ class _EditGamePageState extends State<EditGamePage> {
     });
   }
 
-  void onDeletePress() {
-  }
+  Future<void> onDeletePress() async {
+      var object = await _gamePlayerservice.deleteGamePlayer(widget.gameplayer.id!);
 
+       Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>   const NavigationPage())
+                    );
+    
+  }
+  @override
+  void initState()  {
+    super.initState();
+    initialImages = widget.gameplayer.immagini!;
+    
+  }
   Future<void> _pickImageFromGallery() async {
   final picker = ImagePicker();
   final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -66,9 +112,29 @@ class _EditGamePageState extends State<EditGamePage> {
 
   }
 }
+ Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime( DateTime.now().year - 100),
+      lastDate: DateTime.now(),
+      locale: const Locale('it', 'IT')
+    );
+    if (picked != null && picked != DateTime.now()) {
+      setState(() {
+        dateController.text = "${picked.toLocal()}".split(' ')[0];
+      });
+    }
+  }
+void updateState(){
+  setState(() {
+    
+  });
+}
 
   @override
-  Widget build(BuildContext context)  {
+   build(BuildContext context)   {
+  
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(
@@ -184,6 +250,7 @@ class _EditGamePageState extends State<EditGamePage> {
                               fontFamily: 'Inter')),
                       DropdownMenu<String>(
                         hintText: "${widget.gameplayer.valutazione!}/10",
+                        controller: _valutazioneController,
                         width: 300,
                         onSelected: (String? value) {
                           setState(() {
@@ -254,7 +321,7 @@ class _EditGamePageState extends State<EditGamePage> {
                     
                     controller: placeController,
                     decoration: InputDecoration(
-                        hintText: "Roma",
+                        hintText: widget.gameplayer.luogoCompletamento,
                         border: const OutlineInputBorder(),
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.location_on), 
@@ -271,8 +338,41 @@ class _EditGamePageState extends State<EditGamePage> {
              const SizedBox(
                 height: 30,
              ),
+              SizedBox(
+                  width: 300,
+                  child: 
+                  Column(
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                    children:[
+                      const Text(
+                         "Data Completamento",
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Inter')),
+                      TextFormField(
+                    
+                    controller: dateController,
+                    decoration: InputDecoration(
+                        hintText: widget.gameplayer.dataCompletamento,
+                        border: const OutlineInputBorder(),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.calendar_month), 
+                          onPressed: () {
+                             _selectDate(context);
+                          },
+                        )),
+                    
+                    readOnly: true
+                  )
+                  ]
+                  )
+                  ),
+                   const SizedBox(
+                height: 30,
+             ),
             widget.gameplayer.immagini!.isNotEmpty ? 
-       ImagesList(imagesPaths:widget.gameplayer.immagini!)
+       ImagesList(imagesPaths:widget.gameplayer.immagini!,notifyParent: updateState)
       : Column(
         children: [
        const Text("Highlights", style: TextStyle(
@@ -322,7 +422,7 @@ class _EditGamePageState extends State<EditGamePage> {
           heroTag: "cancella",
           shape: const CircleBorder(),
           backgroundColor: const Color.fromARGB(255, 223, 11, 11),
-          onPressed: onDeletePress,
+          onPressed:  onDeletePress,
           child: const Icon(Icons.delete, color: Colors.white, size: 30),
         ),
         const SizedBox(height: 10,) ,

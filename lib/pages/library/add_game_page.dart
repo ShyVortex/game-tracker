@@ -6,7 +6,6 @@ import 'package:game_tracker/controller/gamePlayerService.dart';
 import 'package:game_tracker/main.dart';
 import 'package:game_tracker/models/game.dart';
 import 'package:game_tracker/models/gamePlayer.dart';
-import 'package:game_tracker/pages/library/library_page.dart';
 import 'package:game_tracker/pages/navigationBar/navigation_page.dart';
 import 'package:game_tracker/utilities/Utilities.dart';
 import 'package:game_tracker/widgets/date_picker_field.dart';
@@ -84,6 +83,7 @@ class AddGamePageState extends State<AddGamePage> {
 
     }
   }
+   
 
   Future<void> onConfirmPress(int idPlayer) async {
 
@@ -117,7 +117,7 @@ void updateState(){
   });
 }
 Future<void> _performInsert(int idPlayer) async {
-    gameToInsert.nome = _nomeController.text;
+      gameToInsert.nome = _nomeController.text;
       gameToInsert.sviluppatore = _sviluppatoreController.text;
       gameToInsert.trofeiTotali = int.parse(_trofeiTotaliController.text);
       gameToInsert.piattaforme!.add(_piattaformaController.text);
@@ -125,6 +125,8 @@ Future<void> _performInsert(int idPlayer) async {
       if(_trofeiOttenutiController.text != "") gamePlayerToInsert.trofeiOttenuti = int.parse(_trofeiOttenutiController.text);
       if(_placeController.text != "") gamePlayerToInsert.luogoCompletamento = _placeController.text;
       gamePlayerToInsert.valutazione =  Utilities.valutazioneIntValue(_valutazioneController.text);
+      if(_dateController.text != "") gamePlayerToInsert.dataCompletamento = _dateController.text;
+      
 
   
 

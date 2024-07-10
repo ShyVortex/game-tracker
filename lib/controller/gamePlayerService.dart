@@ -8,7 +8,7 @@ import 'package:game_tracker/models/player.dart';
 import 'package:http/http.dart' as http;
 
 class GamePlayerservice {
-    final String gamePlayerURL = 'http://localhost:8080/api/game-manager/gamePlayer/';
+    final String gamePlayerURL = 'https://gamemanager-backend.onrender.com/api/game-manager/gamePlayer/';
     final playerservice = PlayerService();
     final gameService = Gameservice();
 
@@ -36,20 +36,40 @@ class GamePlayerservice {
 
     Player player = await playerservice.getPlayerByEmail(email!);
 
-    return await  Future((){
-      games.forEach((element) async {
+    
+      for (Game game in games){
       Gameplayer gameplayer = Gameplayer();
-      await _addGameToPlayer(element.id,player.id!,gameplayer);
-     });
+      await _addGameToPlayer(game.id,player.id!,gameplayer);
+      }
      return "operazione eseguita";
-    });
+    
     
     
   }
 
   Future performGameInsert(Game game,int idPlayer,Gameplayer gamePlayer) async {
     game = await gameService.addGame(game);
-
     return await _addGameToPlayer(game.id, idPlayer, gamePlayer);
+  }
+  Future updateGamePlayer(Gameplayer game, int id) async {
+
+     Uri uri = Uri.parse('${gamePlayerURL}updateGamePlayer/$id');
+     
+     var jsonObject = jsonEncode(game);
+      http.Response response = await http.put(uri,body: jsonObject, headers: headers);
+        if(response.statusCode == 200){
+        var data = jsonDecode(response.body);
+        print(data);
+        return Gameplayer.fromJson(data);
+      }
+  }
+  Future deleteGamePlayer(int id) async {
+     Uri uri = Uri.parse('${gamePlayerURL}deleteGamePlayer/$id');
+
+     http.Response response = await http.delete(uri,headers: headers);
+        if(response.statusCode == 200){
+        print("Chiamata effettuata corretamente");
+        
+      }
   }
 }

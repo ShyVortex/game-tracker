@@ -11,14 +11,17 @@ class Gameplayer {
      Game? _game;
      String? _luogoCompletamento;
      List<String>? _immagini;
-     Gameplayer.withParameters({required int? id,required int? trofeiOttenuti,required int? valutazione, required int? oreDiGioco,required bool? preferito,required Game? game, required String? luogoCompletamento, required List<String?> immagini}){
+     String? _dataCompletamento;
+     Gameplayer.withParameters({required int? id,required int? trofeiOttenuti,required int? valutazione, required int? oreDiGioco,required bool? preferito,required Game? game, required String? luogoCompletamento, required List<String>? immagini,required String? dataCompletamento}){
       _id = id;
       _trofeiOttenuti = trofeiOttenuti;
       _valutazione = valutazione;
       _oreDiGioco = oreDiGioco;
       _preferito = preferito;
       _game = game;
-      _immagini = [];
+      _immagini = immagini;
+      _dataCompletamento = dataCompletamento;
+      _luogoCompletamento = luogoCompletamento;
      }
      Gameplayer(){
       _trofeiOttenuti = 0;
@@ -26,6 +29,7 @@ class Gameplayer {
       _oreDiGioco = 0;
       _preferito = false;
       _luogoCompletamento = "";
+      _dataCompletamento = "";
       _immagini = [];
      }
 
@@ -37,6 +41,8 @@ class Gameplayer {
      Game? get game => _game;
      List<String>? get immagini => _immagini;
      String? get luogoCompletamento => _luogoCompletamento;
+     String? get dataCompletamento => _dataCompletamento;
+
 
       
       set trofeiOttenuti(int? value){
@@ -57,6 +63,9 @@ class Gameplayer {
     set immagini(List<String>? value){
       _immagini = value;
     }
+    set dataCompletamento(String? value){
+      _dataCompletamento = value;
+    }
     Map<String, dynamic> toJson() => {
     'id': _id,
     'trofeiOttenuti': _trofeiOttenuti,
@@ -64,7 +73,8 @@ class Gameplayer {
     "oreDiGioco" : _oreDiGioco,
     "preferito" : _preferito,
     "luogoCompletamento" : _luogoCompletamento,
-    "immagini" : _immagini
+    "immagini" : _immagini,
+    "dataCompletamento": _dataCompletamento
   };
   factory Gameplayer.fromJson(Map<String, dynamic> json) {
     return Gameplayer.withParameters(
@@ -75,8 +85,42 @@ class Gameplayer {
       preferito: json['preferito'],
       game: Game.fromJson(json['game']),
       luogoCompletamento: json['luogoCompletamento'],
-      immagini : List<String>.from(json['immagini'])
+      immagini : List<String>.from(json['immagini']),
+      dataCompletamento: json['dataCompletamento']
     );
   }
+   String toString() {
+    return 'GamePlayer(_id: $_id, '
+           '_trofeiOttenuti: $_trofeiOttenuti, '
+           '_valutazione: $_valutazione, '
+           '_oreDiGioco: $_oreDiGioco, '
+           '_preferito: $_preferito, '
+           '_game: $_game, '
+           '_immagini: $_immagini, '
+           '_dataCompletamento: $_dataCompletamento)';
+  }
+   @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Gameplayer &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          trofeiOttenuti == other.trofeiOttenuti &&
+          valutazione == other.valutazione &&
+          oreDiGioco == other.oreDiGioco &&
+          preferito == other.preferito &&
+          game == other.game &&
+          immagini == other.immagini &&
+          dataCompletamento == other.dataCompletamento;
 
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      trofeiOttenuti.hashCode ^
+      valutazione.hashCode ^
+      oreDiGioco.hashCode ^
+      preferito.hashCode ^
+      game.hashCode ^
+      immagini.hashCode ^
+      dataCompletamento.hashCode;
 }
