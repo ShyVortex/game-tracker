@@ -36,12 +36,14 @@ class _EditGamePageState extends State<EditGamePage> {
   final TextEditingController _valutazioneController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
 
-  List<String> initialImages = [];
+  final _trofeiOttenutiFormKey = GlobalKey<FormFieldState>();
+
 
   final GamePlayerservice _gamePlayerservice = GamePlayerservice();
 
  
   Future<void> onConfirmPress() async {
+    if(_trofeiOttenutiFormKey.currentState!.validate()){
     try {
       
       if(placeController.text!= "") widget.gameplayer.luogoCompletamento = placeController.text;
@@ -64,6 +66,7 @@ class _EditGamePageState extends State<EditGamePage> {
                   content: Text('Errore nella modifica, riprova più tardi'),
                 ));
     }
+    }
   }
   Future<void> onButtonPress() async {
     String location = await Navigator.push(context,
@@ -85,19 +88,24 @@ class _EditGamePageState extends State<EditGamePage> {
   }
 
   Future<void> onDeletePress() async {
-      var object = await _gamePlayerservice.deleteGamePlayer(widget.gameplayer.id!);
+    try{
+      await _gamePlayerservice.deleteGamePlayer(widget.gameplayer.id!);
 
        Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) =>   const NavigationPage())
                     );
-    
+    }
+    catch (error){
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Errore nella cancellazione, riprova più tardi'),
+                ));
+    }
   }
   @override
   void initState()  {
     super.initState();
-    initialImages = widget.gameplayer.immagini!;
     
   }
   Future<void> _pickImageFromGallery() async {
@@ -283,6 +291,15 @@ void updateState(){
                               fontWeight: FontWeight.w600,
                               fontFamily: 'Inter')),
                       TextFormField(
+                    validator: (value) {
+                      if(value != ""){
+                        if(int.parse(value!) > widget.gameplayer.game!.trofeiTotali!){
+                          return "Trofei ottenuti maggiori di trofei totali";
+                        }
+                      }
+                      return null;
+                    },
+                    key: _trofeiOttenutiFormKey ,
                     controller: _trofeiController,
                     decoration: InputDecoration(
                         hintText: "${widget.gameplayer.trofeiOttenuti!}/${widget.gameplayer.game!.trofeiTotali}",

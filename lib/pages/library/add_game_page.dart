@@ -48,11 +48,12 @@ class AddGamePageState extends State<AddGamePage> {
   final _nomeFormKey = GlobalKey<FormFieldState>();
   final _sviluppatoreFormKey = GlobalKey<FormFieldState>();
   final _trofeiTotaliFormKey = GlobalKey<FormFieldState>();
+  final _trofeiOttenutiFormKey = GlobalKey<FormFieldState>();
 
   Game gameToInsert = Game();
   Gameplayer gamePlayerToInsert = Gameplayer();
 
-  GamePlayerservice _gamePlayerservice = GamePlayerservice();
+  final GamePlayerservice _gamePlayerservice = GamePlayerservice();
 
   bool isLoadedImage = false;
 
@@ -87,7 +88,7 @@ class AddGamePageState extends State<AddGamePage> {
 
   Future<void> onConfirmPress(int idPlayer) async {
 
-    if(_nomeFormKey.currentState!.validate() && _sviluppatoreFormKey.currentState!.validate() && _trofeiTotaliFormKey.currentState!.validate()){
+    if(_nomeFormKey.currentState!.validate() && _sviluppatoreFormKey.currentState!.validate() && _trofeiTotaliFormKey.currentState!.validate() && _trofeiOttenutiFormKey.currentState!.validate()){
        if(!isLoadedImage){
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                   content: Text('Inserire una immagine del gioco!'),
@@ -218,7 +219,9 @@ Future<void> _performInsert(int idPlayer) async {
                                   ),
                                 )
                                 )
-                                 : SquareAvatar(imageUrl: gameToInsert.immagineURL!, size: 100, isNetworkImage: gameToInsert.isNetworkImage!),
+                                 : SquareAvatar(imageUrl: gameToInsert.immagineURL!, size: 100, isNetworkImage: gameToInsert.isNetworkImage!,updateParentState: (String value){
+                                  gameToInsert.immagineURL = value;
+                                 }),
 
                             const SizedBox(width: 24),
                             SizedBox(
@@ -313,6 +316,7 @@ Future<void> _performInsert(int idPlayer) async {
                         SizedBox(
                             width: 300,
                             child: TextFormField(
+                                key: _trofeiOttenutiFormKey,
                                 decoration: const InputDecoration(
                                     border:  OutlineInputBorder(),
                                     labelText: "Trofei ottenuti",
@@ -320,6 +324,12 @@ Future<void> _performInsert(int idPlayer) async {
                                 ),
                                 keyboardType: TextInputType.number,
                                 controller: _trofeiOttenutiController,
+                                validator: (value) {
+                                  if(value!= ""){
+                                  if(int.parse(value!)  > int.parse(_trofeiTotaliController.text)){
+                                    return "Trofei ottenuti maggiori dei totali";
+                                  }
+                                }},
                             )
                         ),
                         const SizedBox(height: 24),
