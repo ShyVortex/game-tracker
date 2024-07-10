@@ -47,7 +47,7 @@ class DatePickerState extends State<DatePickerField> {
               controller: _dateController,
               decoration: InputDecoration(
                 labelText: widget.label,
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
               ),
               readOnly: true,
             ),

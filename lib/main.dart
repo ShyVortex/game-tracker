@@ -14,10 +14,11 @@ final playerProvider = StateProvider<Player>((ref) => Player());
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-  runApp(
-     ProviderScope(child: MyApp()) );
-  WidgetsFlutterBinding.ensureInitialized();
+
+  SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual, overlays: SystemUiOverlay.values
+  );
+
   runApp(ProviderScope(child: MyApp()));
 }
 
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const String appTitle = 'Game Tracker';
-    return  MaterialApp(
+    return MaterialApp(
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
@@ -54,9 +55,9 @@ class MyApp extends StatelessWidget {
                 }
               },
           );
-   
   }),
-       title: appTitle);
+       title: appTitle
+    );
   }
   Future<Widget> _loadSavedValue(ref) async {
     final prefs = await SharedPreferences.getInstance();
@@ -65,8 +66,8 @@ class MyApp extends StatelessWidget {
       return const LoginPage();
     }
     else {
-      Player _player = await _playerService.getPlayerByEmail(prefs.getString("email")!);
-      ref.read(playerProvider.notifier).state = _player;
+      Player player = await _playerService.getPlayerByEmail(prefs.getString("email")!);
+      ref.read(playerProvider.notifier).state = player;
       return const NavigationPage();
     }
   }

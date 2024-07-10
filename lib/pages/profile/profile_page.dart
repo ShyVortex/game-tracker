@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:avatar_view/avatar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:game_tracker/widgets/date_picker_field.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key, required this.idPlayer});
@@ -19,9 +22,54 @@ class ProfilePageState extends State<ProfilePage> {
   ];
   String dropdownValue = "";
   bool hasFavouriteGame = false; // variabile placeholder
+  File? galleryFile;
+  final picker = ImagePicker();
 
-  void handleChangePfp() {
-    // todo: gestire avatar dell'utente
+  void handleChangePfp({required BuildContext context}) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Galleria'),
+                onTap: () {
+                  getImage(ImageSource.gallery);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('Fotocamera'),
+                onTap: () {
+                  getImage(ImageSource.camera);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future getImage(
+      ImageSource img,
+      ) async {
+    final pickedFile = await picker.pickImage(source: img);
+    XFile? xfilePick = pickedFile;
+    setState(
+          () {
+        if (xfilePick != null) {
+          galleryFile = File(pickedFile!.path);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Nothing is selected')));
+        }
+      },
+    );
   }
 
   @override
@@ -76,7 +124,9 @@ class ProfilePageState extends State<ProfilePage> {
                                         maxWidth: 25,
                                         maxHeight: 25
                                       ),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        handleChangePfp(context: context);
+                                      },
                                       fillColor: Colors.white,
                                       shape: const CircleBorder(),
                                       child: const Icon(
