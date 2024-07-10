@@ -13,7 +13,7 @@ class LibraryPage extends StatefulWidget {
 }
 
 class LibraryPageState extends State<LibraryPage> {
-  List<Gameplayer> _games = [];
+  List<GamePlayer> _games = [];
   final PlayerService _playerService = PlayerService();
   bool _isLoading = true;
 

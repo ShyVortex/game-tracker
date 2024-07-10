@@ -5,7 +5,8 @@ import 'package:game_tracker/main.dart';
 import 'package:game_tracker/models/player.dart';
 import 'package:game_tracker/pages/navigationBar/navigation_page.dart';
 import 'package:game_tracker/pages/registration/signup/signup_page.dart';
-import 'package:game_tracker/utilities/Utilities.dart';
+import 'package:game_tracker/utilities/login_utilities.dart';
+import 'package:game_tracker/utilities/reference_utilities.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../widgets/app_logo.dart';
 
@@ -114,17 +115,19 @@ class LoginPageState extends State<LoginPage> {
                             } else {
                               try {
                                 _player = await _playerservice.getPlayerByEmail(email!);
-                                if (await Utilities.verifyPassword(
+                                if (await LoginUtilities.verifyPassword(
                                     password!, _player.password!)) {
 
                                   ref.read(playerProvider.notifier).state = _player;
 
                                   final prefs = await SharedPreferences.getInstance();
 
-                                  if(rememberMe){
+                                  if (rememberMe) {
                                     await prefs.setString("password", _player.password!);
                                     await prefs.setString("email", _player.email!);
                                   }
+
+                                  ReferenceUtilities.setActivePlayer(_player);
 
                                   Navigator.push(
                                       context,

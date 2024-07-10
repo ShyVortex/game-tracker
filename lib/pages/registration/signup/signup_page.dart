@@ -3,7 +3,7 @@ import 'package:game_tracker/controller/playerService.dart';
 import 'package:game_tracker/models/player.dart';
 import 'package:game_tracker/pages/registration/signup/game_selection_page.dart';
 import 'package:game_tracker/pages/registration/login/login_page.dart';
-import 'package:game_tracker/utilities/Utilities.dart';
+import 'package:game_tracker/utilities/login_utilities.dart';
 import 'package:game_tracker/widgets/loading_screen.dart';
 
 class SignupPage extends StatefulWidget{
@@ -115,7 +115,7 @@ class SignupPageState extends State<SignupPage> {
                              content: Text('Compilare tutti i campi'),
                            ),
                          );
-                       } else if (Utilities.isValidEmail(email!)) {
+                       } else if (LoginUtilities.isValidEmail(email!)) {
                          ScaffoldMessenger.of(context).showSnackBar(
                            const SnackBar(
                              content: Text(

@@ -2,8 +2,11 @@ import 'dart:io';
 
 import 'package:avatar_view/avatar_view.dart';
 import 'package:flutter/material.dart';
+import 'package:game_tracker/models/player.dart';
+import 'package:game_tracker/utilities/reference_utilities.dart';
 import 'package:game_tracker/widgets/date_picker_field.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key, required this.idPlayer});
@@ -25,6 +28,52 @@ class ProfilePageState extends State<ProfilePage> {
   File? galleryFile;
   final picker = ImagePicker();
 
+  late final Player player;
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  var dateKey = DatePickerField().accessKey;
+  final TextEditingController genderController = TextEditingController();
+  final TextEditingController platformController = TextEditingController();
+  final TextEditingController favouriteController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    player = ReferenceUtilities.getActivePlayer();
+    loadProfileImage();
+    initializeFields();
+  }
+
+  Future<void> loadProfileImage() async {
+    // Carica immagine nuovo utente
+    galleryFile = File("assets/new-user.png");
+
+    final prefs = await SharedPreferences.getInstance();
+    String? path = prefs.getString('profileImage');
+    if (path != null && path.isNotEmpty) {
+      setState(() {
+        // Se l'utente ha già impostato un avatar allora caricalo
+        galleryFile = File(path);
+      });
+    }
+  }
+
+  Future<void> initializeFields() async {
+    emailController.text = player.email!;
+    passwordController.text = "................";
+
+    if (player.birthday != null) {
+      dateKey.currentState?.dateController.text = player.birthday!;
+    }
+    if (player.genere != null) {
+      genderController.text = player.genere?.name as String;
+    }
+    if (player.piattaforma != null) {
+      platformController.text = player.piattaforma!.name;
+    }
+  }
+
   void handleChangePfp({required BuildContext context}) {
     showModalBottomSheet(
       context: context,
@@ -33,18 +82,18 @@ class ProfilePageState extends State<ProfilePage> {
           child: Wrap(
             children: <Widget>[
               ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text('Galleria'),
-                onTap: () {
-                  getImage(ImageSource.gallery);
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
                 leading: const Icon(Icons.photo_camera),
                 title: const Text('Fotocamera'),
                 onTap: () {
                   getImage(ImageSource.camera);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Galleria'),
+                onTap: () {
+                  getImage(ImageSource.gallery);
                   Navigator.of(context).pop();
                 },
               ),
@@ -61,9 +110,14 @@ class ProfilePageState extends State<ProfilePage> {
     final pickedFile = await picker.pickImage(source: img);
     XFile? xfilePick = pickedFile;
     setState(
-          () {
+          () async {
         if (xfilePick != null) {
           galleryFile = File(pickedFile!.path);
+
+          // Salva path dell'immagine in locale
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString("profileImage", galleryFile!.path);
+
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Nothing is selected')));
@@ -109,10 +163,10 @@ class ProfilePageState extends State<ProfilePage> {
                           children: [
                             Stack(
                               children: [
-                                const AvatarView(
+                                AvatarView(
                                   radius: 50,
                                   avatarType: AvatarType.CIRCLE,
-                                  imagePath: "assets/new-user.png",
+                                  imagePath: galleryFile!.path,
                                 ),
                                 Positioned(
                                   top: 70,
@@ -141,7 +195,7 @@ class ProfilePageState extends State<ProfilePage> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text("ShyVortex", style: TextStyle(
+                                Text(player.username!, style: const TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
                                 )),
@@ -149,6 +203,7 @@ class ProfilePageState extends State<ProfilePage> {
                                 SizedBox(
                                     width: 170,
                                     child: TextFormField(
+                                      controller: emailController,
                                       decoration: const InputDecoration(
                                           border:  null,
                                           labelText: "Email",
@@ -163,9 +218,10 @@ class ProfilePageState extends State<ProfilePage> {
                         const SizedBox(height: 32),
                         Row(
                           children: <Widget>[
-                            const Expanded(
-                              child: TextField(
-                                decoration: InputDecoration(
+                            Expanded(
+                              child: TextFormField(
+                                controller: passwordController,
+                                decoration: const InputDecoration(
                                   labelText: 'Password',
                                   border: OutlineInputBorder(),
                                 ),
@@ -180,7 +236,7 @@ class ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                         const SizedBox(height: 24),
-                        const DatePickerField(label: "Data di nascita"),
+                        DatePickerField(label: "Data di nascita"),
                         const SizedBox(height: 24),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -194,6 +250,7 @@ class ProfilePageState extends State<ProfilePage> {
                                         fontWeight: FontWeight.w600,
                                     )),
                                 DropdownMenu<String>(
+                                  controller: genderController,
                                   width: 250,
                                   initialSelection: "",
                                   onSelected: (String? value) {
@@ -222,6 +279,7 @@ class ProfilePageState extends State<ProfilePage> {
                                         fontWeight: FontWeight.w600,
                                     )),
                                 DropdownMenu<String>(
+                                  controller: platformController,
                                   width: 250,
                                   initialSelection: "",
                                   onSelected: (String? value) {
@@ -240,9 +298,10 @@ class ProfilePageState extends State<ProfilePage> {
                         const SizedBox(height: 24),
                         Row(
                           children: <Widget>[
-                            const Expanded(
-                              child: TextField(
-                                decoration: InputDecoration(
+                            Expanded(
+                              child: TextFormField(
+                                controller: favouriteController,
+                                decoration: const InputDecoration(
                                   labelText: 'Gioco preferito',
                                   labelStyle: TextStyle(fontFamily: 'Roboto'),
                                   border: OutlineInputBorder(),

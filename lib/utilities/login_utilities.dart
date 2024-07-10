@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:bcrypt/bcrypt.dart';
 import 'package:flutter/foundation.dart';
 
-class Utilities {
+class LoginUtilities {
   
 static Future<String> hashPassword(String password) async {
   return BCrypt.hashpw(password, BCrypt.gensalt());

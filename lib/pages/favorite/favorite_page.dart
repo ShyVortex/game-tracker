@@ -12,7 +12,7 @@ class FavoritePage extends StatefulWidget {
 }
 
 class _FavoritePageState extends State<FavoritePage> {
- List<Gameplayer> _favoritesGame = [];
+ List<GamePlayer> _favoritesGame = [];
  bool _isLoading = true;
  final PlayerService _playerService = PlayerService();
    @override

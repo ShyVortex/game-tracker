@@ -14,7 +14,7 @@ class GamePlayerservice {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   };
-  Future _addGameToPlayer(int ? idGame, int idPlayer,Gameplayer gamePlayer) async {
+  Future _addGameToPlayer(int ? idGame, int idPlayer,GamePlayer gamePlayer) async {
 
      Uri uri = Uri.parse('${gamePlayerURL}addGameToPlayer/$idGame/$idPlayer');
      
@@ -23,7 +23,7 @@ class GamePlayerservice {
         if(response.statusCode == 200){
         var data = jsonDecode(response.body);
         print(data);
-        return Gameplayer.fromJson(data);
+        return GamePlayer.fromJson(data);
       }
       else {
         print("C'è stato un errore nella chiamata");
@@ -36,7 +36,7 @@ class GamePlayerservice {
 
     return await  Future((){
       games.forEach((element) async {
-      Gameplayer gameplayer = Gameplayer();
+      GamePlayer gameplayer = GamePlayer();
       gameplayer.preferito = false;
       gameplayer.trofeiTotali = 60;
       gameplayer.trofeiOttenuti = 0;

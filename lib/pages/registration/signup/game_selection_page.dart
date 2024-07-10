@@ -27,19 +27,21 @@ class GameSelectPageState extends State<GameSelectPage> {
    final Gameservice _gameservice = Gameservice();
    final GamePlayerservice _gamePlayerservice = GamePlayerservice();
 
-     Future<List<Game>?> fetchData() async {
+  Future<List<Game>?> fetchData() async {
     _games = await _gameservice.getAll();
     _player = await _playerService.getPlayerByEmail(widget.data!);
     setState(() {
-    isLoading = false;
+      isLoading = false;
     });
     return _games;
-     }
-      @override
+  }
+
+  @override
     void initState() {
     super.initState();
     fetchData();
   }
+
   List<Game> _selectedGames(){
     List<Game> games = [];
     for (var element in _games) {
@@ -49,6 +51,7 @@ class GameSelectPageState extends State<GameSelectPage> {
     }
     return games;
   }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
