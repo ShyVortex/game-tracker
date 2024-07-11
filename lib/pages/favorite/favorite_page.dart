@@ -101,7 +101,7 @@ class _FavoritePageState extends State<FavoritePage> {
           return ListTile(
             title: Text(_favoritesGame[index].game!.nome!, style: const TextStyle(fontWeight: FontWeight.w600, fontFamily: 'Inter')),
             subtitle:  Text(_favoritesGame[index].game!.sviluppatore!, style: const TextStyle(fontFamily: 'Inter')),
-            leading:  SquareAvatar(imageUrl: _favoritesGame[index].game!.immagineURL!, size: 50, isNetworkImage: _favoritesGame[index].game!.isNetworkImage!, ),
+            leading:  SquareAvatar(imageUrl: _favoritesGame[index].game!.immagineURL!, size: 50, isNetworkImage: _favoritesGame[index].game!.isNetworkImage!,isTouchable: false, ),
             trailing: IconButton(
           icon: Icon(
             _favoritesGame[index].preferito! ? Icons.star : Icons.star_border,

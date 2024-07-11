@@ -222,7 +222,7 @@ Future<void> _performInsert(int idPlayer) async {
                                           )
                                               : SquareAvatar(imageUrl: gameToInsert.immagineURL!, size: 100, isNetworkImage: gameToInsert.isNetworkImage!,updateParentState: (String value){
                                             gameToInsert.immagineURL = value;
-                                          }),
+                                          },isTouchable: true,),
 
                                           const SizedBox(width: 24),
                                           SizedBox(

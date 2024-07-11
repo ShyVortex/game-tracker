@@ -179,7 +179,8 @@ void updateState(){
                             SquareAvatar(
                               imageUrl: widget.gameplayer.game!.immagineURL!,
                               size: 70,
-                              isNetworkImage: widget.gameplayer.game!.isNetworkImage!,),
+                              isNetworkImage: widget.gameplayer.game!.isNetworkImage!,
+                              isTouchable: false,),
                             const SizedBox(
                               width: 40,
                             ),
