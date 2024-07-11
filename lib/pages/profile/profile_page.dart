@@ -53,6 +53,7 @@ class ProfilePageState extends State<ProfilePage> {
     final prefs = await SharedPreferences.getInstance();
     String? b64Img = prefs.getString('profileImage');
     if (b64Img != null && b64Img.isNotEmpty) {
+      // Se l'utente ha già impostato un avatar allora caricalo
       try {
         // Con await ottiene il file da Future<File>
         File imageFile = await ConcreteImageUtilities.instance.decodeImage(b64Img);
@@ -61,7 +62,6 @@ class ProfilePageState extends State<ProfilePage> {
           galleryFile = imageFile;
         });
       } catch (e) {
-        // Handle error, such as displaying an error message
         print("Error decoding image: $e");
       }
     }
