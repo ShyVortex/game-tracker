@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_tracker/main.dart';
 import 'package:game_tracker/pages/favorite/favorite_page.dart';
 import 'package:game_tracker/pages/library/library_page.dart';
+import 'package:game_tracker/pages/profile/profile_page.dart';
 import '../../theme/app_theme.dart';
 
 class NavigationPage extends StatefulWidget {
@@ -27,9 +28,9 @@ class _NavigationPage extends State<NavigationPage> {
     Consumer(builder: (context, ref, child) {
       return FavoritePage(idPlayer: ref.watch(playerProvider).id!);
     }),
-    const Center(
-      child: Placeholder(),
-    )
+    Consumer(builder: (context, ref, child) {
+      return ProfilePage(idPlayer: ref.watch(playerProvider).id!);
+    }),
   ];
   int navigationIndex = 0;
 

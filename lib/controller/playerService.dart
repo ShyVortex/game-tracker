@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:game_tracker/models/gamePlayer.dart';
-import 'package:game_tracker/utilities/Utilities.dart';
+import 'package:game_tracker/utilities/login_utilities.dart';
+import 'package:game_tracker/utilities/reference_utilities.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/player.dart';
@@ -20,12 +21,13 @@ class PlayerService {
       
       return Future.delayed(const Duration(seconds: 3), () async {
         
-      player.password = await Utilities.hashPassword(player.password!);
+      player.password = await LoginUtilities.hashPassword(player.password!);
       var jsonObject = jsonEncode(player);
       http.Response response = await http.post(uri,body: jsonObject, headers: headers);
-        if(response.statusCode == 200){
+        if(response.statusCode == 200) {
         var data = jsonDecode(response.body);
         print(data);
+        ReferenceUtilities.setActivePlayer(player);
         return Player.fromJson(data);
       }
       else {
@@ -56,12 +58,12 @@ class PlayerService {
       Uri uri = Uri.parse('${playerURL}getGiochiPosseduti/$id');
 
       http.Response response = await http.get(uri,headers:headers);
-      List<Gameplayer> games = [];
+      List<GamePlayer> games = [];
       if(response.statusCode == 200){
         List<dynamic> data = jsonDecode(response.body);
         
 
-        games = data.map((json) => Gameplayer.fromJson(json)).toList();
+        games = data.map((json) => GamePlayer.fromJson(json)).toList();
         
        
         return games;
@@ -75,12 +77,12 @@ class PlayerService {
      Uri uri = Uri.parse('${playerURL}getGiochiPreferiti/$id');
 
       http.Response response = await http.get(uri,headers:headers);
-      List<Gameplayer> games = [];
+      List<GamePlayer> games = [];
       if(response.statusCode == 200){
         List<dynamic> data = jsonDecode(response.body);
         
 
-        games = data.map((json) => Gameplayer.fromJson(json)).toList();
+        games = data.map((json) => GamePlayer.fromJson(json)).toList();
         
        
         return games;
@@ -96,7 +98,7 @@ class PlayerService {
 
     if(response.statusCode == 200){
          var data = jsonDecode(response.body);
-         return  Gameplayer.fromJson(data);
+         return  GamePlayer.fromJson(data);
       }
       else {
         throw Error();

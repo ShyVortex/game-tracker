@@ -89,89 +89,91 @@ class MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight + 1),
-        child: Column(
-          children: [
-            AppBar(
-              title: const Text(
-                "Seleziona luogo",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 26,
-                  fontFamily: 'Inter',
-                ),
-              ),
-              // Impedisce di cambiare colore quando il contenuto viene scrollato
-              forceMaterialTransparency: true,
-            ),
-            Divider(
-              height: 1,
-              thickness: 1,
-              color: themeData.dividerColor.withOpacity(0.35),
-            ),
-          ],
-        ),
-      ),
-      body: Stack(
-        children: [
-          MapContent(key: mapKey),
-          Positioned(
-            top: 16,
-            left: 16,
-            right: 16,
-            child: Card.outlined(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-                side: BorderSide(
-                  color: Colors.black.withOpacity(0.35),
-                  width: 2,
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                child: TextField(
-                  controller: searchController,
-                  decoration: const InputDecoration(
-                    hintText: 'Cerca luogo...',
-                    border: InputBorder.none,
-                    prefixIcon: Icon(Icons.search),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 14),
+    return SafeArea(
+        child: Scaffold(
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(kToolbarHeight + 1),
+              child: Column(
+                children: [
+                  AppBar(
+                    title: const Text(
+                      "Seleziona luogo",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 26,
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                    // Impedisce di cambiare colore quando il contenuto viene scrollato
+                    forceMaterialTransparency: true,
                   ),
-                  readOnly: true,
-                  onTap: onSearchTap
+                  Divider(
+                    height: 1,
+                    thickness: 1,
+                    color: themeData.dividerColor.withOpacity(0.35),
+                  ),
+                ],
+              ),
+            ),
+            body: Stack(
+              children: [
+                MapContent(key: mapKey),
+                Positioned(
+                  top: 16,
+                  left: 16,
+                  right: 16,
+                  child: Card.outlined(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: BorderSide(
+                        color: Colors.black.withOpacity(0.35),
+                        width: 2,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      child: TextField(
+                          controller: searchController,
+                          decoration: const InputDecoration(
+                            hintText: 'Cerca luogo...',
+                            border: InputBorder.none,
+                            prefixIcon: Icon(Icons.search),
+                            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 14),
+                          ),
+                          readOnly: true,
+                          onTap: onSearchTap
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ),
-          ],
-      ),
-      floatingActionButton: Stack(
-          children: <Widget>[
-            Positioned(
-                bottom: 100.0,
-                right: 4.0,
-              child: FloatingActionButton(
-                shape: const CircleBorder(),
-                backgroundColor: Colors.purple,
-                onPressed: determinePosition,
-                child: const Icon(Icons.my_location, color: Colors.white, size: 30),
-              ),
-            ),
-            if (searchController.text.isNotEmpty)
-              Positioned(
-                  bottom: 26.0,
-                  right: 4.0,
-                child: FloatingActionButton(
-                  shape: const CircleBorder(),
-                  backgroundColor: Colors.green,
-                  onPressed: confirmLocation,
-                  child: const Icon(Icons.check, color: Colors.white, size: 30),
-                )
-              )
-          ]
+            floatingActionButton: Stack(
+                children: <Widget>[
+                  Positioned(
+                    bottom: 100.0,
+                    right: 4.0,
+                    child: FloatingActionButton(
+                      shape: const CircleBorder(),
+                      backgroundColor: Colors.purple,
+                      onPressed: determinePosition,
+                      child: const Icon(Icons.my_location, color: Colors.white, size: 30),
+                    ),
+                  ),
+                  if (searchController.text.isNotEmpty)
+                    Positioned(
+                        bottom: 26.0,
+                        right: 4.0,
+                        child: FloatingActionButton(
+                          shape: const CircleBorder(),
+                          backgroundColor: Colors.green,
+                          onPressed: confirmLocation,
+                          child: const Icon(Icons.check, color: Colors.white, size: 30),
+                        )
+                    )
+                ]
+            )
         )
-      );
+    );
   }
 }

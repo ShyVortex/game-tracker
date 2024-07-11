@@ -1,22 +1,22 @@
 
 import 'package:game_tracker/models/Piattaforma.dart';
-import 'package:game_tracker/models/sesso.dart';
+import 'package:game_tracker/models/genere.dart';
 
 class Player {
   int? _id;
   String? _username;
   String? _email;
   String? _password;
-  Sesso? _sesso;
+  Genere? _genere;
   String? _birthday;
   Piattaforma? _piattaformaPreferita;
    
-  Player.withParameters({required int? id,required String? username, required String? email,required String? password,required Sesso? sesso,required String? birthday,required Piattaforma? piattaformaPreferita}){
+  Player.withParameters({required int? id,required String? username, required String? email,required String? password,required Genere? genere,required String? birthday,required Piattaforma? piattaformaPreferita}){
     _id = id;
     _username = username;
     _email = email;
     _password = password;
-    _sesso = sesso;
+    _genere = genere;
     _birthday = birthday;
     _piattaformaPreferita = piattaformaPreferita;
   }
@@ -26,7 +26,7 @@ class Player {
   String? get username => _username;
   String? get password => _password;
   String? get email => _email;
-  Sesso? get sesso => _sesso;
+  Genere? get genere => _genere;
   String? get birthday => _birthday;
   Piattaforma? get piattaforma => _piattaformaPreferita;
 
@@ -36,8 +36,8 @@ class Player {
   set password(String? value){
     _password = value;
   }
-  set sesso(Sesso? value){
-    _sesso = value;
+  set genere(Genere? value){
+    _genere = value;
   }
   set birthday(String? value){
     _birthday = value;
@@ -53,7 +53,7 @@ class Player {
     'username': _username,
     'email': _email,
     'password': _password,
-    'sesso': _sesso,
+    'sesso': _genere,
     'birthday': _birthday,
     'piattaformaPreferita': _piattaformaPreferita
   };
@@ -63,7 +63,7 @@ class Player {
       username: json['username'],
       email: json['email'],
       password:json['password'],
-      sesso: json['sesso'],
+      genere: json['sesso'],
       birthday: json['birthday'],
       piattaformaPreferita : json['piattaformaPreferita']
     );

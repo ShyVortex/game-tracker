@@ -12,7 +12,7 @@ class FavoritePage extends StatefulWidget {
 }
 
 class _FavoritePageState extends State<FavoritePage> {
- List<Gameplayer> _favoritesGame = [];
+ List<GamePlayer> _favoritesGame = [];
  bool _isLoading = true;
  final PlayerService _playerService = PlayerService();
    @override
@@ -28,36 +28,37 @@ class _FavoritePageState extends State<FavoritePage> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(top: 4),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                      onPressed: null,
-                      icon: Icon(Icons.settings, size: 28, color: Colors.black)
-                  )
-                ],
-              ),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                    padding: EdgeInsets.only(left: 32),
-                  child: Text(
-                      "Preferiti",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26, fontFamily: 'Inter')
-                  )
-                ),
-              ],
-            ),
-              const Divider(),
+    return SafeArea(
+        child: Scaffold(
+          body: Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                            onPressed: null,
+                            icon: Icon(Icons.settings, size: 28, color: Colors.black)
+                        )
+                      ],
+                    ),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                            padding: EdgeInsets.only(left: 32),
+                            child: Text(
+                                "Preferiti",
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26, fontFamily: 'Inter')
+                            )
+                        ),
+                      ],
+                    ),
+                    const Divider(),
 
-              (_favoritesGame.isEmpty) ?
+                    (_favoritesGame.isEmpty) ?
 
                  Expanded(
                     child: 
@@ -100,7 +101,7 @@ class _FavoritePageState extends State<FavoritePage> {
           return ListTile(
             title: Text(_favoritesGame[index].game!.nome!, style: const TextStyle(fontWeight: FontWeight.w600, fontFamily: 'Inter')),
             subtitle:  Text(_favoritesGame[index].game!.sviluppatore!, style: const TextStyle(fontFamily: 'Inter')),
-            leading:  SquareAvatar(imageUrl: _favoritesGame[index].game!.immagineURL!, size: 50, isNetworkImage: _favoritesGame[index].game!.isNetworkImage!, ),
+            leading:  SquareAvatar(imageUrl: _favoritesGame[index].game!.immagineURL!, size: 50, isNetworkImage: _favoritesGame[index].game!.isNetworkImage!,isTouchable: false, ),
             trailing: IconButton(
           icon: Icon(
             _favoritesGame[index].preferito! ? Icons.star : Icons.star_border,
@@ -122,7 +123,7 @@ class _FavoritePageState extends State<FavoritePage> {
             ]
             )
             ),
+        )
     );
   }
-  
 }

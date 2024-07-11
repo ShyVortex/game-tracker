@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_tracker/controller/playerService.dart';
@@ -12,10 +13,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 final playerProvider = StateProvider<Player>((ref) => Player());
 
 void main() {
-  runApp(
-     ProviderScope(child: MyApp()) );
   WidgetsFlutterBinding.ensureInitialized();
   runApp( ProviderScope(child: MyApp()));
+
+  SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual, overlays: SystemUiOverlay.values
+  );
+
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -25,7 +30,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const String appTitle = 'Game Tracker';
-    return  MaterialApp(
+    return MaterialApp(
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
@@ -51,9 +56,9 @@ class MyApp extends StatelessWidget {
                 }
               },
           );
-   
   }),
-       title: appTitle);
+       title: appTitle
+    );
   }
   Future<Widget> _loadSavedValue(ref) async {
     final prefs = await SharedPreferences.getInstance();
@@ -62,8 +67,8 @@ class MyApp extends StatelessWidget {
       return const LoginPage();
     }
     else {
-      Player _player = await _playerService.getPlayerByEmail(prefs.getString("email")!);
-      ref.read(playerProvider.notifier).state = _player;
+      Player player = await _playerService.getPlayerByEmail(prefs.getString("email")!);
+      ref.read(playerProvider.notifier).state = player;
       return const NavigationPage();
     }
   }

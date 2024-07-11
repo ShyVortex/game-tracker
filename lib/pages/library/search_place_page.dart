@@ -44,58 +44,60 @@ class SearchPlaceState extends State<SearchPlacePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Card.outlined(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-              side: BorderSide(
-                color: Colors.black.withOpacity(0.35),
-                width: 2,
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              child: Row(
-                children: [
-                  BackButton(
-                    onPressed: navigateBack,
+    return SafeArea(
+        child: Scaffold(
+          body: Column(
+            children: [
+              Card.outlined(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  side: BorderSide(
+                    color: Colors.black.withOpacity(0.35),
+                    width: 2,
                   ),
-                  Expanded(
-                      child: TextField(
-                        controller: searchController,
-                        decoration: const InputDecoration(
-                          hintText: 'Cerca luogo...',
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 14),
+                ),
+                child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    child: Row(
+                      children: [
+                        BackButton(
+                          onPressed: navigateBack,
                         ),
-                        onSubmitted: (value) => searchLocation()
-                      )
-                  )
-                ],
-              )
-            ),
-          ),
-          if (isLoading) const CircularProgressIndicator(),
-          if (searchResults.isNotEmpty)
-            SizedBox(
-              height: 200,
-              child: ListView.builder(
-                itemCount: searchResults.length,
-                itemBuilder: (context, index) {
-                  final result = searchResults[index];
-                  return ListTile(
-                    title: Text(result.displayName),
-                    onTap: () {
-                      Navigator.pop(context, result);
-                    },
-                  );
-                },
+                        Expanded(
+                            child: TextField(
+                                controller: searchController,
+                                decoration: const InputDecoration(
+                                  hintText: 'Cerca luogo...',
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 14),
+                                ),
+                                onSubmitted: (value) => searchLocation()
+                            )
+                        )
+                      ],
+                    )
+                ),
               ),
-            ),
-        ],
-      ),
+              if (isLoading) const CircularProgressIndicator(),
+              if (searchResults.isNotEmpty)
+                SizedBox(
+                  height: 200,
+                  child: ListView.builder(
+                    itemCount: searchResults.length,
+                    itemBuilder: (context, index) {
+                      final result = searchResults[index];
+                      return ListTile(
+                        title: Text(result.displayName),
+                        onTap: () {
+                          Navigator.pop(context, result);
+                        },
+                      );
+                    },
+                  ),
+                ),
+            ],
+          ),
+        )
     );
   }
 

@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 
 class DatePickerField extends StatefulWidget {
-  const DatePickerField({super.key, required this.dateController});
-  final TextEditingController dateController; 
+  final TextEditingController dateController;
+  final String? label;
+
+  const DatePickerField(
+      {super.key, required this.dateController, required this.label}
+  );
 
   @override
   State<DatePickerField> createState() => DatePickerState();
 }
 
 class DatePickerState extends State<DatePickerField> {
-  
+
   final int currentYear = DateTime.now().year;
 
   @override
@@ -42,8 +46,8 @@ class DatePickerState extends State<DatePickerField> {
           Expanded(
             child: TextField(
               controller: widget.dateController,
-              decoration: const InputDecoration(
-                labelText: 'Data completamento',
+              decoration: InputDecoration(
+                labelText: widget.label,
                 border: OutlineInputBorder(),
               ),
               readOnly: true,

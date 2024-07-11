@@ -1,8 +1,6 @@
-
-
 import 'package:game_tracker/models/game.dart';
 
-class Gameplayer {
+class GamePlayer {
      int? _id;
      int? _trofeiOttenuti;
      int? _valutazione;
@@ -12,7 +10,7 @@ class Gameplayer {
      String? _luogoCompletamento;
      List<String>? _immagini;
      String? _dataCompletamento;
-     Gameplayer.withParameters({required int? id,required int? trofeiOttenuti,required int? valutazione, required int? oreDiGioco,required bool? preferito,required Game? game, required String? luogoCompletamento, required List<String>? immagini,required String? dataCompletamento}){
+     GamePlayer.withParameters({required int? id,required int? trofeiOttenuti,required int? valutazione, required int? oreDiGioco,required bool? preferito,required Game? game, required String? luogoCompletamento, required List<String>? immagini,required String? dataCompletamento}){
       _id = id;
       _trofeiOttenuti = trofeiOttenuti;
       _valutazione = valutazione;
@@ -23,7 +21,7 @@ class Gameplayer {
       _dataCompletamento = dataCompletamento;
       _luogoCompletamento = luogoCompletamento;
      }
-     Gameplayer(){
+     GamePlayer(){
       _trofeiOttenuti = 0;
       _valutazione = 0;
       _oreDiGioco = 0;
@@ -44,7 +42,9 @@ class Gameplayer {
      String? get dataCompletamento => _dataCompletamento;
 
 
-      
+      set trofeiTotali(int? value){
+      trofeiTotali = value;
+    }
       set trofeiOttenuti(int? value){
       _trofeiOttenuti = value;
     }
@@ -76,8 +76,8 @@ class Gameplayer {
     "immagini" : _immagini,
     "dataCompletamento": _dataCompletamento
   };
-  factory Gameplayer.fromJson(Map<String, dynamic> json) {
-    return Gameplayer.withParameters(
+  factory GamePlayer.fromJson(Map<String, dynamic> json) {
+    return GamePlayer.withParameters(
       id: json['id'],
       trofeiOttenuti: json['trofeiOttenuti'],
       valutazione: json['valutazione'],
@@ -102,7 +102,7 @@ class Gameplayer {
    @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Gameplayer &&
+      other is GamePlayer &&
           runtimeType == other.runtimeType &&
           id == other.id &&
           trofeiOttenuti == other.trofeiOttenuti &&
