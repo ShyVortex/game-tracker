@@ -29,7 +29,7 @@ class ProfilePageState extends State<ProfilePage> {
   File? galleryFile;
   final picker = ImagePicker();
 
-  late final Player player;
+  Player player = Player();
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
