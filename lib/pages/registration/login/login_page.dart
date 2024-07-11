@@ -127,6 +127,8 @@ class LoginPageState extends State<LoginPage> {
                                         await prefs.setString("email", _player.email!);
                                       }
 
+                                      ReferenceUtilities.setActivePlayer(_player);
+
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
