@@ -12,19 +12,18 @@ abstract class ImageUtilities {
     return base64String;
   }
 
-  File decodeImage(String b64Image) {
+  Future<File> decodeImage(String b64Image) {
     // Decodifica l'immagine in bytes
     List<int> bytes = base64.decode(b64Image);
 
     // Dai bytes costruisce il file
-    File imageFile = writeAsBytes(bytes) as File;
-
-    return imageFile;
+    return writeAsBytes(bytes);
   }
 
   Future<File> writeAsBytes(
-      List<int> bytes,
-      {FileMode mode = FileMode.write,
-        bool flush = false}
+      List<int> bytes, {
+        FileMode mode = FileMode.write,
+        bool flush = false
+      }
   );
 }

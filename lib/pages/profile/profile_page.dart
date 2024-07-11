@@ -53,10 +53,17 @@ class ProfilePageState extends State<ProfilePage> {
     final prefs = await SharedPreferences.getInstance();
     String? b64Img = prefs.getString('profileImage');
     if (b64Img != null && b64Img.isNotEmpty) {
-      setState(() {
-        // Se l'utente ha già impostato un avatar allora caricalo
-        galleryFile = ConcreteImageUtilities.instance.decodeImage(b64Img);
-      });
+      try {
+        // Con await ottiene il file da Future<File>
+        File imageFile = await ConcreteImageUtilities.instance.decodeImage(b64Img);
+
+        setState(() {
+          galleryFile = imageFile;
+        });
+      } catch (e) {
+        // Handle error, such as displaying an error message
+        print("Error decoding image: $e");
+      }
     }
   }
 
@@ -111,22 +118,22 @@ class ProfilePageState extends State<ProfilePage> {
     final pickedFile = await picker.pickImage(source: img);
     XFile? xfilePick = pickedFile;
     setState(
-          () async {
+          () {
         if (xfilePick != null) {
           galleryFile = File(pickedFile!.path);
 
           // Converti in base64 e salva in locale
-          String b64Img = ConcreteImageUtilities.instance
-              .encodeImage(galleryFile!) as String;
-          final prefs = await SharedPreferences.getInstance();
-          await prefs.setString("profileImage", b64Img);
-
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Nothing is selected')));
+          processImage(galleryFile!);
         }
       },
     );
+  }
+
+  Future processImage(File imageFile) async {
+    String b64Img = await ConcreteImageUtilities.instance
+        .encodeImage(galleryFile!);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("profileImage", b64Img);
   }
 
   @override
