@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:avatar_view/avatar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:game_tracker/models/player.dart';
+import 'package:game_tracker/utilities/concrete_image_utilities.dart';
 import 'package:game_tracker/utilities/reference_utilities.dart';
 import 'package:game_tracker/widgets/date_picker_field.dart';
 import 'package:image_picker/image_picker.dart';
@@ -50,11 +51,11 @@ class ProfilePageState extends State<ProfilePage> {
     galleryFile = File("assets/new-user.png");
 
     final prefs = await SharedPreferences.getInstance();
-    String? path = prefs.getString('profileImage');
-    if (path != null && path.isNotEmpty) {
+    String? b64Img = prefs.getString('profileImage');
+    if (b64Img != null && b64Img.isNotEmpty) {
       setState(() {
         // Se l'utente ha già impostato un avatar allora caricalo
-        galleryFile = File(path);
+        galleryFile = ConcreteImageUtilities.instance.decodeImage(b64Img);
       });
     }
   }
@@ -114,9 +115,11 @@ class ProfilePageState extends State<ProfilePage> {
         if (xfilePick != null) {
           galleryFile = File(pickedFile!.path);
 
-          // Salva path dell'immagine in locale
+          // Converti in base64 e salva in locale
+          String b64Img = ConcreteImageUtilities.instance
+              .encodeImage(galleryFile!) as String;
           final prefs = await SharedPreferences.getInstance();
-          await prefs.setString("profileImage", galleryFile!.path);
+          await prefs.setString("profileImage", b64Img);
 
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
