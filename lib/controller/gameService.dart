@@ -4,7 +4,7 @@ import 'package:game_tracker/models/game.dart';
 import 'package:http/http.dart' as http;
 
 class Gameservice {
-    final String gameURL = 'http://localhost:8080/api/game-manager/game/';
+    final String gameURL = 'https://gamemanager-backend.onrender.com/api/game-manager/game/';
 
     final  headers = {
     'Content-Type': 'application/json',
@@ -27,6 +27,26 @@ class Gameservice {
       }
       else {
         throw Error();
+      }
+    }
+    Future addGame(Game game) async {
+
+      Uri uri = Uri.parse('${gameURL}addGame');
+
+      
+        
+      var jsonObject = jsonEncode(game);
+
+      http.Response response = await http.post(uri,body: jsonObject, headers: headers);
+
+        if(response.statusCode == 200){
+        var data = jsonDecode(response.body);
+        print(data);
+        return Game.fromJson(data);
+      }
+      else {
+        print("C'è stato un errore nella chiamata");
+        return null;
       }
     }
 }

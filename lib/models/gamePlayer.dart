@@ -1,35 +1,50 @@
+
+
 import 'package:game_tracker/models/game.dart';
 
 class Gameplayer {
      int? _id;
-     int? _trofeiTotali;
      int? _trofeiOttenuti;
      int? _valutazione;
      int? _oreDiGioco;
      bool? _preferito;
      Game? _game;
-     Gameplayer.withParameters({required int? id,required int? trofeiTotali,required int? trofeiOttenuti,required int? valutazione, required int? oreDiGioco,required bool? preferito,required Game? game}){
+     String? _luogoCompletamento;
+     List<String>? _immagini;
+     String? _dataCompletamento;
+     Gameplayer.withParameters({required int? id,required int? trofeiOttenuti,required int? valutazione, required int? oreDiGioco,required bool? preferito,required Game? game, required String? luogoCompletamento, required List<String>? immagini,required String? dataCompletamento}){
       _id = id;
-      _trofeiTotali = trofeiTotali;
       _trofeiOttenuti = trofeiOttenuti;
       _valutazione = valutazione;
       _oreDiGioco = oreDiGioco;
       _preferito = preferito;
       _game = game;
-    
+      _immagini = immagini;
+      _dataCompletamento = dataCompletamento;
+      _luogoCompletamento = luogoCompletamento;
      }
-     Gameplayer();
+     Gameplayer(){
+      _trofeiOttenuti = 0;
+      _valutazione = 0;
+      _oreDiGioco = 0;
+      _preferito = false;
+      _luogoCompletamento = "";
+      _dataCompletamento = "";
+      _immagini = [];
+     }
+
      int? get id => _id;
-     int? get trofeiTotali => _trofeiTotali;
      int? get trofeiOttenuti => _trofeiOttenuti;
      int? get valutazione => _valutazione;
      int? get oreDiGioco => _oreDiGioco;
      bool? get preferito => _preferito;
      Game? get game => _game;
+     List<String>? get immagini => _immagini;
+     String? get luogoCompletamento => _luogoCompletamento;
+     String? get dataCompletamento => _dataCompletamento;
 
-      set trofeiTotali(int? value){
-      _trofeiTotali = value;
-    }
+
+      
       set trofeiOttenuti(int? value){
       _trofeiOttenuti = value;
     }
@@ -42,24 +57,70 @@ class Gameplayer {
       set preferito(bool? value){
       _preferito = value;
     }
+    set luogoCompletamento(String? value){
+      _luogoCompletamento = value;
+    }
+    set immagini(List<String>? value){
+      _immagini = value;
+    }
+    set dataCompletamento(String? value){
+      _dataCompletamento = value;
+    }
     Map<String, dynamic> toJson() => {
     'id': _id,
-    'trofeiTotali': _trofeiTotali,
     'trofeiOttenuti': _trofeiOttenuti,
     'valutazione': _valutazione,
     "oreDiGioco" : _oreDiGioco,
     "preferito" : _preferito,
+    "luogoCompletamento" : _luogoCompletamento,
+    "immagini" : _immagini,
+    "dataCompletamento": _dataCompletamento
   };
   factory Gameplayer.fromJson(Map<String, dynamic> json) {
     return Gameplayer.withParameters(
       id: json['id'],
-      trofeiTotali: json['trofeiTotali'],
       trofeiOttenuti: json['trofeiOttenuti'],
       valutazione: json['valutazione'],
       oreDiGioco: json['oreDiGioco'],
       preferito: json['preferito'],
-      game: Game.fromJson(json['game'])
+      game: Game.fromJson(json['game']),
+      luogoCompletamento: json['luogoCompletamento'],
+      immagini : List<String>.from(json['immagini']),
+      dataCompletamento: json['dataCompletamento']
     );
   }
+   String toString() {
+    return 'GamePlayer(_id: $_id, '
+           '_trofeiOttenuti: $_trofeiOttenuti, '
+           '_valutazione: $_valutazione, '
+           '_oreDiGioco: $_oreDiGioco, '
+           '_preferito: $_preferito, '
+           '_game: $_game, '
+           '_immagini: $_immagini, '
+           '_dataCompletamento: $_dataCompletamento)';
+  }
+   @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Gameplayer &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          trofeiOttenuti == other.trofeiOttenuti &&
+          valutazione == other.valutazione &&
+          oreDiGioco == other.oreDiGioco &&
+          preferito == other.preferito &&
+          game == other.game &&
+          immagini == other.immagini &&
+          dataCompletamento == other.dataCompletamento;
 
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      trofeiOttenuti.hashCode ^
+      valutazione.hashCode ^
+      oreDiGioco.hashCode ^
+      preferito.hashCode ^
+      game.hashCode ^
+      immagini.hashCode ^
+      dataCompletamento.hashCode;
 }

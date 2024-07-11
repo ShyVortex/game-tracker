@@ -53,13 +53,16 @@ class GameSelectPageState extends State<GameSelectPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        forceMaterialTransparency: true,
         automaticallyImplyLeading: false,
         flexibleSpace: const AppLogo(),
       ),
       body: isLoading ? const Center(
         child: CircularProgressIndicator(),
       ) :
-       Column(children: [
+
+      SingleChildScrollView( child:
+        Column(children: [
         const Text(
   "Quali di questi giochi possiedi?",
   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, fontFamily: 'Inter'),
@@ -75,6 +78,7 @@ SizedBox(
         itemCount: _games.length,
         separatorBuilder: (context, index) => const Divider(), 
         itemBuilder: (context, index) {
+          if(_games[index].isNetworkImage!){
           return ListTile(
             title: Text(_games[index].nome!, style: const TextStyle(fontWeight: FontWeight.w600, fontFamily: 'Inter')),
             subtitle:  Text(_games[index].sviluppatore!, style: const TextStyle(fontFamily: 'Inter')),
@@ -96,6 +100,7 @@ SizedBox(
               });
             },
           );
+        }
         },
       )
       ),
@@ -116,6 +121,7 @@ SizedBox(
        
     ]
        )
+    )
     );
     
   }

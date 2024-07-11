@@ -15,7 +15,7 @@ void main() {
   runApp(
      ProviderScope(child: MyApp()) );
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const ProviderScope(child: MyApp()));
+  runApp( ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

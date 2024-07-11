@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 
 class DatePickerField extends StatefulWidget {
-  const DatePickerField({super.key});
+  const DatePickerField({super.key, required this.dateController});
+  final TextEditingController dateController; 
 
   @override
   State<DatePickerField> createState() => DatePickerState();
 }
 
 class DatePickerState extends State<DatePickerField> {
-  final TextEditingController _dateController = TextEditingController();
+  
   final int currentYear = DateTime.now().year;
 
   @override
   void dispose() {
-    _dateController.dispose();
+    widget.dateController.dispose();
     super.dispose();
   }
 
@@ -27,7 +28,7 @@ class DatePickerState extends State<DatePickerField> {
     );
     if (picked != null && picked != DateTime.now()) {
       setState(() {
-        _dateController.text = "${picked.toLocal()}".split(' ')[0];
+        widget.dateController.text = "${picked.toLocal()}".split(' ')[0];
       });
     }
   }
@@ -40,7 +41,7 @@ class DatePickerState extends State<DatePickerField> {
         children: <Widget>[
           Expanded(
             child: TextField(
-              controller: _dateController,
+              controller: widget.dateController,
               decoration: const InputDecoration(
                 labelText: 'Data completamento',
                 border: OutlineInputBorder(),
