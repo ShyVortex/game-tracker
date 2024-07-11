@@ -36,123 +36,125 @@ class SignupPageState extends State<SignupPage> {
      Widget build(BuildContext context) {
    return
    !_showRegistrationLoadingScreen ?
-   Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 150.0,
-          flexibleSpace: const MyContainerWidget(),
-          leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          }
-        )
-        ),
-        body:
-        SingleChildScrollView(child:
-         Center(
-        child: Column(
-          children:[
-          SizedBox(
-          width: 325,
-          child: TextField(
-          decoration: const InputDecoration(
-          border:  OutlineInputBorder(),
-          labelText: "Username",
-              labelStyle: TextStyle(fontFamily: 'Inter')
-        ),
-        onChanged: (value) {
-              username = value;
-            },
-      ),
-          ),
-        const SizedBox(height: 32),
-        SizedBox(
-          width: 325,
-          child: TextField(
-          decoration: const InputDecoration(
-          border:  OutlineInputBorder(),
-          labelText: "Email",
-              labelStyle: TextStyle(fontFamily: 'Inter')
-        ),
-            onChanged: (value) {
-              email = value;
-            },
-          ),
-        ),
-         const SizedBox(height: 32),
-            SizedBox(
-              width: 325,
-              child: TextField(
-                decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    labelText: "Password",
-                    labelStyle: const TextStyle(fontFamily: 'Inter'),
-                    suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            isPasswordHidden = !isPasswordHidden;
-                          });
-                        },
-                        icon: const Icon(Icons.remove_red_eye)
-                    )),
-                obscureText: isPasswordHidden,
-                onChanged: (value) {
-                  password = value;
-                },
-              ),
-            ),
-        const SizedBox(height: 40),
-            FilledButton(
-                  onPressed: () {
-                    if (password == null ||
-                        email == null ||
-                        username == null ||
-                        password == '' ||
-                        email == '' ||
-                        username == '') {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Compilare tutti i campi'),
-                        ),
-                      );
-                    } else if (Utilities.isValidEmail(email!)) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                              'Email non valida, inserire una email valida'),
-                        ),
-                      );
-                    } else {
-                      _switchScreen();
-                    }
-                  },
-                  child: const Text("PROSEGUI",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Inter'
-                      )
-                  ),
-                ),
-            const SizedBox(height: 20),
-            Builder(builder: (BuildContext context) {
-              return TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginPage()),
-                    );
-                  },
-                  child: const Text("Hai già un account? Effettua il login",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Inter'
-                      )
-                  ));
-            })
-              ]),
-        )
-        )
+   SafeArea(
+       child: Scaffold(
+           appBar: AppBar(
+               toolbarHeight: 150.0,
+               flexibleSpace: const MyContainerWidget(),
+               leading: IconButton(
+                   icon: const Icon(Icons.arrow_back),
+                   onPressed: () {
+                     Navigator.pop(context);
+                   }
+               )
+           ),
+           body:
+           SingleChildScrollView(child:
+           Center(
+             child: Column(
+                 children:[
+                   SizedBox(
+                     width: 325,
+                     child: TextField(
+                       decoration: const InputDecoration(
+                           border:  OutlineInputBorder(),
+                           labelText: "Username",
+                           labelStyle: TextStyle(fontFamily: 'Inter')
+                       ),
+                       onChanged: (value) {
+                         username = value;
+                       },
+                     ),
+                   ),
+                   const SizedBox(height: 32),
+                   SizedBox(
+                     width: 325,
+                     child: TextField(
+                       decoration: const InputDecoration(
+                           border:  OutlineInputBorder(),
+                           labelText: "Email",
+                           labelStyle: TextStyle(fontFamily: 'Inter')
+                       ),
+                       onChanged: (value) {
+                         email = value;
+                       },
+                     ),
+                   ),
+                   const SizedBox(height: 32),
+                   SizedBox(
+                     width: 325,
+                     child: TextField(
+                       decoration: InputDecoration(
+                           border: const OutlineInputBorder(),
+                           labelText: "Password",
+                           labelStyle: const TextStyle(fontFamily: 'Inter'),
+                           suffixIcon: IconButton(
+                               onPressed: () {
+                                 setState(() {
+                                   isPasswordHidden = !isPasswordHidden;
+                                 });
+                               },
+                               icon: const Icon(Icons.remove_red_eye)
+                           )),
+                       obscureText: isPasswordHidden,
+                       onChanged: (value) {
+                         password = value;
+                       },
+                     ),
+                   ),
+                   const SizedBox(height: 40),
+                   FilledButton(
+                     onPressed: () {
+                       if (password == null ||
+                           email == null ||
+                           username == null ||
+                           password == '' ||
+                           email == '' ||
+                           username == '') {
+                         ScaffoldMessenger.of(context).showSnackBar(
+                           const SnackBar(
+                             content: Text('Compilare tutti i campi'),
+                           ),
+                         );
+                       } else if (LoginUtilities.isValidEmail(email!)) {
+                         ScaffoldMessenger.of(context).showSnackBar(
+                           const SnackBar(
+                             content: Text(
+                                 'Email non valida, inserire una email valida'),
+                           ),
+                         );
+                       } else {
+                         _switchScreen();
+                       }
+                     },
+                     child: const Text("PROSEGUI",
+                         style: TextStyle(
+                             fontWeight: FontWeight.w600,
+                             fontFamily: 'Inter'
+                         )
+                     ),
+                   ),
+                   const SizedBox(height: 20),
+                   Builder(builder: (BuildContext context) {
+                     return TextButton(
+                         onPressed: () {
+                           Navigator.push(
+                             context,
+                             MaterialPageRoute(
+                                 builder: (context) => const LoginPage()),
+                           );
+                         },
+                         child: const Text("Hai già un account? Effettua il login",
+                             style: TextStyle(
+                                 fontWeight: FontWeight.w600,
+                                 fontFamily: 'Inter'
+                             )
+                         ));
+                   })
+                 ]),
+           )
+           )
+       )
    )
         : LoadingScreen(
             httpOperation: playerService.addPlayer(player),

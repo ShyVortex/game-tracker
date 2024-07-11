@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:bcrypt/bcrypt.dart';
 import 'package:flutter/foundation.dart';
 
-class Utilities {
+class LoginUtilities {
 
 static final Map<String,int> _valutazioneMap  = {
     '0/10': 0 ,

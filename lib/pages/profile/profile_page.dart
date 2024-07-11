@@ -33,7 +33,7 @@ class ProfilePageState extends State<ProfilePage> {
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  var dateKey = DatePickerField().accessKey;
+  final TextEditingController dateController = TextEditingController();
   final TextEditingController genderController = TextEditingController();
   final TextEditingController platformController = TextEditingController();
   final TextEditingController favouriteController = TextEditingController();
@@ -65,7 +65,7 @@ class ProfilePageState extends State<ProfilePage> {
     passwordController.text = "................";
 
     if (player.birthday != null) {
-      dateKey.currentState?.dateController.text = player.birthday!;
+      dateController.text = player.birthday!;
     }
     if (player.genere != null) {
       genderController.text = player.genere?.name as String;
@@ -239,7 +239,10 @@ class ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                         const SizedBox(height: 24),
-                        DatePickerField(label: "Data di nascita"),
+                        DatePickerField(
+                            dateController: dateController,
+                            label: "Data di nascita"
+                        ),
                         const SizedBox(height: 24),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
