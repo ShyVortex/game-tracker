@@ -2,12 +2,15 @@ import 'dart:io';
 
 import 'package:avatar_view/avatar_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_tracker/models/player.dart';
 import 'package:game_tracker/utilities/concrete_image_utilities.dart';
 import 'package:game_tracker/utilities/reference_utilities.dart';
 import 'package:game_tracker/widgets/date_picker_field.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../main.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key, required this.idPlayer});
@@ -24,7 +27,6 @@ class ProfilePageState extends State<ProfilePage> {
     'PSP', 'Xbox 360', 'Nintendo Wii U', 'Nintendo 3DS', 'Nintendo Wii', 'PS2',
     'Xbox', 'Nintendo DS', 'Nintendo GameCube', 'Nintendo GBA', 'Retro console'
   ];
-  String dropdownValue = "";
   bool hasFavouriteGame = false; // variabile placeholder
   File? galleryFile;
   final picker = ImagePicker();
@@ -37,6 +39,18 @@ class ProfilePageState extends State<ProfilePage> {
   final TextEditingController genderController = TextEditingController();
   final TextEditingController platformController = TextEditingController();
   final TextEditingController favouriteController = TextEditingController();
+
+  bool isEditingEmail = false;
+  bool isEditingPassword = false;
+  bool isPasswordHidden = true;
+
+  String placeholder = "................";
+  String currentEmail = "";
+  String currentPassword = "";
+  String currentDate = "";
+  String currentGender = "";
+  String currentFavPlatform = "";
+  String currentFavGame = "";
 
   @override
   void initState() {
@@ -68,18 +82,34 @@ class ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> initializeFields() async {
-    emailController.text = player.email!;
-    passwordController.text = "................";
+    setState(() {
+      emailController.text = player.email!;
+      passwordController.text = placeholder;
 
-    if (player.birthday != null) {
-      dateController.text = player.birthday!;
-    }
-    if (player.genere != null) {
-      genderController.text = player.genere?.name as String;
-    }
-    if (player.piattaforma != null) {
-      platformController.text = player.piattaforma!.name;
-    }
+      currentEmail = emailController.text;
+      currentPassword = passwordController.text;
+
+      if (player.birthday != null) {
+        dateController.text = player.birthday!;
+      } else {
+        dateController.text = "";
+      }
+      if (player.genere != null) {
+        genderController.text = player.genere?.name as String;
+      } else {
+        genderController.text = "";
+      }
+      if (player.piattaforma != null) {
+        platformController.text = player.piattaforma!.name;
+      } else {
+        platformController.text = "";
+      }
+
+      currentDate = dateController.text;
+      currentGender = genderController.text;
+      currentFavPlatform = platformController.text;
+      // todo: inizializzare currentFavGame
+    });
   }
 
   void handleChangePfp({required BuildContext context}) {
@@ -136,6 +166,28 @@ class ProfilePageState extends State<ProfilePage> {
     await prefs.setString("profileImage", b64Img);
   }
 
+  bool hasAnyValueChanged() {
+    if (currentEmail != player.email || currentPassword != placeholder) {
+      return true;
+    }
+    if (currentDate != player.birthday && dateController.text.isNotEmpty) {
+      return true;
+    }
+    if (currentGender != player.genere?.name && currentGender.isNotEmpty) {
+      return true;
+    }
+    if (currentFavPlatform != player.piattaforma?.name && currentFavPlatform.isNotEmpty) {
+      return true;
+    }
+
+    return false;
+  }
+
+
+  Future<void> onConfirmPress(int idPlayer) async {
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -172,6 +224,7 @@ class ProfilePageState extends State<ProfilePage> {
                         Row(
                           children: [
                             Stack(
+                              clipBehavior: Clip.none,
                               children: [
                                 AvatarView(
                                   radius: 50,
@@ -179,7 +232,7 @@ class ProfilePageState extends State<ProfilePage> {
                                   imagePath: galleryFile!.path,
                                 ),
                                 Positioned(
-                                  top: 70,
+                                  top: 75,
                                     left: 25,
                                     child: RawMaterialButton(
                                       constraints: const BoxConstraints(
@@ -210,22 +263,89 @@ class ProfilePageState extends State<ProfilePage> {
                                   fontWeight: FontWeight.bold,
                                 )),
                                 const SizedBox(height: 5),
-                                SizedBox(
-                                    width: 170,
-                                    child: TextFormField(
-                                      controller: emailController,
-                                      decoration: const InputDecoration(
-                                          border:  null,
-                                          labelText: "Email",
-                                      ),
-                                      keyboardType: TextInputType.text,
+                                Row(
+                                  children: <Widget>[
+                                    SizedBox(
+                                        width: 135,
+                                        child: TextFormField(
+                                          controller: emailController,
+                                          decoration: const InputDecoration(
+                                            border:  null,
+                                            labelText: "Email",
+                                          ),
+                                          style: const TextStyle(fontSize: 15),
+                                          keyboardType: TextInputType.text,
+                                          readOnly: !isEditingEmail,
+                                        )
+                                    ),
+                                    Stack(
+                                      clipBehavior: Clip.none,
+                                      children: [
+                                        if (!isEditingEmail)
+                                          IconButton(
+                                            icon: const Icon(Icons.edit),
+                                            iconSize: 20,
+                                            onPressed: () {
+                                              setState(() {
+                                                emailController.text = currentEmail;
+                                                isEditingEmail = true;
+                                              });
+                                            },
+                                          ),
+                                        if (!isEditingEmail && currentEmail != player.email)
+                                          Positioned(
+                                            top: 22.5,
+                                            child: IconButton(
+                                              icon: const Icon(Icons.settings_backup_restore),
+                                              iconSize: 20,
+                                              onPressed: () {
+                                                setState(() {
+                                                  currentEmail = player.email!;
+                                                  emailController.text = currentEmail;
+                                                });
+                                              },
+                                            ),
+                                          ),
+
+                                        if (isEditingEmail)
+                                          IconButton(
+                                              icon: const Icon(Icons.cancel),
+                                              iconSize: 20,
+                                              onPressed: () {
+                                                setState(() {
+                                                  emailController.text = currentEmail;
+                                                  isEditingEmail = false;
+                                                });
+                                              }
+                                          ),
+                                        if (isEditingEmail)
+                                          Positioned(
+                                            top: 22.5,
+                                            child: IconButton(
+                                              icon: const Icon(Icons.check_circle),
+                                              iconSize: 20,
+                                              onPressed: () {
+                                                setState(() {
+                                                  isEditingEmail = false;
+
+                                                  if (emailController.text.isEmpty) {
+                                                    emailController.text = currentEmail;
+                                                  } else {
+                                                    currentEmail = emailController.text;
+                                                  }
+                                                });
+                                              }
+                                            )
+                                          )
+                                      ],
                                     )
+                                  ],
                                 )
                               ],
                             )
                           ],
                         ),
-                        const SizedBox(height: 32),
+                        const SizedBox(height: 38),
                         Row(
                           children: <Widget>[
                             Expanded(
@@ -235,14 +355,67 @@ class ProfilePageState extends State<ProfilePage> {
                                   labelText: 'Password',
                                   border: OutlineInputBorder(),
                                 ),
-                                readOnly: true,
+                                readOnly: !isEditingPassword,
+                                obscureText: isPasswordHidden,
                               ),
                             ),
                             const SizedBox(width: 10),
-                            IconButton(
-                              icon: const Icon(Icons.edit),
-                              onPressed: () {},
-                            ),
+                            Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                if (!isEditingPassword)
+                                  IconButton(
+                                    icon: const Icon(Icons.edit),
+                                    onPressed: () {
+                                      setState(() {
+                                        isEditingPassword = true;
+                                        isPasswordHidden = false;
+
+                                        if (currentPassword == placeholder) {
+                                          passwordController.text = "";
+                                        } else {
+                                          passwordController.text = currentPassword;
+                                        }
+                                      });
+                                    },
+                                  ),
+                                if (isEditingPassword)
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 30),
+                                    child: IconButton(
+                                        icon: const Icon(Icons.cancel),
+                                        iconSize: 20,
+                                        onPressed: () {
+                                          setState(() {
+                                            passwordController.text = currentPassword;
+                                            isEditingPassword = false;
+                                            isPasswordHidden = true;
+                                          });
+                                        }
+                                    ),
+                                  ),
+                                if (isEditingPassword)
+                                  Positioned(
+                                      top: 30,
+                                      child: IconButton(
+                                          icon: const Icon(Icons.check_circle),
+                                          iconSize: 20,
+                                          onPressed: () {
+                                            setState(() {
+                                              isEditingPassword = false;
+                                              isPasswordHidden = true;
+
+                                              if (passwordController.text.isEmpty) {
+                                                passwordController.text = currentPassword;
+                                              } else {
+                                                currentPassword = passwordController.text;
+                                              }
+                                            });
+                                          }
+                                      )
+                                  )
+                              ],
+                            )
                           ],
                         ),
                         const SizedBox(height: 24),
@@ -268,7 +441,7 @@ class ProfilePageState extends State<ProfilePage> {
                                   initialSelection: "",
                                   onSelected: (String? value) {
                                     setState(() {
-                                      dropdownValue = value!;
+                                      currentGender = value!;
                                     });
                                   },
                                   dropdownMenuEntries: genderList.map<DropdownMenuEntry<String>>((String value) {
@@ -297,7 +470,7 @@ class ProfilePageState extends State<ProfilePage> {
                                   initialSelection: "",
                                   onSelected: (String? value) {
                                     setState(() {
-                                      dropdownValue = value!;
+                                      currentFavPlatform = value!;
                                     });
                                   },
                                   dropdownMenuEntries: platformList.map<DropdownMenuEntry<String>>((String value) {
@@ -342,6 +515,32 @@ class ProfilePageState extends State<ProfilePage> {
             )
       ]),
     ),
-    );
+      floatingActionButton:
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              if (!isEditingEmail && !isEditingPassword && hasAnyValueChanged())
+              FloatingActionButton(
+                heroTag: "restore_fields",
+                shape: const CircleBorder(),
+                backgroundColor: Colors.black,
+                onPressed: initializeFields,
+                child: const Icon(Icons.settings_backup_restore, color: Colors.white, size: 30),
+              ),
+              if (!isEditingEmail && !isEditingPassword && hasAnyValueChanged())
+                Consumer(builder: (context, ref, child) {
+                  return FloatingActionButton(
+                    heroTag: "confirm_profile_update",
+                    shape: const CircleBorder(),
+                    backgroundColor: Colors.green,
+                    onPressed: () async {
+                      await onConfirmPress(ref.watch(playerProvider).id!);
+                    },
+                    child: const Icon(Icons.check, color: Colors.white, size: 30),
+                  );
+                })
+            ],
+          )
+      );
   }
 }
