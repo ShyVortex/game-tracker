@@ -28,15 +28,14 @@ class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 32),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const Text(
-                    "Login",
-                    style: TextStyle(
+          body: SingleChildScrollView(child: Padding(
+            padding: const EdgeInsets.only(top: 32),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Text(
+                      "Login",
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 26,
                         fontFamily: 'Inter'
@@ -127,44 +126,42 @@ class LoginPageState extends State<LoginPage> {
                                     await prefs.setString("email", _player.email!);
                                   }
 
-                                  ReferenceUtilities.setActivePlayer(_player);
-
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>  const NavigationPage())
-                                  );
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('Password sbagliata')));
-                                }
-                              } catch (error) {
-                                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                  content: Text('Nessun utente trovato con questa email'),
-                                ));
-                              }
-                            }
-                          });
-                    }),
-                const SizedBox(height: 20),
-                Builder(builder: (BuildContext context) {
-                  return TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SignupPage()),
-                        );
-                      },
-                      child: const Text("Non hai un account? Registrati",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Inter'
-                          )
-                      ));
-                })
-              ]),
-        ))
-      );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  const NavigationPage())
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Password sbagliata')));
+                  }
+                } catch (error) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('Nessun utente trovato con questa email'),
+                  ));
+                }
+              }
+        });
+          }),
+        const SizedBox(height: 20),
+        Builder(builder: (BuildContext context) {
+          return TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const SignupPage()),
+                );
+              },
+              child: const Text("Non hai un account? Registrati",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                      fontFamily: 'Inter'
+                  )
+              ));
+        })
+      ]),
+    ))
+    );
   }
 }

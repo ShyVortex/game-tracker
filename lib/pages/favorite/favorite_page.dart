@@ -60,70 +60,71 @@ class _FavoritePageState extends State<FavoritePage> {
 
                     (_favoritesGame.isEmpty) ?
 
-                    Expanded(
-                        child:
-                        _isLoading ?
-                        const Center(child:
-                        CircularProgressIndicator.adaptive()):const Center(
-                          child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 32),
-                              child: Center(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      "Sembra che tu non abbia aggiunto ancora nessun gioco tra i preferiti.",
-                                      style: TextStyle(
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.w600,
-                                          fontFamily: 'Inter'),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    SizedBox(height: 20),
-                                    Text("Aggiungine uno dalla libreria!",
-                                      style: TextStyle(
-                                          fontSize: 22,
-                                          fontFamily: 'Inter'),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
-                              )),
-                        ))
-                        :   _isLoading ?
-                    const Center(child:
-                    CircularProgressIndicator.adaptive()):
-                    Expanded(child:
-                    ListView.separated(
-                      itemCount: _favoritesGame.length,
-                      separatorBuilder: (context, index) => const Divider(),
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(_favoritesGame[index].game!.nome!, style: const TextStyle(fontWeight: FontWeight.w600, fontFamily: 'Inter')),
-                          subtitle:  Text(_favoritesGame[index].game!.sviluppatore!, style: const TextStyle(fontFamily: 'Inter')),
-                          leading:  SquareAvatar(imageUrl: _favoritesGame[index].game!.immagineURL!, size: 50 ),
-                          trailing: IconButton(
-                            icon: Icon(
-                              _favoritesGame[index].preferito! ? Icons.star : Icons.star_border,
-                              color:  _favoritesGame[index].preferito! ? Colors.yellow : Colors.grey,
-                              size: 25.0,
+                 Expanded(
+                    child: 
+                     _isLoading ?
+              const Center(child: 
+               CircularProgressIndicator.adaptive()):const Center(
+                  child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 32),
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "Sembra che tu non abbia aggiunto ancora nessun gioco tra i preferiti.",
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Inter'),
+                              textAlign: TextAlign.center,
                             ),
-                            onPressed: () {
-                              setState((){
-                                _favoritesGame[index].preferito = !_favoritesGame[index].preferito!;
-                                _playerService.setPreferito(_favoritesGame[index].id!, widget.idPlayer, _favoritesGame[index].preferito!);
-                                _favoritesGame.remove(_favoritesGame[index]);
-                              });
-                            },
-                          ),
-                        );
-                      },
-                    )
-                    ),
-                  ]
-              )
+                            SizedBox(height: 20),
+                            Text("Aggiungine uno dalla libreria!",
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  fontFamily: 'Inter'),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      )),
+                ))
+            :   _isLoading ?
+              const Center(child: 
+               CircularProgressIndicator.adaptive()):
+               Expanded(child: 
+            ListView.separated(
+        itemCount: _favoritesGame.length,
+        separatorBuilder: (context, index) => const Divider(), 
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(_favoritesGame[index].game!.nome!, style: const TextStyle(fontWeight: FontWeight.w600, fontFamily: 'Inter')),
+            subtitle:  Text(_favoritesGame[index].game!.sviluppatore!, style: const TextStyle(fontFamily: 'Inter')),
+            leading:  SquareAvatar(imageUrl: _favoritesGame[index].game!.immagineURL!, size: 50, isNetworkImage: _favoritesGame[index].game!.isNetworkImage!, ),
+            trailing: IconButton(
+          icon: Icon(
+            _favoritesGame[index].preferito! ? Icons.star : Icons.star_border,
+            color:  _favoritesGame[index].preferito! ? Colors.yellow : Colors.grey,
+            size: 25.0,
           ),
+          onPressed: () {
+            setState((){
+              _favoritesGame[index].preferito = !_favoritesGame[index].preferito!;
+              _playerService.setPreferito(_favoritesGame[index].id!, widget.idPlayer, _favoritesGame[index].preferito!);
+              _favoritesGame.remove(_favoritesGame[index]);
+            });
+          },
+        ),
+          );
+        },
+      )
+       ),
+            ]
+            )
+            ),
         )
+    )
     );
   }
 }

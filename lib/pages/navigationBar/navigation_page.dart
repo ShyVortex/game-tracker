@@ -14,7 +14,13 @@ class NavigationPage extends StatefulWidget {
 }
 
 class _NavigationPage extends State<NavigationPage> {
+
   ThemeData themeData = AppTheme.buildThemeData();
+  @override
+  void initState() {
+    
+    super.initState();
+  }
   final List<Widget> _navigationPages = [
     Consumer(builder: (context, ref, child) {
       return LibraryPage(idPlayer: ref.watch(playerProvider).id!);

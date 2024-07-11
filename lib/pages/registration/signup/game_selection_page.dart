@@ -34,9 +34,8 @@ class GameSelectPageState extends State<GameSelectPage> {
       isLoading = false;
     });
     return _games;
-  }
-
-  @override
+     }
+      @override
     void initState() {
     super.initState();
     fetchData();
@@ -54,73 +53,77 @@ class GameSelectPageState extends State<GameSelectPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              flexibleSpace: const AppLogo(),
+    return Scaffold(
+      appBar: AppBar(
+        forceMaterialTransparency: true,
+        automaticallyImplyLeading: false,
+        flexibleSpace: const AppLogo(),
+      ),
+      body: isLoading ? const Center(
+        child: CircularProgressIndicator(),
+      ) :
+
+      SingleChildScrollView( child:
+        Column(children: [
+        const Text(
+  "Quali di questi giochi possiedi?",
+  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, fontFamily: 'Inter'),
+  textAlign: TextAlign.center, // Allineamento del testo al centro
+  maxLines: 2, // Numero massimo di righe
+  overflow: TextOverflow.ellipsis, // Troncamento con ellissi se il testo supera le 2 righe
+),
+  const Padding(padding: EdgeInsets.only(top: 16)),
+SizedBox(
+  height: 500,
+  child:
+       ListView.separated(
+        itemCount: _games.length,
+        separatorBuilder: (context, index) => const Divider(),
+        itemBuilder: (context, index) {
+          if(_games[index].isNetworkImage!){
+          return ListTile(
+            title: Text(_games[index].nome!, style: const TextStyle(fontWeight: FontWeight.w600, fontFamily: 'Inter')),
+            subtitle:  Text(_games[index].sviluppatore!, style: const TextStyle(fontFamily: 'Inter')),
+            leading:  CircleAvatar(
+              backgroundImage: NetworkImage(_games[index].immagineURL!),
             ),
-            body: isLoading ? const Center(
-              child: CircularProgressIndicator(),
-            ) :
-            Column(children: [
-              const Text(
-                "Quali di questi giochi possiedi?",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, fontFamily: 'Inter'),
-                textAlign: TextAlign.center, // Allineamento del testo al centro
-                maxLines: 2, // Numero massimo di righe
-                overflow: TextOverflow.ellipsis, // Troncamento con ellissi se il testo supera le 2 righe
-              ),
-              const Padding(padding: EdgeInsets.only(top: 16)),
-              SizedBox(
-                  height: 500,
-                  child:
-                  ListView.separated(
-                    itemCount: _games.length,
-                    separatorBuilder: (context, index) => const Divider(),
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(_games[index].nome!, style: const TextStyle(fontWeight: FontWeight.w600, fontFamily: 'Inter')),
-                        subtitle:  Text(_games[index].sviluppatore!, style: const TextStyle(fontFamily: 'Inter')),
-                        leading:  CircleAvatar(
-                          backgroundImage: NetworkImage(_games[index].immagineURL!),
-                        ),
-                        trailing: Checkbox(
-                          value: _games[index].isSelected,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              _games[index].isSelected = value ?? false;
-                            });
-                          },
-                        ),
+            trailing: Checkbox(
+              value: _games[index].isSelected,
+              onChanged: (bool? value) {
+                setState(() {
+                  _games[index].isSelected = value ?? false;
+                });
+              },
+            ),
 
-                        onTap: () {
-                          setState(() {
-                            _games[index].isSelected = !_games[index].isSelected!;
-                          });
-                        },
-                      );
+            onTap: () {
+              setState(() {
+                _games[index].isSelected = !_games[index].isSelected!;
+              });
+            },
+          );
+        }
+        },
+      )
+      ),
+       const SizedBox(height:30),
+       Consumer(builder: (context,ref,child){
+        return FilledButton(
+                    onPressed: () {
+                      ref.read(playerProvider.notifier).state = _player;
+                      Navigator.push(context,MaterialPageRoute(builder: (context) => LoadingScreen( httpOperation: _gamePlayerservice.performSelection(widget.data, _selectedGames())!,widget: const NavigationPage())));
                     },
-                  )
-              ),
-              const SizedBox(height:30),
-              Consumer(builder: (context,ref,child){
-                return FilledButton(
-                  onPressed: () {
-                    ref.read(playerProvider.notifier).state = _player;
-                    Navigator.push(context,MaterialPageRoute(builder: (context) => LoadingScreen( httpOperation: _gamePlayerservice.performSelection(widget.data, _selectedGames())!,widget: const NavigationPage())));
-                  },
-                  child: const Text("CONFERMA",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Inter'
-                      )),
-                );
-              })
+                    child: const Text("CONFERMA",
+                        style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Inter'
+                    )),
+                  );
+       })
 
-            ]
-            )
-        )
+    ]
+       )
+    )
     );
   }
 }
