@@ -10,6 +10,7 @@ import 'package:game_tracker/pages/navigationBar/navigation_page.dart';
 import 'package:game_tracker/utilities/Utilities.dart';
 import 'package:game_tracker/widgets/date_picker_field.dart';
 import 'package:game_tracker/widgets/images_list.dart';
+import 'package:game_tracker/widgets/loading_screen.dart';
 import 'package:game_tracker/widgets/location_field.dart';
 import 'package:game_tracker/widgets/square_avatar.dart';
 import 'package:image_picker/image_picker.dart';
@@ -128,16 +129,14 @@ Future<void> _performInsert(int idPlayer) async {
       gamePlayerToInsert.valutazione =  Utilities.valutazioneIntValue(_valutazioneController.text);
       if(_dateController.text != "") gamePlayerToInsert.dataCompletamento = _dateController.text;
       
+      print(idPlayer);
 
-  
-
-      await _gamePlayerservice.performGameInsert(gameToInsert, idPlayer, gamePlayerToInsert);
-
-     Navigator.push(
+      Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>   const NavigationPage())
+                          builder: (context) =>   LoadingScreen(httpOperation: _gamePlayerservice.performGameInsert(gameToInsert, idPlayer, gamePlayerToInsert),widget: const NavigationPage(),) )
                     );
+     
 
 
 }
@@ -220,8 +219,9 @@ Future<void> _performInsert(int idPlayer) async {
                                 )
                                 )
                                  : SquareAvatar(imageUrl: gameToInsert.immagineURL!, size: 100, isNetworkImage: gameToInsert.isNetworkImage!,updateParentState: (String value){
+                                  print(value);
                                   gameToInsert.immagineURL = value;
-                                 }),
+                                 },isTouchable: true,),
 
                             const SizedBox(width: 24),
                             SizedBox(
