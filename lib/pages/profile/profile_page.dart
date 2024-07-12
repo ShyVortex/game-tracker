@@ -28,7 +28,6 @@ class ProfilePageState extends State<ProfilePage> {
     'PSP', 'Xbox 360', 'Nintendo Wii U', 'Nintendo 3DS', 'Nintendo Wii', 'PS2',
     'Xbox', 'Nintendo DS', 'Nintendo GameCube', 'Nintendo GBA', 'Retro console'
   ];
-  bool hasFavouriteGame = false; // variabile placeholder
   File? galleryFile;
   final picker = ImagePicker();
   final int currentYear = DateTime.now().year;
@@ -542,14 +541,14 @@ class ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                             const SizedBox(width: 10),
-                            if (!hasFavouriteGame)
+                            if (currentFavGame.isEmpty)
                               IconButton(
                                 icon: const Icon(Icons.add),
                                 onPressed: onAddFavGame,
                               ),
-                            if (hasFavouriteGame)
+                            if (currentFavGame.isNotEmpty)
                               IconButton(
-                                icon: const Icon(Icons.edit),
+                                icon: const Icon(Icons.edit_document),
                                 onPressed: onAddFavGame,
                               ),
                           ],
