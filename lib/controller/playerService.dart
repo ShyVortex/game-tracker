@@ -17,9 +17,6 @@ class PlayerService {
 
     Future addPlayer(Player player) async {
       Uri uri = Uri.parse('${playerURL}addPlayer');
-
-      
-      return Future.delayed(const Duration(seconds: 3), () async {
         
       player.password = await LoginUtilities.hashPassword(player.password!);
       var jsonObject = jsonEncode(player);
@@ -34,7 +31,6 @@ class PlayerService {
         print("C'è stato un errore nella chiamata");
         return null;
       }
-    });
 
       
   
