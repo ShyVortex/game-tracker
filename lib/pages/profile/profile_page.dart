@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:avatar_view/avatar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_tracker/models/gamePlayer.dart';
 import 'package:game_tracker/models/player.dart';
 import 'package:game_tracker/pages/profile/search_games_page.dart';
 import 'package:game_tracker/utilities/concrete_image_utilities.dart';
 import 'package:game_tracker/utilities/reference_utilities.dart';
-import 'package:game_tracker/widgets/date_picker_field.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -33,6 +33,7 @@ class ProfilePageState extends State<ProfilePage> {
   final int currentYear = DateTime.now().year;
 
   Player player = Player();
+  GamePlayer giocoPreferito = GamePlayer();
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -57,6 +58,11 @@ class ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     player = ReferenceUtilities.getActivePlayer();
+
+    if (player.giocoPreferito != null) {
+      giocoPreferito = player.giocoPreferito!;
+    }
+
     loadProfileImage();
     initializeFields();
   }
@@ -104,6 +110,11 @@ class ProfilePageState extends State<ProfilePage> {
         platformController.text = player.piattaforma!.name;
       } else {
         platformController.text = "";
+      }
+      if (giocoPreferito.game != null) {
+        favouriteController.text = giocoPreferito.game!.nome!;
+      } else {
+        favouriteController.text = "";
       }
 
       currentDate = dateController.text;
@@ -207,6 +218,9 @@ class ProfilePageState extends State<ProfilePage> {
       return true;
     }
     if (currentFavPlatform != player.piattaforma?.name && currentFavPlatform.isNotEmpty) {
+      return true;
+    }
+    if (currentFavGame != giocoPreferito.game?.nome && currentFavGame.isNotEmpty) {
       return true;
     }
 
