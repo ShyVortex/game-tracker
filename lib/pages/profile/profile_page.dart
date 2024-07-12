@@ -4,6 +4,7 @@ import 'package:avatar_view/avatar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_tracker/models/player.dart';
+import 'package:game_tracker/pages/profile/search_games_page.dart';
 import 'package:game_tracker/utilities/concrete_image_utilities.dart';
 import 'package:game_tracker/utilities/reference_utilities.dart';
 import 'package:game_tracker/widgets/date_picker_field.dart';
@@ -30,6 +31,7 @@ class ProfilePageState extends State<ProfilePage> {
   bool hasFavouriteGame = false; // variabile placeholder
   File? galleryFile;
   final picker = ImagePicker();
+  final int currentYear = DateTime.now().year;
 
   Player player = Player();
 
@@ -108,7 +110,7 @@ class ProfilePageState extends State<ProfilePage> {
       currentDate = dateController.text;
       currentGender = genderController.text;
       currentFavPlatform = platformController.text;
-      // todo: inizializzare currentFavGame
+      currentFavGame = favouriteController.text;
     });
   }
 
@@ -164,6 +166,35 @@ class ProfilePageState extends State<ProfilePage> {
         .encodeImage(galleryFile!);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString("profileImage", b64Img);
+  }
+
+  Future<void> selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(currentYear - 100),
+        lastDate: DateTime.now(),
+        locale: const Locale('it', 'IT')
+    );
+    if (picked != null && picked != DateTime.now()) {
+      setState(() {
+        dateController.text = "${picked.toLocal()}".split(' ')[0];
+      });
+    }
+  }
+
+  Future<void> onAddFavGame() async {
+    final result = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const SearchGamesPage()
+        )
+    );
+
+    if (result != null) {
+      setState(() {
+        favouriteController.text = result.game.nome;
+        currentFavGame = favouriteController.text;
+      });
+    }
   }
 
   bool hasAnyValueChanged() {
@@ -419,9 +450,24 @@ class ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                         const SizedBox(height: 24),
-                        DatePickerField(
-                            dateController: dateController,
-                            label: "Data di nascita"
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: TextField(
+                                controller: dateController,
+                                decoration: const InputDecoration(
+                                  labelText: "Data di nascita",
+                                  border: OutlineInputBorder(),
+                                ),
+                                readOnly: true,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            IconButton(
+                              icon: const Icon(Icons.calendar_month),
+                              onPressed: () => selectDate(context),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 24),
                         Row(
@@ -499,12 +545,12 @@ class ProfilePageState extends State<ProfilePage> {
                             if (!hasFavouriteGame)
                               IconButton(
                                 icon: const Icon(Icons.add),
-                                onPressed: () {},
+                                onPressed: onAddFavGame,
                               ),
                             if (hasFavouriteGame)
                               IconButton(
                                 icon: const Icon(Icons.edit),
-                                onPressed: () {},
+                                onPressed: onAddFavGame,
                               ),
                           ],
                         ),
