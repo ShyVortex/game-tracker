@@ -73,7 +73,7 @@ class Player {
     'username': _username,
     'email': _email,
     'password': _password,
-    'sesso': _genere,
+    'genere': _genere,
     'birthday': _birthday,
     'piattaformaPreferita': _piattaformaPreferita,
     'giocoPreferito': _giocoPreferito
@@ -84,7 +84,7 @@ class Player {
       username: json['username'],
       email: json['email'],
       password:json['password'],
-      genere: json['sesso'],
+      genere: json['genere'],
       birthday: json['birthday'],
       piattaformaPreferita : json['piattaformaPreferita'],
       giocoPreferito: json['giocoPreferito']

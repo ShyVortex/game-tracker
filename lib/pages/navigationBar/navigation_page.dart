@@ -23,13 +23,13 @@ class _NavigationPage extends State<NavigationPage> {
   }
   final List<Widget> _navigationPages = [
     Consumer(builder: (context, ref, child) {
-      return LibraryPage(idPlayer: ref.watch(playerProvider).id!);
+      return LibraryPage(player: ref.watch(playerProvider));
     }),
     Consumer(builder: (context, ref, child) {
-      return FavoritePage(idPlayer: ref.watch(playerProvider).id!);
+      return FavoritePage(player: ref.watch(playerProvider));
     }),
     Consumer(builder: (context, ref, child) {
-      return ProfilePage(idPlayer: ref.watch(playerProvider).id!);
+      return ProfilePage(player: ref.watch(playerProvider));
     }),
   ];
   int navigationIndex = 0;

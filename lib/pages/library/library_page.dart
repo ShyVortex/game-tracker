@@ -5,9 +5,11 @@ import 'package:game_tracker/models/gamePlayer.dart';
 import 'package:game_tracker/pages/library/edit_game_page.dart';
 import 'package:game_tracker/widgets/square_avatar.dart';
 
+import '../../models/player.dart';
+
 class LibraryPage extends StatefulWidget {
-  const LibraryPage({super.key, required this.idPlayer});
-  final int idPlayer;
+  const LibraryPage({super.key, required this.player});
+  final Player player;
 
   @override
   State<LibraryPage> createState() => LibraryPageState();
@@ -18,10 +20,12 @@ class LibraryPageState extends State<LibraryPage> {
   final PlayerService _playerService = PlayerService();
   bool _isLoading = true;
 
+  late final Player loggedPlayer;
+
   @override
   void initState()  {
     super.initState();
-       _playerService.getAllGiochiPosseduti(widget.idPlayer).then((onValue){
+       _playerService.getAllGiochiPosseduti(widget.player.id!).then((onValue){
        setState(() {
          _games = onValue;
          _isLoading = false;
@@ -122,7 +126,7 @@ class LibraryPageState extends State<LibraryPage> {
                             onPressed: () {
                               setState(() {
                                 _games[index].preferito = !_games[index].preferito!;
-                                _playerService.setPreferito(_games[index].id!,widget.idPlayer,_games[index].preferito!);
+                                _playerService.setPreferito(_games[index].id!,widget.player.id!,_games[index].preferito!);
                               });
                             },
                           ),

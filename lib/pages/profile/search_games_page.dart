@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:game_tracker/models/game.dart';
-import 'package:game_tracker/utilities/reference_utilities.dart';
 
 import '../../controller/playerService.dart';
 import '../../models/gamePlayer.dart';
+import '../../models/player.dart';
 import '../../widgets/square_avatar.dart';
 
 class SearchGamesPage extends StatefulWidget {
-  const SearchGamesPage({super.key});
+  final Player player;
+
+  const SearchGamesPage({super.key, required this.player});
 
   @override
   State<SearchGamesPage> createState() => SearchGamesState();
@@ -24,9 +25,8 @@ class SearchGamesState extends State<SearchGamesPage> {
   @override
   void initState()  {
     super.initState();
-    playerService.getAllGiochiPreferiti(
-        ReferenceUtilities.getActivePlayer().id!
-    ).then((onValue){
+    playerService.getAllGiochiPreferiti(widget.player.id!)
+        .then((onValue){
       setState(() {
         favoritesGame = onValue;
         isLoading = false;

@@ -3,9 +3,11 @@ import 'package:game_tracker/controller/playerService.dart';
 import 'package:game_tracker/models/gamePlayer.dart';
 import 'package:game_tracker/widgets/square_avatar.dart';
 
+import '../../models/player.dart';
+
 class FavoritePage extends StatefulWidget {
-  const FavoritePage({super.key, required this.idPlayer});
-  final int idPlayer;
+  const FavoritePage({super.key, required this.player});
+  final Player player;
 
   @override
   State<FavoritePage> createState() => _FavoritePageState();
@@ -18,7 +20,7 @@ class _FavoritePageState extends State<FavoritePage> {
    @override
   void initState()  {
     super.initState();
-       _playerService.getAllGiochiPreferiti(widget.idPlayer).then((onValue){
+       _playerService.getAllGiochiPreferiti(widget.player.id!).then((onValue){
        setState(() {
          _favoritesGame = onValue;
          _isLoading = false;
@@ -111,7 +113,7 @@ class _FavoritePageState extends State<FavoritePage> {
           onPressed: () {
             setState((){
               _favoritesGame[index].preferito = !_favoritesGame[index].preferito!;
-              _playerService.setPreferito(_favoritesGame[index].id!, widget.idPlayer, _favoritesGame[index].preferito!);
+              _playerService.setPreferito(_favoritesGame[index].id!, widget.player.id!, _favoritesGame[index].preferito!);
               _favoritesGame.remove(_favoritesGame[index]);
             });
           },
