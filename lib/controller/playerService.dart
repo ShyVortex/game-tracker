@@ -131,7 +131,7 @@ class PlayerService {
     int idGame = game.id!;
 
     Uri uri =
-    Uri.parse('${playerURL}addPreferito/$idPlayer/$idGame');
+        Uri.parse('${playerURL}addPreferito/$idPlayer/$idGame');
 
     var jsonObject = jsonEncode(player);
 
@@ -153,7 +153,7 @@ class PlayerService {
     int idPlayer = player.id!;
 
     Uri uri =
-    Uri.parse('${playerURL}removePreferito/$idPlayer');
+        Uri.parse('${playerURL}removePreferito/$idPlayer');
 
     var jsonObject = jsonEncode(player);
 
@@ -168,6 +168,19 @@ class PlayerService {
     } else {
       print("C'è stato un errore nella chiamata");
       return null;
+    }
+  }
+
+  Future deletePlayer(int idPlayer) async {
+    Uri uri =
+        Uri.parse('${playerURL}deletePlayer/$idPlayer');
+
+    http.Response response = await http.delete(uri, headers: headers);
+
+    if (response.statusCode == 200) {
+      print("Chiamata effettuata corretamente");
+    } else {
+      print("C'è stato un errore nella chiamata");
     }
   }
 }

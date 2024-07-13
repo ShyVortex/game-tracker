@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_tracker/controller/playerService.dart';
 import 'package:game_tracker/models/player.dart';
 import 'package:game_tracker/pages/profile/search_games_page.dart';
+import 'package:game_tracker/pages/registration/login/login_page.dart';
 import 'package:game_tracker/utilities/concrete_image_utilities.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -277,13 +278,37 @@ class ProfilePageState extends State<ProfilePage> {
       ));
     }
   }
+  
+  Future<void> onAccountDelete() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      prefs.clear();
+
+      await playerService.deletePlayer(widget.player.id!);
+
+      Navigator.pop(context, 'SI');
+      Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const LoginPage())
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Dati eliminati con successo.'),
+      ));
+
+    } catch (error) {
+      print(error);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Errore nella rimozione, riprova più tardi.'),
+      ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
             body: Padding(
-              padding: const EdgeInsets.only(top: 4, bottom: 75),
+              padding: const EdgeInsets.only(top: 4, bottom: 85),
               child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -614,6 +639,37 @@ class ProfilePageState extends State<ProfilePage> {
                                   ),
                               ],
                             ),
+                            const SizedBox(height: 24),
+                            FilledButton.icon(
+                                onPressed: () => showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) => AlertDialog(
+                                    title: const Text('Attenzione'),
+                                    content: const Text('Sei sicuro di voler eliminare il tuo account?\n'
+                                    "Quest'azione è irreversibile."
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context, 'NO'),
+                                        child: const Text('NO'),
+                                      ),
+                                      TextButton(
+                                        onPressed: onAccountDelete,
+                                        child: const Text('SI'),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                label: const Text("Cancella account"),
+                              icon: const Icon(Icons.warning),
+                              style: FilledButton.styleFrom(
+                                backgroundColor: Colors.red,
+                                textStyle: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500
+                                )
+                              )
+                            )
                           ],
                         ),
                       ),
