@@ -1,6 +1,5 @@
 
 import 'package:game_tracker/models/Piattaforma.dart';
-import 'package:game_tracker/models/gamePlayer.dart';
 import 'package:game_tracker/models/genere.dart';
 
 import 'game.dart';
@@ -13,7 +12,7 @@ class Player {
   Genere? _genere;
   String? _birthday;
   Piattaforma? _piattaformaPreferita;
-  GamePlayer? _giocoPreferito;
+  Game? _giocoPreferito;
    
   Player.withParameters(
       {
@@ -24,7 +23,7 @@ class Player {
     required Genere? genere,
     required String? birthday,
     required Piattaforma? piattaformaPreferita,
-    required GamePlayer? giocoPreferito,
+    required Game? giocoPreferito,
       })
   {
     _id = id;
@@ -45,7 +44,7 @@ class Player {
   Genere? get genere => _genere;
   String? get birthday => _birthday;
   Piattaforma? get piattaforma => _piattaformaPreferita;
-  GamePlayer? get giocoPreferito => _giocoPreferito;
+  Game? get giocoPreferito => _giocoPreferito;
 
   set username(String? value){
       _username = value;
@@ -65,7 +64,7 @@ class Player {
   set piattaforma(Piattaforma? value){
     _piattaformaPreferita = value;
   }
-  set giocoPreferito(GamePlayer? value) {
+  set giocoPreferito(Game? value) {
     _giocoPreferito = value;
   }
 

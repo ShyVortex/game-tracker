@@ -4,7 +4,6 @@ import 'package:avatar_view/avatar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_tracker/controller/playerService.dart';
-import 'package:game_tracker/models/gamePlayer.dart';
 import 'package:game_tracker/models/player.dart';
 import 'package:game_tracker/pages/profile/search_games_page.dart';
 import 'package:game_tracker/utilities/concrete_image_utilities.dart';
@@ -12,10 +11,15 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../main.dart';
+import '../../models/game.dart';
+import '../../models/genere.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key, required this.player});
+  static late Player comparison;
+
   final Player player;
+
+  const ProfilePage({super.key, required this.player});
 
   @override
   State<ProfilePage> createState() => ProfilePageState();
@@ -32,8 +36,9 @@ class ProfilePageState extends State<ProfilePage> {
   final picker = ImagePicker();
   final int currentYear = DateTime.now().year;
 
-  GamePlayer giocoPreferito = GamePlayer();
+  Game? giocoPreferito;
   final PlayerService playerService = PlayerService();
+  Game? selectedGame;
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -57,6 +62,7 @@ class ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
+    ProfilePage.comparison = widget.player;
 
     if (widget.player.giocoPreferito != null) {
       giocoPreferito = widget.player.giocoPreferito!;
@@ -88,6 +94,8 @@ class ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> initializeFields() async {
+    final giocoPreferito = this.giocoPreferito;
+
     setState(() {
       emailController.text = widget.player.email!;
       passwordController.text = placeholder;
@@ -110,8 +118,8 @@ class ProfilePageState extends State<ProfilePage> {
       } else {
         platformController.text = "";
       }
-      if (giocoPreferito.game != null) {
-        favouriteController.text = giocoPreferito.game!.nome!;
+      if (giocoPreferito != null) {
+        favouriteController.text = giocoPreferito.nome!;
       } else {
         favouriteController.text = "";
       }
@@ -201,8 +209,10 @@ class ProfilePageState extends State<ProfilePage> {
 
     if (result != null) {
       setState(() {
+        selectedGame = result.game;
         favouriteController.text = result.game.nome;
         currentFavGame = favouriteController.text;
+        playerService.addGiocoPreferito(widget.player, selectedGame!);
       });
     }
   }
@@ -220,7 +230,7 @@ class ProfilePageState extends State<ProfilePage> {
     if (currentFavPlatform != widget.player.piattaforma?.name && currentFavPlatform.isNotEmpty) {
       return true;
     }
-    if (currentFavGame != giocoPreferito.game?.nome && currentFavGame.isNotEmpty) {
+    if (currentFavGame != giocoPreferito?.nome && currentFavGame.isNotEmpty) {
       return true;
     }
 
@@ -234,7 +244,27 @@ class ProfilePageState extends State<ProfilePage> {
         currentPassword = widget.player.password!;
       }
 
-      await playerService.updatePlayer(widget.player, idPlayer);
+      Player updated = Player();
+      updated.username = widget.player.username;
+      updated.email = currentEmail;
+      updated.password = currentPassword;
+      updated.birthday = currentDate;
+
+      switch (currentGender) {
+        case 'Maschio':
+          updated.genere = Genere.MASCHIO;
+          break;
+        case 'Femmina':
+          updated.genere = Genere.FEMMINA;
+          break;
+        case 'Non binario':
+          updated.genere = Genere.NON_BINARIO;
+          break;
+      }
+
+      // todo: fix updated.piattaforma = currentFavPlatform;
+
+      await playerService.updatePlayer(updated, idPlayer);
 
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Dati modificati con successo!'),

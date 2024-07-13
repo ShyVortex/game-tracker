@@ -4,9 +4,11 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_tracker/main.dart';
 import 'package:game_tracker/models/gamePlayer.dart';
+import 'package:game_tracker/pages/profile/profile_page.dart';
 import 'package:game_tracker/utilities/login_utilities.dart';
 import 'package:http/http.dart' as http;
 
+import '../models/game.dart';
 import '../models/player.dart';
 
 class PlayerService {
@@ -98,11 +100,16 @@ class PlayerService {
   }
 
   Future updatePlayer(Player player, int idPlayer) async {
+    final Player old = ProfilePage.comparison;
+
     Uri uri =
         Uri.parse('${playerURL}updatePlayer/$idPlayer');
 
     return Future.delayed(const Duration(seconds: 1), () async {
-      player.password = await LoginUtilities.hashPassword(player.password!);
+
+      if (player.password != old.password) {
+        player.password = await LoginUtilities.hashPassword(player.password!);
+      }
 
       var jsonObject = jsonEncode(player);
       http.Response response =
@@ -117,5 +124,50 @@ class PlayerService {
         return null;
       }
     });
+  }
+
+  Future addGiocoPreferito(Player player, Game game) async {
+    int idPlayer = player.id!;
+    int idGame = game.id!;
+
+    Uri uri =
+    Uri.parse('${playerURL}addPreferito/$idPlayer/$idGame');
+
+    var jsonObject = jsonEncode(player);
+
+    http.Response response = await http.post(uri,
+        body: jsonObject, headers: headers
+    );
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      print(data);
+      return Player.fromJson(data);
+    } else {
+      print("C'è stato un errore nella chiamata");
+      return null;
+    }
+  }
+
+  Future removeGiocoPreferito(Player player) async {
+    int idPlayer = player.id!;
+
+    Uri uri =
+    Uri.parse('${playerURL}removePreferito/$idPlayer');
+
+    var jsonObject = jsonEncode(player);
+
+    http.Response response = await http.delete(uri,
+        body: jsonObject, headers: headers
+    );
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      print(data);
+      return Player.fromJson(data);
+    } else {
+      print("C'è stato un errore nella chiamata");
+      return null;
+    }
   }
 }

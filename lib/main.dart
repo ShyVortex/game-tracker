@@ -14,7 +14,6 @@ final playerProvider = StateProvider<Player>((ref) => Player());
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp( ProviderScope(child: MyApp()));
 
   SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.manual, overlays: SystemUiOverlay.values
