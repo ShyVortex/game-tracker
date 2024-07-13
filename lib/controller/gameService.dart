@@ -45,7 +45,10 @@ class Gameservice {
         return Game.fromJson(data);
       }
       else {
-        print("C'è stato un errore nella chiamata");
+          print("C'è stato un errore nella chiamata, "
+              "\nCode: ${response.statusCode},"
+              "\nBody:\n${response.body}"
+          );
         return null;
       }
     }

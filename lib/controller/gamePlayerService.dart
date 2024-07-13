@@ -28,7 +28,10 @@ class GamePlayerservice {
         return GamePlayer.fromJson(data);
       }
       else {
-        print("C'è stato un errore nella chiamata");
+          print("C'è stato un errore nella chiamata, "
+              "\nCode: ${response.statusCode},"
+              "\nBody:\n${response.body}"
+          );
         return null;
       }
   }
@@ -61,6 +64,11 @@ class GamePlayerservice {
         var data = jsonDecode(response.body);
         print(data);
         return GamePlayer.fromJson(data);
+      } else {
+          print("C'è stato un errore nella chiamata, "
+              "\nCode: ${response.statusCode},"
+              "\nBody:\n${response.body}"
+          );
       }
   }
   Future deleteGamePlayer(int id) async {
@@ -70,6 +78,11 @@ class GamePlayerservice {
         if(response.statusCode == 200){
         print("Chiamata effettuata corretamente");
 
-      }
+      } else {
+          print("C'è stato un errore nella chiamata, "
+              "\nCode: ${response.statusCode},"
+              "\nBody:\n${response.body}"
+          );
+        }
   }
 }

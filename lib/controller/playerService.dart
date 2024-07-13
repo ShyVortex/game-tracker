@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:game_tracker/main.dart';
 import 'package:game_tracker/models/gamePlayer.dart';
 import 'package:game_tracker/pages/profile/profile_page.dart';
 import 'package:game_tracker/utilities/login_utilities.dart';
@@ -33,7 +31,10 @@ class PlayerService {
         print(data);
         return Player.fromJson(data);
       } else {
-        print("C'è stato un errore nella chiamata");
+        print("C'è stato un errore nella chiamata, "
+            "\nCode: ${response.statusCode},"
+            "\nBody:\n${response.body}"
+        );
         return null;
       }
     });
@@ -99,6 +100,60 @@ class PlayerService {
     }
   }
 
+  Future addPlayerBirthday(int idPlayer, String date) async {
+    Uri uri =
+        Uri.parse('${playerURL}addBirthday/$idPlayer');
+
+    var jsonObject = jsonEncode({"dateString": date});
+
+    http.Response response = await http.post(
+      uri,
+      body: jsonObject,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      print(data);
+      return Player.fromJson(data);
+    } else {
+      print("C'è stato un errore nella chiamata, "
+          "\nCode: ${response.statusCode},"
+          "\nBody:\n${response.body}"
+      );
+      return null;
+    }
+  }
+
+  Future updatePlayerBirthday(int idPlayer, String date) async {
+    Uri uri =
+        Uri.parse('${playerURL}updateBirthday/$idPlayer');
+
+    var jsonObject = jsonEncode({"dateString": date});
+
+    http.Response response = await http.put(
+      uri,
+      body: jsonObject,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      print(data);
+      return Player.fromJson(data);
+    } else {
+      print("C'è stato un errore nella chiamata, "
+          "\nCode: ${response.statusCode},"
+          "\nBody:\n${response.body}"
+      );
+      return null;
+    }
+  }
+
   Future updatePlayer(Player player, int idPlayer) async {
     final Player old = ProfilePage.comparison;
 
@@ -120,7 +175,10 @@ class PlayerService {
         print(data);
         return Player.fromJson(data);
       } else {
-        print("C'è stato un errore nella chiamata");
+        print("C'è stato un errore nella chiamata, "
+            "\nCode: ${response.statusCode},"
+            "\nBody:\n${response.body}"
+        );
         return null;
       }
     });
@@ -133,7 +191,7 @@ class PlayerService {
     Uri uri =
         Uri.parse('${playerURL}addPreferito/$idPlayer/$idGame');
 
-    var jsonObject = jsonEncode(player);
+    var jsonObject = jsonEncode(game);
 
     http.Response response = await http.post(uri,
         body: jsonObject, headers: headers
@@ -144,30 +202,26 @@ class PlayerService {
       print(data);
       return Player.fromJson(data);
     } else {
-      print("C'è stato un errore nella chiamata");
-      return null;
+      throw Exception("C'è stato un errore nella chiamata, "
+          "\nCode: ${response.statusCode},"
+          "\nBody:\n${response.body}"
+      );
     }
   }
 
-  Future removeGiocoPreferito(Player player) async {
-    int idPlayer = player.id!;
-
+  Future removeGiocoPreferito(int idPlayer) async {
     Uri uri =
         Uri.parse('${playerURL}removePreferito/$idPlayer');
 
-    var jsonObject = jsonEncode(player);
-
-    http.Response response = await http.delete(uri,
-        body: jsonObject, headers: headers
-    );
+    http.Response response = await http.delete(uri, headers: headers);
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      print(data);
-      return Player.fromJson(data);
+      print("Chiamata effettuata corretamente");
     } else {
-      print("C'è stato un errore nella chiamata");
-      return null;
+      print("C'è stato un errore nella chiamata, "
+          "\nCode: ${response.statusCode},"
+          "\nBody:\n${response.body}"
+      );
     }
   }
 
@@ -180,7 +234,10 @@ class PlayerService {
     if (response.statusCode == 200) {
       print("Chiamata effettuata corretamente");
     } else {
-      print("C'è stato un errore nella chiamata");
+      print("C'è stato un errore nella chiamata, "
+          "\nCode: ${response.statusCode},"
+          "\nBody:\n${response.body}"
+      );
     }
   }
 }

@@ -82,7 +82,7 @@ class Player {
       id: json['id'],
       username: json['username'],
       email: json['email'],
-      password:json['password'],
+      password: json['password'],
       genere: json['genere'],
       birthday: json['birthday'],
       piattaformaPreferita : json['piattaformaPreferita'],

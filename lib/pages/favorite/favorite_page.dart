@@ -17,17 +17,24 @@ class _FavoritePageState extends State<FavoritePage> {
  List<GamePlayer> _favoritesGame = [];
  bool _isLoading = true;
  final PlayerService _playerService = PlayerService();
-   @override
+
+ @override
   void initState()  {
     super.initState();
        _playerService.getAllGiochiPreferiti(widget.player.id!).then((onValue){
-       setState(() {
-         _favoritesGame = onValue;
-         _isLoading = false;
-       });
-      
+       initialize(onValue);
     });
   }
+
+  void initialize(var onValue) {
+     if (!mounted) return;
+
+    setState(() {
+      _favoritesGame = onValue;
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

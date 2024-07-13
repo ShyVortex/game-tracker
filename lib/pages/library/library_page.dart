@@ -20,17 +20,20 @@ class LibraryPageState extends State<LibraryPage> {
   final PlayerService _playerService = PlayerService();
   bool _isLoading = true;
 
-  late final Player loggedPlayer;
-
   @override
   void initState()  {
     super.initState();
        _playerService.getAllGiochiPosseduti(widget.player.id!).then((onValue){
-       setState(() {
-         _games = onValue;
-         _isLoading = false;
-       });
+       initialize(onValue);
+    });
+  }
 
+  Future<void> initialize(var onValue) async {
+    if (!mounted) return;
+
+    setState(() {
+      _games = onValue;
+      _isLoading = false;
     });
   }
 
@@ -137,12 +140,15 @@ class LibraryPageState extends State<LibraryPage> {
                   ]
               )
           ),
-          floatingActionButton: FloatingActionButton(
+          floatingActionButton:
+          !_isLoading ?
+          FloatingActionButton(
             shape: const CircleBorder(),
             backgroundColor: Colors.purple,
             onPressed: onAddPress,
             child: const Icon(Icons.add, color: Colors.white, size: 30),
-          ),
+          )
+              : null
         )
     );
   }

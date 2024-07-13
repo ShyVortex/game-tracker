@@ -27,7 +27,9 @@ class ProfilePage extends StatefulWidget {
 }
 
 class ProfilePageState extends State<ProfilePage> {
-  static const List<String> genderList = <String>['Maschio', 'Femmina', 'Non binario'];
+  static List<String> genderList = <String>[Genere.MASCHIO.name,
+    Genere.FEMMINA.name, Genere.NON_BINARIO.name
+  ];
   static const List<String> platformList = <String>['PC', 'Steam Deck', 'PS5',
     'Xbox Series S/X', 'Nintendo Switch', 'PS4', 'PS Vita', 'Xbox One', 'PS3',
     'PSP', 'Xbox 360', 'Nintendo Wii U', 'Nintendo 3DS', 'Nintendo Wii', 'PS2',
@@ -36,6 +38,7 @@ class ProfilePageState extends State<ProfilePage> {
   File? galleryFile;
   final picker = ImagePicker();
   final int currentYear = DateTime.now().year;
+  bool isLoading = true;
 
   Game? giocoPreferito;
   final PlayerService playerService = PlayerService();
@@ -69,8 +72,19 @@ class ProfilePageState extends State<ProfilePage> {
       giocoPreferito = widget.player.giocoPreferito!;
     }
 
+    waitLoad();
     loadProfileImage();
     initializeFields();
+  }
+
+  Future<void> waitLoad() async {
+    await Future.delayed(const Duration(seconds: 1));
+
+    if (!mounted) return;
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   Future<void> loadProfileImage() async {
@@ -186,7 +200,7 @@ class ProfilePageState extends State<ProfilePage> {
     await prefs.setString("profileImage", b64Img);
   }
 
-  Future<void> selectDate(BuildContext context) async {
+  Future<void> postBirthday(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -198,6 +212,12 @@ class ProfilePageState extends State<ProfilePage> {
       setState(() {
         dateController.text = "${picked.toLocal()}".split(' ')[0];
         currentDate = dateController.text;
+
+        if (widget.player.birthday == null) {
+          playerService.addPlayerBirthday(widget.player.id!, currentDate);
+        } else {
+          playerService.updatePlayerBirthday(widget.player.id!, currentDate);
+        }
       });
     }
   }
@@ -222,16 +242,10 @@ class ProfilePageState extends State<ProfilePage> {
     if (currentEmail != widget.player.email || currentPassword != placeholder) {
       return true;
     }
-    if (currentDate != widget.player.birthday && dateController.text.isNotEmpty) {
-      return true;
-    }
     if (currentGender != widget.player.genere?.name && currentGender.isNotEmpty) {
       return true;
     }
     if (currentFavPlatform != widget.player.piattaforma?.name && currentFavPlatform.isNotEmpty) {
-      return true;
-    }
-    if (currentFavGame != giocoPreferito?.nome && currentFavGame.isNotEmpty) {
       return true;
     }
 
@@ -249,19 +263,9 @@ class ProfilePageState extends State<ProfilePage> {
       updated.username = widget.player.username;
       updated.email = currentEmail;
       updated.password = currentPassword;
-      updated.birthday = currentDate;
 
-      switch (currentGender) {
-        case 'Maschio':
-          updated.genere = Genere.MASCHIO;
-          break;
-        case 'Femmina':
-          updated.genere = Genere.FEMMINA;
-          break;
-        case 'Non binario':
-          updated.genere = Genere.NON_BINARIO;
-          break;
-      }
+      currentGender = currentGender.toUpperCase();
+      updated.genere = GenereExtension.genereFromBackend(currentGender);
 
       // todo: fix updated.piattaforma = currentFavPlatform;
 
@@ -331,6 +335,13 @@ class ProfilePageState extends State<ProfilePage> {
                   ],
                 ),
                 const Divider(),
+                if (isLoading)
+                  const Expanded(
+                      child: Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      ),
+                  ),
+                if (!isLoading)
                 Expanded(
                     child: SingleChildScrollView(
                       child: Padding(
@@ -550,7 +561,7 @@ class ProfilePageState extends State<ProfilePage> {
                                 const SizedBox(width: 10),
                                 IconButton(
                                   icon: const Icon(Icons.calendar_month),
-                                  onPressed: () => selectDate(context),
+                                  onPressed: () => postBirthday(context),
                                 ),
                               ],
                             ),
@@ -681,7 +692,7 @@ class ProfilePageState extends State<ProfilePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                if (!isEditingEmail && !isEditingPassword && hasAnyValueChanged())
+                if (!isLoading && !isEditingEmail && !isEditingPassword && hasAnyValueChanged())
                   FloatingActionButton(
                     heroTag: "restore_fields",
                     shape: const CircleBorder(),
@@ -690,7 +701,7 @@ class ProfilePageState extends State<ProfilePage> {
                     child: const Icon(Icons.settings_backup_restore, color: Colors.white, size: 30),
                   ),
                 const SizedBox(width: 16),
-                if (!isEditingEmail && !isEditingPassword && hasAnyValueChanged())
+                if (!isLoading && !isEditingEmail && !isEditingPassword && hasAnyValueChanged())
                   Consumer(builder: (context, ref, child) {
                     return FloatingActionButton(
                       heroTag: "confirm_profile_update",
