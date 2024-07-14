@@ -44,6 +44,7 @@ class SignupPageState extends State<SignupPage> {
         ? SafeArea(
             child: Scaffold(
                 appBar: AppBar(
+                    forceMaterialTransparency: true,
                     toolbarHeight: 150.0,
                     flexibleSpace: const MyContainerWidget(),
                     leading: IconButton(
