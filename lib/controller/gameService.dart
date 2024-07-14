@@ -19,10 +19,10 @@ class Gameservice {
 
        if(response.statusCode == 200){
         List<dynamic> data = jsonDecode(response.body);
-        print(data);
 
         games = data.map((json) => Game.fromJson(json)).toList();
-       
+        print(games);
+
         return games;
       }
       else {
@@ -44,12 +44,12 @@ class Gameservice {
         print(data);
         return Game.fromJson(data);
       }
-      else {
+      else if (response.statusCode == 404) {
           print("C'è stato un errore nella chiamata, "
               "\nCode: ${response.statusCode},"
               "\nBody:\n${response.body}"
           );
-        return null;
+          return null;
       }
     }
 }

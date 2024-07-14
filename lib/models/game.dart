@@ -70,5 +70,9 @@ class Game {
       isNetworkImage: json["networkImage"]
     );
   }
+   @override
+  String toString() {
+    return 'Game{id: $_id, nome: $_nome, sviluppatore: $_sviluppatore, piattaforme: $_piattaforme, immagineURL: $_immagineURL, trofeiTotali: $_trofeiTotali, isNetworkImage: $_isNetworkImage, isSelected: $isSelected}';
+  }
 
 }

@@ -35,6 +35,8 @@ class _EditGamePageState extends State<EditGamePage> {
   String dropdownValue = "";
   bool enableOreDiGiocoFormField = true;
   bool enableTrofeiOttenutiFormField = true;
+  List<String>? _initialImagesList = [];
+
   final TextEditingController placeController = TextEditingController();
   final TextEditingController _trofeiController = TextEditingController();
   final TextEditingController _oreDiGiocoController = TextEditingController();
@@ -57,6 +59,7 @@ class _EditGamePageState extends State<EditGamePage> {
       if(_oreDiGiocoController.text!= "") widget.gameplayer.oreDiGioco = int.parse(_oreDiGiocoController.text);
       if(_valutazioneController.text!= "") widget.gameplayer.valutazione = LoginUtilities.valutazioneIntValue(_valutazioneController.text);
       if(_trofeiController.text!= "") widget.gameplayer.trofeiOttenuti = int.parse(_trofeiController.text);
+      widget.gameplayer.immagini = _initialImagesList;
 
       await _gamePlayerservice.updateGamePlayer(widget.gameplayer, widget.gameplayer.id!);
 
@@ -124,15 +127,16 @@ class _EditGamePageState extends State<EditGamePage> {
   @override
   void initState()  {
     super.initState();
-    
+    _initialImagesList = List<String>.from(widget.gameplayer.immagini!);
   }
+
   Future<void> _pickImageFromGallery() async {
   final picker = ImagePicker();
   final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
   if (pickedFile != null) {
      final File imagesPath = File(pickedFile.path); 
-     widget.gameplayer.immagini?.add(imagesPath.path);
+     _initialImagesList?.add(imagesPath.path);
   } 
   else {
 
@@ -408,8 +412,8 @@ void updateState(){
                     const SizedBox(
                       height: 30,
                     ),
-                    widget.gameplayer.immagini!.isNotEmpty ?
-                    ImagesList(imagesPaths:widget.gameplayer.immagini!,notifyParent: updateState)
+                    _initialImagesList!.isNotEmpty ?
+                    ImagesList(imagesPaths:_initialImagesList!,notifyParent: updateState)
                         : Column(
                         children: [
                           const Text("Highlights", style: TextStyle(
@@ -427,7 +431,7 @@ void updateState(){
                             clipBehavior: Clip.hardEdge,
                             child: InkWell(
                               splashColor: Colors.purple.withAlpha(30),
-                              onTap: onAddImage,
+                              onTap: onSelectionPress,
                               child: const Padding(
                                 padding: EdgeInsets.only(
                                     bottom: 12, left: 12, right: 12),
@@ -448,13 +452,15 @@ void updateState(){
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                _initialImagesList!.isNotEmpty?
                 FloatingActionButton(
                   heroTag: "selection-photo",
                   shape: const CircleBorder(),
                   backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                   onPressed:  onSelectionPress,
                   child: const Icon(Icons.photo_library, color: Colors.black, size: 30),
-                ), const SizedBox(height: 10,),
+                ) : const SizedBox(),
+                const SizedBox(height: 10,),
                 Consumer(builder: (context, ref, child) {
                   return FloatingActionButton(
                     heroTag: "cancella",
@@ -466,7 +472,7 @@ void updateState(){
                     child: const Icon(Icons.delete, color: Colors.white, size: 30),
                   );
                 }),
-                const SizedBox(height: 10,) ,
+                const SizedBox(height: 10,),
                 FloatingActionButton(
                   heroTag: "conferma",
                   shape: const CircleBorder(),

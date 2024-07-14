@@ -5,6 +5,7 @@ import 'package:game_tracker/models/gamePlayer.dart';
 import 'package:game_tracker/pages/profile/profile_page.dart';
 import 'package:game_tracker/utilities/login_utilities.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/game.dart';
 import '../models/player.dart';
@@ -12,6 +13,7 @@ import '../models/player.dart';
 class PlayerService {
   final String playerURL =
       'https://gamemanager-backend.onrender.com/api/game-manager/player/';
+
 
   final headers = {
     'Content-Type': 'application/json',
@@ -21,7 +23,7 @@ class PlayerService {
   Future addPlayer(Player player) async {
     Uri uri = Uri.parse('${playerURL}addPlayer');
 
-    return Future.delayed(const Duration(seconds: 3), () async {
+
       player.password = await LoginUtilities.hashPassword(player.password!);
       var jsonObject = jsonEncode(player);
       http.Response response =
@@ -57,25 +59,25 @@ class PlayerService {
   Future getAllGiochiPosseduti(int id) async {
     Uri uri = Uri.parse('${playerURL}getGiochiPosseduti/$id');
 
-    http.Response response = await http.get(uri, headers: headers);
+    final prefs = await SharedPreferences.getInstance();http.Response response = await http.get(uri, headers: headers);
     List<GamePlayer> games = [];
     if (response.statusCode == 200) {
-      List<dynamic> data = jsonDecode(response.body);
+prefs.setString('gamesPosseduti',response.body);      List<dynamic> data = jsonDecode(response.body);
 
       games = data.map((json) => GamePlayer.fromJson(json)).toList();
 
       return games;
     } else {
-      throw Error();
+      throw Exception();
+
     }
   }
-
   Future getAllGiochiPreferiti(int id) async {
     Uri uri = Uri.parse('${playerURL}getGiochiPreferiti/$id');
 
-    http.Response response = await http.get(uri, headers: headers);
+    final prefs = await SharedPreferences.getInstance();http.Response response = await http.get(uri, headers: headers);
     List<GamePlayer> games = [];
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200) {prefs.setString('gamesPreferiti',response.body);
       List<dynamic> data = jsonDecode(response.body);
 
       games = data.map((json) => GamePlayer.fromJson(json)).toList();

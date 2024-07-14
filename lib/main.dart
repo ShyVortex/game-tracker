@@ -7,6 +7,7 @@ import 'package:game_tracker/models/player.dart';
 import 'package:game_tracker/pages/navigationBar/navigation_page.dart';
 import 'package:game_tracker/pages/registration/login/login_page.dart';
 import 'package:game_tracker/theme/app_theme.dart';
+import 'package:game_tracker/widgets/waiting_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -47,7 +48,7 @@ class MyApp extends StatelessWidget {
               future: _loadSavedValue(ref),
               builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
+                  return const WaitingWidget();
                 } else if (snapshot.hasError) {
                   return Text('Errore: ${snapshot.error}');
                 } else {
