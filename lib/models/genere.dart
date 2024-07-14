@@ -39,7 +39,7 @@ extension GenereExtension on Genere {
         return Genere.MASCHIO;
       case "FEMMINA":
         return Genere.FEMMINA;
-      case "NON_BINARIO":
+      case "NON BINARIO":
         return Genere.NON_BINARIO;
       default:
         return null;

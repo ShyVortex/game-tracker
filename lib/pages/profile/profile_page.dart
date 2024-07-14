@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:avatar_view/avatar_view.dart';
@@ -12,7 +13,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../main.dart';
-import '../../models/game.dart';
 import '../../models/genere.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -40,9 +40,7 @@ class ProfilePageState extends State<ProfilePage> {
   final int currentYear = DateTime.now().year;
   bool isLoading = true;
 
-  Game? giocoPreferito;
   final PlayerService playerService = PlayerService();
-  Game? selectedGame;
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -67,10 +65,6 @@ class ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     ProfilePage.comparison = widget.player;
-
-    if (widget.player.giocoPreferito != null) {
-      giocoPreferito = widget.player.giocoPreferito!;
-    }
 
     waitLoad();
     loadProfileImage();
@@ -109,8 +103,6 @@ class ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> initializeFields() async {
-    final giocoPreferito = this.giocoPreferito;
-
     setState(() {
       emailController.text = widget.player.email!;
       passwordController.text = placeholder;
@@ -124,17 +116,17 @@ class ProfilePageState extends State<ProfilePage> {
         dateController.text = "";
       }
       if (widget.player.genere != null) {
-        genderController.text = widget.player.genere?.name as String;
+        genderController.text = widget.player.genere!.name;
       } else {
         genderController.text = "";
       }
       if (widget.player.piattaforma != null) {
-        platformController.text = widget.player.piattaforma!.name;
+        platformController.text = widget.player.piattaforma!;
       } else {
         platformController.text = "";
       }
-      if (giocoPreferito != null) {
-        favouriteController.text = giocoPreferito.nome!;
+      if (widget.player.giocoPreferito != null) {
+        favouriteController.text = widget.player.giocoPreferito!;
       } else {
         favouriteController.text = "";
       }
@@ -200,7 +192,7 @@ class ProfilePageState extends State<ProfilePage> {
     await prefs.setString("profileImage", b64Img);
   }
 
-  Future<void> postBirthday(BuildContext context) async {
+  Future<void> selectBirthday(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -212,12 +204,6 @@ class ProfilePageState extends State<ProfilePage> {
       setState(() {
         dateController.text = "${picked.toLocal()}".split(' ')[0];
         currentDate = dateController.text;
-
-        if (widget.player.birthday == null) {
-          playerService.addPlayerBirthday(widget.player.id!, currentDate);
-        } else {
-          playerService.updatePlayerBirthday(widget.player.id!, currentDate);
-        }
       });
     }
   }
@@ -230,10 +216,8 @@ class ProfilePageState extends State<ProfilePage> {
 
     if (result != null) {
       setState(() {
-        selectedGame = result.game;
         favouriteController.text = result.game.nome;
         currentFavGame = favouriteController.text;
-        playerService.addGiocoPreferito(widget.player, selectedGame!);
       });
     }
   }
@@ -242,34 +226,72 @@ class ProfilePageState extends State<ProfilePage> {
     if (currentEmail != widget.player.email || currentPassword != placeholder) {
       return true;
     }
+    if (currentDate != widget.player.birthday && dateController.text.isNotEmpty) {
+      return true;
+    }
     if (currentGender != widget.player.genere?.name && currentGender.isNotEmpty) {
       return true;
     }
-    if (currentFavPlatform != widget.player.piattaforma?.name && currentFavPlatform.isNotEmpty) {
+    if (currentFavPlatform != widget.player.piattaforma && currentFavPlatform.isNotEmpty) {
+      return true;
+    }
+    if (currentFavGame != widget.player.giocoPreferito && currentFavGame.isNotEmpty) {
       return true;
     }
 
     return false;
   }
 
-
-  Future<void> onConfirmPress(int idPlayer) async {
+  Future<void> onConfirmPress(int idPlayer, WidgetRef ref) async {
     try {
-      if (currentPassword == placeholder) {
-        currentPassword = widget.player.password!;
-      }
+      setState(() {
+        isLoading = true;
 
-      Player updated = Player();
-      updated.username = widget.player.username;
-      updated.email = currentEmail;
-      updated.password = currentPassword;
+        if (currentPassword == placeholder) {
+          currentPassword = widget.player.password!;
+        }
 
-      currentGender = currentGender.toUpperCase();
-      updated.genere = GenereExtension.genereFromBackend(currentGender);
+        Player updated = widget.player;
 
-      // todo: fix updated.piattaforma = currentFavPlatform;
+        updated.email = currentEmail;
+        updated.password = currentPassword;
 
-      await playerService.updatePlayer(updated, idPlayer);
+        if (currentDate.isNotEmpty) {
+          if (widget.player.birthday == null) {
+            playerService.addPlayerBirthday(widget.player.id!, currentDate);
+          } else {
+            playerService.updatePlayerBirthday(widget.player.id!, currentDate);
+          }
+          updated.birthday = currentDate;
+        }
+
+        if (currentGender.isNotEmpty) {
+          currentGender = currentGender.toUpperCase();
+          Genere? updatedGender = GenereExtension.genereFromBackend(currentGender);
+
+          if (widget.player.genere == null) {
+            playerService.addPlayerGenere(widget.player.id!,
+                updatedGender!.backendValue);
+          } else {
+            playerService.updatePlayerGenere(widget.player.id!,
+                updatedGender!.backendValue);
+          }
+
+          updated.genere = updatedGender;
+        }
+
+        updated.piattaforma = currentFavPlatform;
+        updated.giocoPreferito = currentFavGame;
+
+        playerService.updatePlayer(updated, idPlayer);
+
+        ref.read(playerProvider.notifier)
+          .update((state) => updated);
+        ProfilePage.comparison = widget.player;
+
+        initializeFields();
+        waitLoad();
+      });
 
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Dati modificati con successo!'),
@@ -561,7 +583,7 @@ class ProfilePageState extends State<ProfilePage> {
                                 const SizedBox(width: 10),
                                 IconButton(
                                   icon: const Icon(Icons.calendar_month),
-                                  onPressed: () => postBirthday(context),
+                                  onPressed: () => selectBirthday(context),
                                 ),
                               ],
                             ),
@@ -692,7 +714,9 @@ class ProfilePageState extends State<ProfilePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                if (!isLoading && !isEditingEmail && !isEditingPassword && hasAnyValueChanged())
+                if (!isLoading && !isEditingEmail
+                    && !isEditingPassword && hasAnyValueChanged()
+                )
                   FloatingActionButton(
                     heroTag: "restore_fields",
                     shape: const CircleBorder(),
@@ -701,14 +725,16 @@ class ProfilePageState extends State<ProfilePage> {
                     child: const Icon(Icons.settings_backup_restore, color: Colors.white, size: 30),
                   ),
                 const SizedBox(width: 16),
-                if (!isLoading && !isEditingEmail && !isEditingPassword && hasAnyValueChanged())
+                if (!isLoading && !isEditingEmail
+                    && !isEditingPassword && hasAnyValueChanged()
+                )
                   Consumer(builder: (context, ref, child) {
                     return FloatingActionButton(
                       heroTag: "confirm_profile_update",
                       shape: const CircleBorder(),
                       backgroundColor: Colors.green,
                       onPressed: () async {
-                        await onConfirmPress(ref.watch(playerProvider).id!);
+                        await onConfirmPress(ref.watch(playerProvider).id!, ref);
                       },
                       child: const Icon(Icons.check, color: Colors.white, size: 30),
                     );

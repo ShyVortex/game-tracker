@@ -1,5 +1,3 @@
-
-import 'package:game_tracker/models/Piattaforma.dart';
 import 'package:game_tracker/models/genere.dart';
 
 import 'game.dart';
@@ -11,8 +9,8 @@ class Player {
   String? _password;
   Genere? _genere;
   String? _birthday;
-  Piattaforma? _piattaformaPreferita;
-  Game? _giocoPreferito;
+  String? _piattaformaPreferita;
+  String? _giocoPreferito;
    
   Player.withParameters(
       {
@@ -22,8 +20,8 @@ class Player {
     required String? password,
     required Genere? genere,
     required String? birthday,
-    required Piattaforma? piattaformaPreferita,
-    required Game? giocoPreferito,
+    required String? piattaformaPreferita,
+    required String? giocoPreferito,
       })
   {
     _id = id;
@@ -43,8 +41,8 @@ class Player {
   String? get email => _email;
   Genere? get genere => _genere;
   String? get birthday => _birthday;
-  Piattaforma? get piattaforma => _piattaformaPreferita;
-  Game? get giocoPreferito => _giocoPreferito;
+  String? get piattaforma => _piattaformaPreferita;
+  String? get giocoPreferito => _giocoPreferito;
 
   set username(String? value){
       _username = value;
@@ -61,10 +59,10 @@ class Player {
   set birthday(String? value){
     _birthday = value;
   }
-  set piattaforma(Piattaforma? value){
+  set piattaforma(String? value){
     _piattaformaPreferita = value;
   }
-  set giocoPreferito(Game? value) {
+  set giocoPreferito(String? value) {
     _giocoPreferito = value;
   }
 
@@ -72,7 +70,6 @@ class Player {
     'username': _username,
     'email': _email,
     'password': _password,
-    'genere': _genere,
     'birthday': _birthday,
     'piattaformaPreferita': _piattaformaPreferita,
     'giocoPreferito': _giocoPreferito
@@ -83,7 +80,9 @@ class Player {
       username: json['username'],
       email: json['email'],
       password: json['password'],
-      genere: json['genere'],
+        genere: json['genere'] == null
+            ? json['genere']
+            : GenereExtension.genereFromBackend(json['genere']),
       birthday: json['birthday'],
       piattaformaPreferita : json['piattaformaPreferita'],
       giocoPreferito: json['giocoPreferito']

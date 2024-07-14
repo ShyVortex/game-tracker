@@ -114,7 +114,7 @@ class LibraryPageState extends State<LibraryPage> {
                         return ListTile(
                           onTap: () {
                             Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => EditGamePage(gameplayer: _games[index]))
+                                MaterialPageRoute(builder: (context) => EditGamePage(gameplayer: _games[index], player: widget.player))
                             );
                           },
                           title: Text(_games[index].game!.nome!, style: const TextStyle(fontWeight: FontWeight.w600, fontFamily: 'Inter')),

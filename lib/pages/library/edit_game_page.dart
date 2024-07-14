@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_tracker/controller/gamePlayerService.dart';
+import 'package:game_tracker/controller/playerService.dart';
 import 'package:game_tracker/models/gamePlayer.dart';
 import 'package:game_tracker/pages/library/map_page.dart';
 import 'package:game_tracker/pages/navigationBar/navigation_page.dart';
@@ -11,9 +13,14 @@ import 'package:game_tracker/widgets/images_list.dart';
 import 'package:game_tracker/widgets/square_avatar.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../main.dart';
+import '../../models/player.dart';
+import '../profile/profile_page.dart';
+
 class EditGamePage extends StatefulWidget {
-  const EditGamePage({super.key, required this.gameplayer});
+  const EditGamePage({super.key, required this.gameplayer, required this.player});
   final GamePlayer gameplayer;
+  final Player player;
 
   @override
   State<EditGamePage> createState() => _EditGamePageState();
@@ -38,6 +45,7 @@ class _EditGamePageState extends State<EditGamePage> {
 
 
   final GamePlayerservice _gamePlayerservice = GamePlayerservice();
+  final PlayerService _playerService = PlayerService();
 
  
   Future<void> onConfirmPress() async {
@@ -85,8 +93,20 @@ class _EditGamePageState extends State<EditGamePage> {
     });
   }
 
-  Future<void> onDeletePress() async {
+  Future<void> onDeletePress(WidgetRef ref) async {
     try{
+      if (widget.player.giocoPreferito == widget.gameplayer.game?.nome) {
+        Player updated = widget.player;
+        updated.giocoPreferito = "";
+        await _playerService.updatePlayer(widget.player, widget.player.id!);
+
+        setState(() {
+          ref.read(playerProvider.notifier)
+              .update((state) => updated);
+          ProfilePage.comparison = widget.player;
+        });
+      }
+
       await _gamePlayerservice.deleteGamePlayer(widget.gameplayer.id!);
 
        Navigator.push(
@@ -434,14 +454,18 @@ void updateState(){
                   backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                   onPressed:  onSelectionPress,
                   child: const Icon(Icons.photo_library, color: Colors.black, size: 30),
-                ), const SizedBox(height: 10,) ,
-                FloatingActionButton(
-                  heroTag: "cancella",
-                  shape: const CircleBorder(),
-                  backgroundColor: const Color.fromARGB(255, 223, 11, 11),
-                  onPressed:  onDeletePress,
-                  child: const Icon(Icons.delete, color: Colors.white, size: 30),
-                ),
+                ), const SizedBox(height: 10,),
+                Consumer(builder: (context, ref, child) {
+                  return FloatingActionButton(
+                    heroTag: "cancella",
+                    shape: const CircleBorder(),
+                    backgroundColor: const Color.fromARGB(255, 223, 11, 11),
+                    onPressed: () {
+                      onDeletePress(ref);
+                    },
+                    child: const Icon(Icons.delete, color: Colors.white, size: 30),
+                  );
+                }),
                 const SizedBox(height: 10,) ,
                 FloatingActionButton(
                   heroTag: "conferma",

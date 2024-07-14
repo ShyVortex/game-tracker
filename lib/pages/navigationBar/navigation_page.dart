@@ -10,17 +10,17 @@ class NavigationPage extends StatefulWidget {
   const NavigationPage({super.key});
 
   @override
-  State<NavigationPage> createState() => _NavigationPage();
+  State<NavigationPage> createState() => NavigationState();
 }
 
-class _NavigationPage extends State<NavigationPage> {
-
+class NavigationState extends State<NavigationPage> {
   ThemeData themeData = AppTheme.buildThemeData();
+
   @override
   void initState() {
-    
     super.initState();
   }
+
   final List<Widget> _navigationPages = [
     Consumer(builder: (context, ref, child) {
       return LibraryPage(player: ref.watch(playerProvider));

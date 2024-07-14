@@ -154,6 +154,60 @@ class PlayerService {
     }
   }
 
+  Future addPlayerGenere(int idPlayer, String genere) async {
+    Uri uri =
+    Uri.parse('${playerURL}addGenere/$idPlayer');
+
+    var jsonObject = jsonEncode({"genere": genere});
+
+    http.Response response = await http.post(
+      uri,
+      body: jsonObject,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      print(data);
+      return Player.fromJson(data);
+    } else {
+      print("C'è stato un errore nella chiamata, "
+          "\nCode: ${response.statusCode},"
+          "\nBody:\n${response.body}"
+      );
+      return null;
+    }
+  }
+
+  Future updatePlayerGenere(int idPlayer, String genere) async {
+    Uri uri =
+        Uri.parse('${playerURL}updateGenere/$idPlayer');
+
+    var jsonObject = jsonEncode({"genere": genere});
+
+    http.Response response = await http.put(
+      uri,
+      body: jsonObject,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      print(data);
+      return Player.fromJson(data);
+    } else {
+      print("C'è stato un errore nella chiamata, "
+          "\nCode: ${response.statusCode},"
+          "\nBody:\n${response.body}"
+      );
+      return null;
+    }
+  }
+
   Future updatePlayer(Player player, int idPlayer) async {
     final Player old = ProfilePage.comparison;
 
@@ -182,47 +236,6 @@ class PlayerService {
         return null;
       }
     });
-  }
-
-  Future addGiocoPreferito(Player player, Game game) async {
-    int idPlayer = player.id!;
-    int idGame = game.id!;
-
-    Uri uri =
-        Uri.parse('${playerURL}addPreferito/$idPlayer/$idGame');
-
-    var jsonObject = jsonEncode(game);
-
-    http.Response response = await http.post(uri,
-        body: jsonObject, headers: headers
-    );
-
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      print(data);
-      return Player.fromJson(data);
-    } else {
-      throw Exception("C'è stato un errore nella chiamata, "
-          "\nCode: ${response.statusCode},"
-          "\nBody:\n${response.body}"
-      );
-    }
-  }
-
-  Future removeGiocoPreferito(int idPlayer) async {
-    Uri uri =
-        Uri.parse('${playerURL}removePreferito/$idPlayer');
-
-    http.Response response = await http.delete(uri, headers: headers);
-
-    if (response.statusCode == 200) {
-      print("Chiamata effettuata corretamente");
-    } else {
-      print("C'è stato un errore nella chiamata, "
-          "\nCode: ${response.statusCode},"
-          "\nBody:\n${response.body}"
-      );
-    }
   }
 
   Future deletePlayer(int idPlayer) async {
