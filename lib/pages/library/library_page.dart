@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:game_tracker/pages/library/add_game_page.dart';
 import 'package:game_tracker/controller/playerService.dart';
 import 'package:game_tracker/models/gamePlayer.dart';
 import 'package:game_tracker/pages/library/edit_game_page.dart';
 import 'package:game_tracker/widgets/square_avatar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LibraryPage extends StatefulWidget {
   const LibraryPage({super.key, required this.idPlayer});
@@ -18,16 +21,31 @@ class LibraryPageState extends State<LibraryPage> {
   final PlayerService _playerService = PlayerService();
   bool _isLoading = true;
 
-  @override
-  void initState()  {
-    super.initState();
-       _playerService.getAllGiochiPosseduti(widget.idPlayer).then((onValue){
+  void fetchData(){
+      _playerService.getAllGiochiPosseduti(widget.idPlayer).then((onValue){
        setState(() {
          _games = onValue;
          _isLoading = false;
        });
+         }).catchError((onError) async {
+        final prefs = await SharedPreferences.getInstance();
+        List<dynamic> data = jsonDecode(prefs.getString("gamesPosseduti")!);
+        _games = data.map((json) => GamePlayer.fromJson(json)).toList();
 
-    });
+        setState(() {
+         _isLoading = false;
+       });
+         ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Impossibile connettersi al server. Alcune funzioni potrebbero essere limitate')));
+         });
+  }
+
+
+  @override
+  void initState()  {
+    super.initState();
+    fetchData();
+      
   }
 
   void onAddPress() {
