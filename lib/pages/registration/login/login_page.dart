@@ -6,7 +6,6 @@ import 'package:game_tracker/models/player.dart';
 import 'package:game_tracker/pages/navigationBar/navigation_page.dart';
 import 'package:game_tracker/pages/registration/signup/signup_page.dart';
 import 'package:game_tracker/utilities/login_utilities.dart';
-import 'package:game_tracker/utilities/reference_utilities.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../widgets/app_logo.dart';
 
@@ -59,7 +58,7 @@ class LoginPageState extends State<LoginPage> {
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Per favore inserire una email';
-              } 
+              }
               else if(LoginUtilities.isValidEmail(value)) {
                 return "formato email non valido";
               }
@@ -94,7 +93,7 @@ class LoginPageState extends State<LoginPage> {
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Per favore inserire la password';
-              }else { 
+              }else {
               return null;
             }},
           ),
@@ -131,12 +130,10 @@ class LoginPageState extends State<LoginPage> {
                         await prefs.setString("email", _player.email!);
                       }
 
-                      ReferenceUtilities.setActivePlayer(_player);
-
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const NavigationPage()));
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>  const NavigationPage()));
                       }
                       else{
                         ScaffoldMessenger.of(context).showSnackBar(

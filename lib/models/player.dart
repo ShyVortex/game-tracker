@@ -1,6 +1,6 @@
-
-import 'package:game_tracker/models/Piattaforma.dart';
 import 'package:game_tracker/models/genere.dart';
+
+import 'game.dart';
 
 class Player {
   int? _id;
@@ -9,9 +9,21 @@ class Player {
   String? _password;
   Genere? _genere;
   String? _birthday;
-  Piattaforma? _piattaformaPreferita;
+  String? _piattaformaPreferita;
+  String? _giocoPreferito;
    
-  Player.withParameters({required int? id,required String? username, required String? email,required String? password,required Genere? genere,required String? birthday,required Piattaforma? piattaformaPreferita}){
+  Player.withParameters(
+      {
+    required int? id,
+    required String? username,
+    required String? email,
+    required String? password,
+    required Genere? genere,
+    required String? birthday,
+    required String? piattaformaPreferita,
+    required String? giocoPreferito,
+      })
+  {
     _id = id;
     _username = username;
     _email = email;
@@ -19,6 +31,7 @@ class Player {
     _genere = genere;
     _birthday = birthday;
     _piattaformaPreferita = piattaformaPreferita;
+    _giocoPreferito = giocoPreferito;
   }
   Player();
 
@@ -28,10 +41,14 @@ class Player {
   String? get email => _email;
   Genere? get genere => _genere;
   String? get birthday => _birthday;
-  Piattaforma? get piattaforma => _piattaformaPreferita;
+  String? get piattaforma => _piattaformaPreferita;
+  String? get giocoPreferito => _giocoPreferito;
 
   set username(String? value){
       _username = value;
+  }
+  set email(String? value){
+    _email = value;
   }
   set password(String? value){
     _password = value;
@@ -42,30 +59,33 @@ class Player {
   set birthday(String? value){
     _birthday = value;
   }
-  set piattaforma(Piattaforma? value){
+  set piattaforma(String? value){
     _piattaformaPreferita = value;
   }
-  set email(String? value){
-    _email = value;
+  set giocoPreferito(String? value) {
+    _giocoPreferito = value;
   }
 
   Map<String, dynamic> toJson() => {
     'username': _username,
     'email': _email,
     'password': _password,
-    'sesso': _genere,
     'birthday': _birthday,
-    'piattaformaPreferita': _piattaformaPreferita
+    'piattaformaPreferita': _piattaformaPreferita,
+    'giocoPreferito': _giocoPreferito
   };
    factory Player.fromJson(Map<String, dynamic> json) {
     return Player.withParameters(
       id: json['id'],
       username: json['username'],
       email: json['email'],
-      password:json['password'],
-      genere: json['sesso'],
+      password: json['password'],
+        genere: json['genere'] == null
+            ? json['genere']
+            : GenereExtension.genereFromBackend(json['genere']),
       birthday: json['birthday'],
-      piattaformaPreferita : json['piattaformaPreferita']
+      piattaformaPreferita : json['piattaformaPreferita'],
+      giocoPreferito: json['giocoPreferito']
     );
   }
 }

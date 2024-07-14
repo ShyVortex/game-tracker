@@ -22,7 +22,7 @@ class Gameservice {
 
         games = data.map((json) => Game.fromJson(json)).toList();
         print(games);
-       
+
         return games;
       }
       else {
@@ -45,8 +45,11 @@ class Gameservice {
         return Game.fromJson(data);
       }
       else if (response.statusCode == 404) {
-        print("C'è stato un errore nella chiamata");
-        return null;
+          print("C'è stato un errore nella chiamata, "
+              "\nCode: ${response.statusCode},"
+              "\nBody:\n${response.body}"
+          );
+          return null;
       }
     }
 }

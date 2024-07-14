@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 
 class GamePlayerservice {
     final String gamePlayerURL = 'https://gamemanager-backend.onrender.com/api/game-manager/gamePlayer/';
-    final playerservice = PlayerService();
+    final PlayerService playerService = PlayerService();
     final gameService = Gameservice();
 
     final  headers = {
@@ -28,13 +28,16 @@ class GamePlayerservice {
         return GamePlayer.fromJson(data);
       }
       else {
-        print("C'è stato un errore nella chiamata");
+          print("C'è stato un errore nella chiamata, "
+              "\nCode: ${response.statusCode},"
+              "\nBody:\n${response.body}"
+          );
         return null;
       }
   }
   Future? performSelection(String? email,List<Game> games) async {
 
-    Player player = await playerservice.getPlayerByEmail(email!);
+    Player player = await playerService.getPlayerByEmail(email!);
 
 
       for (Game game in games){
@@ -61,6 +64,11 @@ class GamePlayerservice {
         var data = jsonDecode(response.body);
         print(data);
         return GamePlayer.fromJson(data);
+      } else {
+          print("C'è stato un errore nella chiamata, "
+              "\nCode: ${response.statusCode},"
+              "\nBody:\n${response.body}"
+          );
       }
   }
   Future deleteGamePlayer(int id) async {
@@ -70,6 +78,11 @@ class GamePlayerservice {
         if(response.statusCode == 200){
         print("Chiamata effettuata corretamente");
 
-      }
+      } else {
+          print("C'è stato un errore nella chiamata, "
+              "\nCode: ${response.statusCode},"
+              "\nBody:\n${response.body}"
+          );
+        }
   }
 }
