@@ -5,10 +5,12 @@ import 'package:game_tracker/models/gamePlayer.dart';
 import 'package:game_tracker/utilities/login_utilities.dart';
 import 'package:game_tracker/utilities/reference_utilities.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/player.dart';
 class PlayerService {
     final String playerURL = 'https://gamemanager-backend.onrender.com/api/game-manager/player/';
+    
 
     final  headers = {
     'Content-Type': 'application/json',
@@ -53,10 +55,16 @@ class PlayerService {
     Future getAllGiochiPosseduti(int id) async {
       Uri uri = Uri.parse('${playerURL}getGiochiPosseduti/$id');
 
+      final prefs = await SharedPreferences.getInstance();
+
+
       http.Response response = await http.get(uri,headers:headers);
       List<GamePlayer> games = [];
       if(response.statusCode == 200){
+
+        prefs.setString('gamesPosseduti',response.body);
         List<dynamic> data = jsonDecode(response.body);
+        
         
 
         games = data.map((json) => GamePlayer.fromJson(json)).toList();
@@ -65,16 +73,21 @@ class PlayerService {
         return games;
       }
       else {
-        throw Error();
+        throw Exception();
+        
       }
 
     }
   Future getAllGiochiPreferiti(int id) async {
      Uri uri = Uri.parse('${playerURL}getGiochiPreferiti/$id');
 
+     final prefs = await SharedPreferences.getInstance();
+
       http.Response response = await http.get(uri,headers:headers);
       List<GamePlayer> games = [];
       if(response.statusCode == 200){
+
+        prefs.setString('gamesPreferiti',response.body);
         List<dynamic> data = jsonDecode(response.body);
         
 

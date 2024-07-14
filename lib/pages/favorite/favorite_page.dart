@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:game_tracker/controller/playerService.dart';
 import 'package:game_tracker/models/gamePlayer.dart';
 import 'package:game_tracker/widgets/square_avatar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FavoritePage extends StatefulWidget {
   const FavoritePage({super.key, required this.idPlayer});
@@ -15,16 +18,31 @@ class _FavoritePageState extends State<FavoritePage> {
  List<GamePlayer> _favoritesGame = [];
  bool _isLoading = true;
  final PlayerService _playerService = PlayerService();
-   @override
-  void initState()  {
-    super.initState();
-       _playerService.getAllGiochiPreferiti(widget.idPlayer).then((onValue){
+
+ void fetchData(){
+      _playerService.getAllGiochiPreferiti(widget.idPlayer).then((onValue){
        setState(() {
          _favoritesGame = onValue;
          _isLoading = false;
        });
+         }).catchError((onError) async {
+        final prefs = await SharedPreferences.getInstance();
+        List<dynamic> data = jsonDecode(prefs.getString("gamesPreferiti")!);
+        _favoritesGame = data.map((json) => GamePlayer.fromJson(json)).toList();
+
+        setState(() {
+         _isLoading = false;
+       });
+         ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Impossibile connettersi al server. Alcune funzioni potrebbero essere limitate')));
+         });
+  }
+   @override
+  void initState()  {
+    super.initState();
+    fetchData();
       
-    });
+  
   }
   @override
   Widget build(BuildContext context) {
