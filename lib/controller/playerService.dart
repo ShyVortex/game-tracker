@@ -7,7 +7,6 @@ import 'package:game_tracker/utilities/login_utilities.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../models/game.dart';
 import '../models/player.dart';
 
 class PlayerService {
@@ -39,8 +38,7 @@ class PlayerService {
         );
         return null;
       }
-    });
-  }
+    }
 
   Future getPlayerByEmail(String email) async {
     Uri uri = Uri.parse('${playerURL}getPlayerByEmail/$email');

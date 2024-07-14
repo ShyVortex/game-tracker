@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 
 class GamePlayerservice {
     final String gamePlayerURL = 'https://gamemanager-backend.onrender.com/api/game-manager/gamePlayer/';
-    final playerservice = PlayerService();
+    final PlayerService playerService = PlayerService();
     final gameService = Gameservice();
 
     final  headers = {
@@ -37,7 +37,7 @@ class GamePlayerservice {
   }
   Future? performSelection(String? email,List<Game> games) async {
 
-    Player player = await playerservice.getPlayerByEmail(email!);
+    Player player = await playerService.getPlayerByEmail(email!);
 
 
       for (Game game in games){
