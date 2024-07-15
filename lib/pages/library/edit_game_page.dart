@@ -10,6 +10,7 @@ import 'package:game_tracker/pages/navigationBar/navigation_page.dart';
 import 'package:game_tracker/theme/app_theme.dart';
 import 'package:game_tracker/utilities/login_utilities.dart';
 import 'package:game_tracker/widgets/images_list.dart';
+import 'package:game_tracker/widgets/loading_screen.dart';
 import 'package:game_tracker/widgets/square_avatar.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -35,7 +36,8 @@ class _EditGamePageState extends State<EditGamePage> {
   String dropdownValue = "";
   bool enableOreDiGiocoFormField = true;
   bool enableTrofeiOttenutiFormField = true;
-  List<String>? _initialImagesList = [];
+  late GamePlayer _initialGamePlayer;
+  List<String> _initialImagesList = [];
 
   final TextEditingController placeController = TextEditingController();
   final TextEditingController _trofeiController = TextEditingController();
@@ -52,28 +54,35 @@ class _EditGamePageState extends State<EditGamePage> {
  
   Future<void> onConfirmPress() async {
     if(_trofeiOttenutiFormKey.currentState!.validate()){
-    try {
       
-      if(placeController.text!= "") widget.gameplayer.luogoCompletamento = placeController.text;
-      if(dateController.text!= "") widget.gameplayer.dataCompletamento = dateController.text;
-      if(_oreDiGiocoController.text!= "") widget.gameplayer.oreDiGioco = int.parse(_oreDiGiocoController.text);
-      if(_valutazioneController.text!= "") widget.gameplayer.valutazione = LoginUtilities.valutazioneIntValue(_valutazioneController.text);
-      if(_trofeiController.text!= "") widget.gameplayer.trofeiOttenuti = int.parse(_trofeiController.text);
-      widget.gameplayer.immagini = _initialImagesList;
-
-      await _gamePlayerservice.updateGamePlayer(widget.gameplayer, widget.gameplayer.id!);
-
+      if(placeController.text!= "") _initialGamePlayer.luogoCompletamento = placeController.text;
+      if(dateController.text!= "") _initialGamePlayer.dataCompletamento = dateController.text;
+      if(_oreDiGiocoController.text!= "") _initialGamePlayer.oreDiGioco = int.parse(_oreDiGiocoController.text);
+      if(_valutazioneController.text!= "") _initialGamePlayer.valutazione = LoginUtilities.valutazioneIntValue(_valutazioneController.text);
+      if(_trofeiController.text!= "") _initialGamePlayer.trofeiOttenuti = int.parse(_trofeiController.text);
+      _initialGamePlayer.immagini = _initialImagesList;
+      if(_initialGamePlayer == widget.gameplayer){
+         Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  const NavigationPage())
+                    );
+      }
+    else {
+      try{
+      
+      await _gamePlayerservice.updateGamePlayer(_initialGamePlayer, _initialGamePlayer.id!);
        Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>   const NavigationPage())
+                          builder: (context) => const NavigationPage())
                     );
-    }
-    catch(error){
-      print(error);
-       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Errore nella modifica, riprova più tardi'),
+      }
+      catch(error){
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Problemi di connessione, non è possibile modificare il gioco'),
                 ));
+      }
     }
     }
   }
@@ -106,7 +115,6 @@ class _EditGamePageState extends State<EditGamePage> {
         setState(() {
           ref.read(playerProvider.notifier)
               .update((state) => updated);
-          ProfilePage.comparison = widget.player;
         });
       }
 
@@ -127,7 +135,8 @@ class _EditGamePageState extends State<EditGamePage> {
   @override
   void initState()  {
     super.initState();
-    _initialImagesList = List<String>.from(widget.gameplayer.immagini!);
+    _initialGamePlayer = GamePlayer.withParameters(id: widget.gameplayer.id, trofeiOttenuti: widget.gameplayer.trofeiOttenuti, valutazione: widget.gameplayer.valutazione, oreDiGioco: widget.gameplayer.oreDiGioco, preferito: widget.gameplayer.preferito, game: widget.gameplayer.game, luogoCompletamento: widget.gameplayer.luogoCompletamento, immagini: widget.gameplayer.immagini, dataCompletamento: widget.gameplayer.dataCompletamento);
+    _initialImagesList = List.of(_initialGamePlayer.immagini!);
   }
 
   Future<void> _pickImageFromGallery() async {
@@ -136,7 +145,7 @@ class _EditGamePageState extends State<EditGamePage> {
 
   if (pickedFile != null) {
      final File imagesPath = File(pickedFile.path); 
-     _initialImagesList?.add(imagesPath.path);
+     _initialImagesList.add(imagesPath.path);
   } 
   else {
 
@@ -412,8 +421,8 @@ void updateState(){
                     const SizedBox(
                       height: 30,
                     ),
-                    _initialImagesList!.isNotEmpty ?
-                    ImagesList(imagesPaths:_initialImagesList!,notifyParent: updateState)
+                    _initialImagesList.isNotEmpty ?
+                    ImagesList(imagesPaths:_initialImagesList,notifyParent: updateState)
                         : Column(
                         children: [
                           const Text("Highlights", style: TextStyle(
@@ -452,7 +461,7 @@ void updateState(){
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                _initialImagesList!.isNotEmpty?
+                _initialImagesList.isNotEmpty?
                 FloatingActionButton(
                   heroTag: "selection-photo",
                   shape: const CircleBorder(),

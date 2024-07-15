@@ -45,5 +45,16 @@ static Future<String> hashPasswordAsync(String password) {
 static int? valutazioneIntValue(String? key){
   return _valutazioneMap[key];
 }
+static bool? compareTwoListString(List<String> lista1, List<String> lista2){
+    if (lista1.length != lista2.length) {
+    return false;
+  }
+  for (int i = 0; i < lista1.length; i++) {
+    if (lista1[i] != lista2[i]) {
+      return false;
+    }
+  }
+  return true;
+}
 
 }
