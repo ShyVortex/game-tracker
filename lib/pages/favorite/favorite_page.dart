@@ -37,6 +37,7 @@ final TextEditingController searchController = TextEditingController();
         final prefs = await SharedPreferences.getInstance();
         List<dynamic> data = jsonDecode(prefs.getString("gamesPreferiti")!);
         _favoritesGame = data.map((json) => GamePlayer.fromJson(json)).toList();
+        searchResults = _favoritesGame;
 
         setState(() {
          _isLoading = false;
@@ -215,7 +216,8 @@ final TextEditingController searchController = TextEditingController();
        ),
             ]
             )
-            ]),
+            ]
+            ),
           )
     ));
   }

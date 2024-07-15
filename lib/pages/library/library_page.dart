@@ -39,6 +39,7 @@ class LibraryPageState extends State<LibraryPage> {
         final prefs = await SharedPreferences.getInstance();
         List<dynamic> data = jsonDecode(prefs.getString("gamesPosseduti")!);
         _games = data.map((json) => GamePlayer.fromJson(json)).toList();
+        searchResults = _games;
 
         setState(() {
          _isLoading = false;
@@ -156,7 +157,7 @@ class LibraryPageState extends State<LibraryPage> {
                     CircularProgressIndicator.adaptive()):
                      Column(children: [
                       const SizedBox(height:10),
-                      SizedBox(height: 50,width: 380,
+                      SizedBox(height: 50,width: 350,
                         child: 
                         TextField(
                         controller: searchController,
