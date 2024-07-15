@@ -98,7 +98,8 @@ class GamePlayer {
            '_preferito: $_preferito, '
            '_game: $_game, '
            '_immagini: $_immagini, '
-           '_dataCompletamento: $_dataCompletamento)';
+           '_dataCompletamento: $_dataCompletamento,'
+           '_luogoCompletamento: $_luogoCompletamento';
   }
    @override
   bool operator ==(Object other) =>
@@ -111,7 +112,8 @@ class GamePlayer {
           preferito == other.preferito &&
           game == other.game &&
           LoginUtilities.compareTwoListString(immagini!, other.immagini!)! &&
-          dataCompletamento == other.dataCompletamento;
+          dataCompletamento == other.dataCompletamento &&
+          luogoCompletamento == other.luogoCompletamento;
 
   @override
   int get hashCode =>
