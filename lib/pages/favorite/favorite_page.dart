@@ -23,11 +23,14 @@ class _FavoritePageState extends State<FavoritePage> {
  List<GamePlayer> _favoritesGame = [];
  bool _isLoading = true;
  final PlayerService _playerService = PlayerService();
+ List<GamePlayer> searchResults = [];
+final TextEditingController searchController = TextEditingController();
 
  void fetchData(){
       _playerService.getAllGiochiPreferiti(widget.player.id!).then((onValue){
        setState(() {
          _favoritesGame = onValue;
+         searchResults = _favoritesGame;
          _isLoading = false;
        });
          }).catchError((onError) async {
@@ -41,6 +44,21 @@ class _FavoritePageState extends State<FavoritePage> {
          ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Impossibile connettersi al server. Alcune funzioni potrebbero essere limitate')));
          });
+  }
+   Future<void> searchGame() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    final searchResult = _favoritesGame.where(
+        (result) => result.game!.nome!.toLowerCase()
+            .contains(searchController.text.toLowerCase())).toList(
+    );
+
+    setState(() {
+      searchResults = searchResult;
+      _isLoading = false;
+    });
   }
 
    @override
@@ -129,30 +147,64 @@ class _FavoritePageState extends State<FavoritePage> {
             :   _isLoading ?
               const Center(child: 
                CircularProgressIndicator.adaptive()):
-               Expanded(child: 
+                     Column(children: [
+                      const SizedBox(height:10),
+                      SizedBox(height: 50,width: 380,
+                        child: 
+                        TextField(
+                        controller: searchController,
+                        decoration: InputDecoration(
+                hintText: 'Cerca gioco...',
+                prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  borderSide: const BorderSide(
+                    color: Color.fromARGB(155, 22, 18, 18),
+                    width: 0.5,
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                  borderSide: BorderSide(
+                    color: Colors.grey[300]!,
+                    width: 1.5,
+                  ),
+                ),
+              ),
+                        onChanged: (value) => searchGame()
+                        )
+                        )
+                        ,
+                    const SizedBox(height: 10,),
+                    SizedBox(height: 300,
+                    child: 
             ListView.separated(
-        itemCount: _favoritesGame.length,
+        itemCount: searchResults.length,
         separatorBuilder: (context, index) => const Divider(), 
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(_favoritesGame[index].game!.nome!, style: const TextStyle(fontWeight: FontWeight.w600, fontFamily: 'Inter')),
-            subtitle:  Text(_favoritesGame[index].game!.sviluppatore!, style: const TextStyle(fontFamily: 'Inter')),
-            leading:  SquareAvatar(imageUrl: _favoritesGame[index].game!.immagineURL!, size: 50, isNetworkImage: _favoritesGame[index].game!.isNetworkImage!,isTouchable: false, ),
+            title: Text(searchResults[index].game!.nome!, style: const TextStyle(fontWeight: FontWeight.w600, fontFamily: 'Inter')),
+            subtitle:  Text(searchResults[index].game!.sviluppatore!, style: const TextStyle(fontFamily: 'Inter')),
+            leading:  SquareAvatar(imageUrl: searchResults[index].game!.immagineURL!, size: 50, isNetworkImage: searchResults[index].game!.isNetworkImage!,isTouchable: false, ),
             trailing: Consumer(builder: (context, ref, child) {
               return IconButton(
                 icon: Icon(
-                  _favoritesGame[index].preferito! ? Icons.star : Icons.star_border,
-                  color:  _favoritesGame[index].preferito! ? Colors.yellow : Colors.grey,
+                  searchResults[index].preferito! ? Icons.star : Icons.star_border,
+                  color:  searchResults[index].preferito! ? Colors.yellow : Colors.grey,
                   size: 25.0,
                 ),
                 onPressed: () {
                   setState((){
-                    _favoritesGame[index].preferito = !_favoritesGame[index].preferito!;
-                    _playerService.setPreferito(_favoritesGame[index].id!, widget.player.id!, _favoritesGame[index].preferito!);
-                    if (_favoritesGame[index].preferito == false) {
-                      potentialUpdatePlayer(_favoritesGame[index], ref);
+                    searchResults[index].preferito = !searchResults[index].preferito!;
+                    _playerService.setPreferito(searchResults[index].id!, widget.player.id!, searchResults[index].preferito!);
+                    if (searchResults[index].preferito == false) {
+                      potentialUpdatePlayer(searchResults[index], ref);
                     }
-                    _favoritesGame.remove(_favoritesGame[index]);
+                    searchResults.remove(searchResults[index]);
                   });
                 },
               );
@@ -163,8 +215,8 @@ class _FavoritePageState extends State<FavoritePage> {
        ),
             ]
             )
-            ),
-        )
-    );
+            ]),
+          )
+    ));
   }
 }

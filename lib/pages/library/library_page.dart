@@ -25,11 +25,14 @@ class LibraryPageState extends State<LibraryPage> {
   List<GamePlayer> _games = [];
   final PlayerService _playerService = PlayerService();
   bool _isLoading = true;
+  List<GamePlayer> searchResults = [];
+  final TextEditingController searchController = TextEditingController();
 
   void fetchData(){
       _playerService.getAllGiochiPosseduti(widget.player.id!).then((onValue){
        setState(() {
          _games = onValue;
+         searchResults = _games;
          _isLoading = false;
        });
          }).catchError((onError) async {
@@ -43,6 +46,21 @@ class LibraryPageState extends State<LibraryPage> {
          ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Impossibile connettersi al server. Alcune funzioni potrebbero essere limitate')));
          });
+  }
+  Future<void> searchGame() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    final searchResult = _games.where(
+        (result) => result.game!.nome!.toLowerCase()
+            .contains(searchController.text.toLowerCase())).toList(
+    );
+
+    setState(() {
+      searchResults = searchResult;
+      _isLoading = false;
+    });
   }
 
 
@@ -135,42 +153,79 @@ class LibraryPageState extends State<LibraryPage> {
                         ))
                         :  _isLoading ?
                     const Center(child:
-                    CircularProgressIndicator.adaptive()): Expanded(child:
+                    CircularProgressIndicator.adaptive()):
+                     Column(children: [
+                      const SizedBox(height:10),
+                      SizedBox(height: 50,width: 380,
+                        child: 
+                        TextField(
+                        controller: searchController,
+                        decoration: InputDecoration(
+                hintText: 'Cerca gioco...',
+                prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  borderSide: const BorderSide(
+                    color: Color.fromARGB(155, 22, 18, 18),
+                    width: 0.5,
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                  borderSide: BorderSide(
+                    color: Colors.grey[300]!,
+                    width: 1.5,
+                  ),
+                ),
+              ),
+                        onChanged: (value) => searchGame()
+                        )
+                        )
+                        ,
+                    const SizedBox(height: 10,),
+                    SizedBox(height: 600,
+                    child: 
                     ListView.separated(
-                      itemCount: _games.length,
+                      itemCount: searchResults.length,
                       separatorBuilder: (context, index) => const Divider(),
                       itemBuilder: (context, index) {
                         return ListTile(
                           onTap: () {
                             Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => EditGamePage(gameplayer: _games[index], player: widget.player))
+                                MaterialPageRoute(builder: (context) => EditGamePage(gameplayer: searchResults[index], player: widget.player))
                             );
                           },
-                          title: Text(_games[index].game!.nome!, style: const TextStyle(fontWeight: FontWeight.w600, fontFamily: 'Inter')),
-                          subtitle:  Text(_games[index].game!.sviluppatore!, style: const TextStyle(fontFamily: 'Inter')),
-                          leading:  SquareAvatar(imageUrl: _games[index].game!.immagineURL!, size: 50 ,isNetworkImage: _games[index].game!.isNetworkImage!,isTouchable: false,),
+                          title: Text(searchResults[index].game!.nome!, style: const TextStyle(fontWeight: FontWeight.w600, fontFamily: 'Inter')),
+                          subtitle:  Text(searchResults[index].game!.sviluppatore!, style: const TextStyle(fontFamily: 'Inter')),
+                          leading:  SquareAvatar(imageUrl: searchResults[index].game!.immagineURL!, size: 50 ,isNetworkImage: searchResults[index].game!.isNetworkImage!,isTouchable: false,),
                           trailing: Consumer(builder: (context, ref, child) {
                             return IconButton(
                               icon: Icon(
-                                _games[index].preferito! ? Icons.star : Icons.star_border,
-                                color:  _games[index].preferito! ? Colors.yellow : Colors.grey,
+                                searchResults[index].preferito! ? Icons.star : Icons.star_border,
+                                color:  searchResults[index].preferito! ? Colors.yellow : Colors.grey,
                                 size: 25.0,
                               ),
                               onPressed: () {
                                 setState(() {
-                                  _games[index].preferito = !_games[index].preferito!;
-                                  _playerService.setPreferito(_games[index].id!,widget.player.id!,_games[index].preferito!);
-                                  if (_games[index].preferito == false) {
-                                    potentialUpdatePlayer(_games[index], ref);
+                                  searchResults[index].preferito = !searchResults[index].preferito!;
+                                  _playerService.setPreferito(searchResults[index].id!,widget.player.id!,searchResults[index].preferito!);
+                                  if (searchResults[index].preferito == false) {
+                                    potentialUpdatePlayer(searchResults[index], ref);
                                   }
                                 });
                               },
                             );
                           }),
-                        );
+                    );
                       },
                     )
-                    ),
+                    )
+                  ])
+                    
                   ]
               )
           ),
