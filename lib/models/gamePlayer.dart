@@ -1,4 +1,5 @@
 import 'package:game_tracker/models/game.dart';
+import 'package:game_tracker/utilities/login_utilities.dart';
 
 class GamePlayer {
      int? _id;
@@ -103,14 +104,13 @@ class GamePlayer {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is GamePlayer &&
-          runtimeType == other.runtimeType &&
           id == other.id &&
           trofeiOttenuti == other.trofeiOttenuti &&
           valutazione == other.valutazione &&
           oreDiGioco == other.oreDiGioco &&
           preferito == other.preferito &&
           game == other.game &&
-          immagini == other.immagini &&
+          LoginUtilities.compareTwoListString(immagini!, other.immagini!)! &&
           dataCompletamento == other.dataCompletamento;
 
   @override

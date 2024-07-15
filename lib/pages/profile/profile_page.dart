@@ -9,6 +9,7 @@ import 'package:game_tracker/models/player.dart';
 import 'package:game_tracker/pages/profile/search_games_page.dart';
 import 'package:game_tracker/pages/registration/login/login_page.dart';
 import 'package:game_tracker/utilities/concrete_image_utilities.dart';
+import 'package:game_tracker/utilities/login_utilities.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -48,6 +49,8 @@ class ProfilePageState extends State<ProfilePage> {
   final TextEditingController genderController = TextEditingController();
   final TextEditingController platformController = TextEditingController();
   final TextEditingController favouriteController = TextEditingController();
+
+  final _emailFormKey = GlobalKey<FormFieldState>();
 
   bool isEditingEmail = false;
   bool isEditingPassword = false;
@@ -243,6 +246,9 @@ class ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> onConfirmPress(int idPlayer, WidgetRef ref) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    if(_emailFormKey.currentState!.validate()){
     try {
       setState(() {
         isLoading = true;
@@ -283,7 +289,9 @@ class ProfilePageState extends State<ProfilePage> {
         updated.piattaforma = currentFavPlatform;
         updated.giocoPreferito = currentFavGame;
 
+        
         playerService.updatePlayer(updated, idPlayer);
+        prefs.setString("email",updated.email!);
 
         ref.read(playerProvider.notifier)
           .update((state) => updated);
@@ -302,6 +310,7 @@ class ProfilePageState extends State<ProfilePage> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Errore nella modifica, riprova più tardi.'),
       ));
+    }
     }
   }
   
@@ -417,6 +426,7 @@ class ProfilePageState extends State<ProfilePage> {
                                         SizedBox(
                                             width: 135,
                                             child: TextFormField(
+                                              key: _emailFormKey,
                                               controller: emailController,
                                               decoration: const InputDecoration(
                                                 border:  null,
@@ -425,6 +435,15 @@ class ProfilePageState extends State<ProfilePage> {
                                               style: const TextStyle(fontSize: 15),
                                               keyboardType: TextInputType.text,
                                               readOnly: !isEditingEmail,
+                                              validator: (value){
+                                                if(value == null|| value == ""){
+                                                  return "Compilare il campo";
+                                                }
+                                                else if(LoginUtilities.isValidEmail(value)){
+                                                  return "Inserire un'email valida";
+                                                }
+                                                return null;
+                                              },
                                             )
                                         ),
                                         Stack(
