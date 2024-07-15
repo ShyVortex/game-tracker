@@ -1,14 +1,15 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
-import 'package:avatar_view/avatar_view.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_tracker/controller/playerService.dart';
 import 'package:game_tracker/models/player.dart';
 import 'package:game_tracker/pages/profile/search_games_page.dart';
 import 'package:game_tracker/pages/registration/login/login_page.dart';
-import 'package:game_tracker/utilities/concrete_image_utilities.dart';
+import 'package:game_tracker/utilities/image_utilities.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,6 +37,7 @@ class ProfilePageState extends State<ProfilePage> {
     'Xbox', 'Nintendo DS', 'Nintendo GameCube', 'Nintendo GBA', 'Retro console'
   ];
   File? galleryFile;
+  ImageProvider<Object>? convertedImage;
   final picker = ImagePicker();
   final int currentYear = DateTime.now().year;
   bool isLoading = true;
@@ -86,15 +88,15 @@ class ProfilePageState extends State<ProfilePage> {
     galleryFile = File("assets/new-user.png");
 
     final prefs = await SharedPreferences.getInstance();
-    String? b64Img = prefs.getString('profileImage');
-    if (b64Img != null && b64Img.isNotEmpty) {
+    String? encoded = prefs.getString('profileImage');
+    if (encoded != null && encoded.isNotEmpty) {
       // Se l'utente ha già impostato un avatar allora caricalo
       try {
         // Con await ottiene il file da Future<File>
-        File imageFile = await ConcreteImageUtilities.instance.decodeImage(b64Img);
+        Uint8List imgBytes = ImageUtilities.instance.decodeImage(encoded);
 
         setState(() {
-          galleryFile = imageFile;
+          convertedImage = MemoryImage(imgBytes);
         });
       } catch (e) {
         print("Error decoding image: $e");
@@ -186,10 +188,15 @@ class ProfilePageState extends State<ProfilePage> {
   }
 
   Future processImage(File imageFile) async {
-    String b64Img = await ConcreteImageUtilities.instance
-        .encodeImage(galleryFile!);
+    String b64Img = ImageUtilities.instance.encodeImage(galleryFile!);
+
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString("profileImage", b64Img);
+    
+    Uint8List bytes = ImageUtilities.instance.decodeImage(b64Img);
+    setState(() {
+      convertedImage = MemoryImage(bytes);
+    });
   }
 
   Future<void> selectBirthday(BuildContext context) async {
@@ -375,10 +382,9 @@ class ProfilePageState extends State<ProfilePage> {
                                 Stack(
                                   clipBehavior: Clip.none,
                                   children: [
-                                    AvatarView(
+                                    CircleAvatar(
                                       radius: 50,
-                                      avatarType: AvatarType.CIRCLE,
-                                      imagePath: galleryFile!.path,
+                                      backgroundImage: convertedImage,
                                     ),
                                     Positioned(
                                         top: 75,
