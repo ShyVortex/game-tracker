@@ -58,7 +58,6 @@ class _FavoritePageState extends State<FavoritePage> {
      setState(() {
        ref.read(playerProvider.notifier)
            .update((state) => updated);
-       ProfilePage.comparison = widget.player;
      });
    }
  }

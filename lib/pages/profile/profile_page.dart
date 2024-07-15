@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_tracker/controller/playerService.dart';
@@ -17,7 +16,7 @@ import '../../main.dart';
 import '../../models/genere.dart';
 
 class ProfilePage extends StatefulWidget {
-  static late Player comparison;
+  static String oldPsw = "";
 
   final Player player;
 
@@ -66,7 +65,7 @@ class ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    ProfilePage.comparison = widget.player;
+    ProfilePage.oldPsw = widget.player.password!;
 
     waitLoad();
     loadProfileImage();
@@ -294,11 +293,12 @@ class ProfilePageState extends State<ProfilePage> {
 
         ref.read(playerProvider.notifier)
           .update((state) => updated);
-        ProfilePage.comparison = widget.player;
 
         initializeFields();
         waitLoad();
       });
+
+      ProfilePage.oldPsw = widget.player.password!;
 
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Dati modificati con successo!'),
