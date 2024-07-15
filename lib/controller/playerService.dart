@@ -209,14 +209,14 @@ prefs.setString('gamesPosseduti',response.body);      List<dynamic> data = jsonD
   }
 
   Future updatePlayer(Player player, int idPlayer) async {
-    final Player old = ProfilePage.comparison;
+    final String oldPassword = ProfilePage.oldPsw;
 
     Uri uri =
         Uri.parse('${playerURL}updatePlayer/$idPlayer');
 
     return Future.delayed(const Duration(seconds: 1), () async {
 
-      if (player.password != old.password) {
+      if (player.password != oldPassword) {
         player.password = await LoginUtilities.hashPassword(player.password!);
       }
 

@@ -115,7 +115,6 @@ class _EditGamePageState extends State<EditGamePage> {
         setState(() {
           ref.read(playerProvider.notifier)
               .update((state) => updated);
-          ProfilePage.comparison = widget.player;
         });
       }
 
