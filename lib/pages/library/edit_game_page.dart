@@ -65,7 +65,7 @@ class _EditGamePageState extends State<EditGamePage> {
          Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>  const NavigationPage())
+                          builder: (context) =>  NavigationPage())
                     );
       }
     else {
@@ -75,7 +75,7 @@ class _EditGamePageState extends State<EditGamePage> {
        Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const NavigationPage())
+                          builder: (context) => NavigationPage())
                     );
       }
       catch(error){
@@ -231,11 +231,14 @@ void updateState(){
                                     softWrap: true,
                                   ),
                                   Text(widget.gameplayer.game!.sviluppatore!,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 15,
                                           fontFamily: 'Inter',
-                                          color: Color.fromARGB(136, 105, 105, 105))),
+                                          color: GameTracker.isLightOrDark() == "Light"
+                                              ? const Color.fromARGB(
+                                                  136, 105, 105, 105)
+                                              : Colors.grey)),
                                 ]),
                           ],
                         )
@@ -428,12 +431,14 @@ void updateState(){
                           const Text("Highlights", style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
-                              fontFamily: 'Inter'
+                              fontFamily: 'Inter',
                           )),
                           Card.outlined(
                             shape: CircleBorder(
                               side: BorderSide(
-                                color: Colors.black.withOpacity(0.25),
+                                color: GameTracker.isLightOrDark() == "Light"
+                                    ? Colors.black.withOpacity(0.25)
+                                    : Colors.white.withOpacity(0.4),
                                 width: 2,
                               ),
                             ),

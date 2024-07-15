@@ -188,7 +188,13 @@ Future<void> _performInsert(int idPlayer) async {
                                               shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(12),
                                                 side: BorderSide(
-                                                  color: Colors.black.withOpacity(0.25),
+                                                  color: GameTracker.isLightOrDark() ==
+                                                              "Light"
+                                                          ? Colors.black
+                                                              .withOpacity(0.25)
+                                                          : Colors.white
+                                                              .withOpacity(
+                                                                  0.3),
                                                   width: 2,
                                                 ),
                                               ),
@@ -370,8 +376,15 @@ Future<void> _performInsert(int idPlayer) async {
                                               Card.outlined(
                                                 shape: CircleBorder(
                                                   side: BorderSide(
-                                                    color: Colors.black.withOpacity(0.25),
-                                                    width: 2,
+                                                    color: GameTracker.isLightOrDark()
+                                                                == "Light"
+                                                              ? Colors.black
+                                                                  .withOpacity(
+                                                                      0.25)
+                                                              : Colors.white
+                                                                  .withOpacity(
+                                                                      0.4),
+                                                          width: 2,
                                                   ),
                                                 ),
                                                 clipBehavior: Clip.hardEdge,

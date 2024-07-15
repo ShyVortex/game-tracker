@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:game_tracker/pages/library/search_place_page.dart';
 import 'package:osm_nominatim/osm_nominatim.dart';
+import '../../main.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/map_content.dart';
 import 'package:geolocator/geolocator.dart';
@@ -124,7 +125,7 @@ class MapPageState extends State<MapPage> {
                   right: 16,
                   child: Card.outlined(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(30),
                       side: BorderSide(
                         color: Colors.black.withOpacity(0.35),
                         width: 2,
@@ -134,18 +135,26 @@ class MapPageState extends State<MapPage> {
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                       child: TextField(
                           controller: searchController,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             hintText: 'Cerca luogo...',
+                            hintStyle: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Inter',
+                                color: GameTracker.isLightOrDark() == "Light"
+                                    ? Colors.grey
+                                    : Colors.grey[400]
+                            ),
                             border: InputBorder.none,
-                            prefixIcon: Icon(Icons.search),
-                            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 14),
+                            prefixIcon: const Icon(Icons.search),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
                           ),
                           readOnly: true,
                           onTap: onSearchTap
-                      ),
                     ),
                   ),
                 ),
+                )
               ],
             ),
             floatingActionButton: Stack(

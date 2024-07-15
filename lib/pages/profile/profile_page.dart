@@ -352,12 +352,18 @@ class ProfilePageState extends State<ProfilePage> {
             body: Padding(
               padding: const EdgeInsets.only(top: 4, bottom: 85),
               child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
                         onPressed: null,
-                        icon: Icon(Icons.settings, size: 28, color: Colors.black))
+                        icon: Icon(
+                            Icons.settings,
+                            size: 28,
+                            color: GameTracker.isLightOrDark() == "Light" ?
+                            Colors.black : Colors.white
+                        )
+                    )
                   ],
                 ),
                 const Row(
@@ -413,6 +419,7 @@ class ProfilePageState extends State<ProfilePage> {
                                           child: const Icon(
                                             Icons.photo_camera,
                                             size: 20,
+                                            color: Colors.black
                                           ),
                                         )
                                     )
@@ -718,8 +725,14 @@ class ProfilePageState extends State<ProfilePage> {
                                     ],
                                   ),
                                 ),
-                                label: const Text("Cancella account"),
-                              icon: const Icon(Icons.warning),
+                                label: const Text("Cancella account",
+                                    style: TextStyle(
+                                  color: Colors.white
+                                )),
+                              icon: const Icon(
+                                  Icons.warning,
+                                color: Colors.white,
+                              ),
                               style: FilledButton.styleFrom(
                                 backgroundColor: Colors.red,
                                 textStyle: const TextStyle(
@@ -745,9 +758,16 @@ class ProfilePageState extends State<ProfilePage> {
                   FloatingActionButton(
                     heroTag: "restore_fields",
                     shape: const CircleBorder(),
-                    backgroundColor: Colors.black,
+                    backgroundColor: GameTracker.isLightOrDark() == "Light"
+                        ? Colors.black
+                        : Colors.white,
                     onPressed: initializeFields,
-                    child: const Icon(Icons.settings_backup_restore, color: Colors.white, size: 30),
+                    child: Icon(
+                        Icons.settings_backup_restore,
+                        color: GameTracker.isLightOrDark() == "Light"
+                            ? Colors.white
+                            : Colors.black,
+                        size: 30),
                   ),
                 const SizedBox(width: 16),
                 if (!isLoading && !isEditingEmail

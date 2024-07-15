@@ -90,12 +90,17 @@ final TextEditingController searchController = TextEditingController();
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         IconButton(
                             onPressed: null,
-                            icon: Icon(Icons.settings, size: 28, color: Colors.black)
+                            icon: Icon(
+                                Icons.settings,
+                                size: 28,
+                                color: GameTracker.isLightOrDark() == "Light" ?
+                                Colors.black : Colors.white
+                            )
                         )
                       ],
                     ),
@@ -150,26 +155,41 @@ final TextEditingController searchController = TextEditingController();
                CircularProgressIndicator.adaptive()):
                      Column(children: [
                       const SizedBox(height:10),
-                      SizedBox(height: 50,width: 380,
+                      SizedBox(height: 50,width: 325,
                         child: 
                         TextField(
                         controller: searchController,
                         decoration: InputDecoration(
                 hintText: 'Cerca gioco...',
-                prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                hintStyle: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Inter',
+                    color: GameTracker.isLightOrDark() == "Light"
+                        ? Colors.grey[700]
+                        : Colors.grey[400]
+                ),
+                prefixIcon: Icon(
+                    Icons.search,
+                    color: GameTracker.isLightOrDark() == "Light"
+                        ? Colors.grey[700]
+                        : Colors.grey[400]
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30.0),
                   borderSide: BorderSide.none,
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30.0),
-                  borderSide: const BorderSide(
-                    color: Color.fromARGB(155, 22, 18, 18),
+                  borderSide: BorderSide(
+                    color: GameTracker.isLightOrDark() == "Light"
+                        ? const Color.fromARGB(155, 22, 18, 18)
+                        : Colors.white,
                     width: 0.5,
                   ),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
+                  borderRadius: BorderRadius.circular(30.0),
                   borderSide: BorderSide(
                     color: Colors.grey[300]!,
                     width: 1.5,
@@ -178,11 +198,12 @@ final TextEditingController searchController = TextEditingController();
               ),
                         onChanged: (value) => searchGame()
                         )
-                        )
-                        ,
+                        ),
                     const SizedBox(height: 10,),
-                    SizedBox(height: 300,
-                    child: 
+                    // 232px è la dimensione degli altri widget
+                    SizedBox(
+                        height: MediaQuery.sizeOf(context).height - 232,
+                        child:
             ListView.separated(
         itemCount: searchResults.length,
         separatorBuilder: (context, index) => const Divider(), 

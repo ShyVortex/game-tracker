@@ -155,6 +155,10 @@ class SignupPageState extends State<SignupPage> {
                           });
                         }
                       } : null,
+                      style: FilledButton.styleFrom(
+                          backgroundColor: Colors.purple,
+                          foregroundColor: Colors.white
+                      ),
                       child: !isLoading?
                       const Text("PROSEGUI",
                           style: TextStyle(
@@ -179,10 +183,14 @@ class SignupPageState extends State<SignupPage> {
                                   builder: (context) => const LoginPage()),
                             );
                           },
+                          style: TextButton.styleFrom(
+                              foregroundColor: Colors.purple,
+                              shadowColor: Colors.white
+                          ),
                           child: const Text(
                               "Hai già un account? Effettua il login",
                               style: TextStyle(
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.bold,
                                   fontFamily: 'Inter')));
                     })
                   ]),
