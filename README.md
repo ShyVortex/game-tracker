@@ -45,4 +45,6 @@ Il deliverable generato sarà disponibile in 'app/outputs/apk/release'.
 - Google per il font [Inter](https://fonts.google.com/specimen/Inter),
 - [Render](https://render.com/) per l'hosting sia del database che del backend web service.
 
-## 
+## Licenza
+- Questo progetto è distribuito sotto i termini della [GNU General Public License v3.0](https://github.com/ShyVortex/game-tracker/blob/master/LICENSE.md).
+- Copyright di [@ShyVortex](https://github.com/ShyVortex) e [@mariorascato](https://github.com/mariorascato), 2024.
