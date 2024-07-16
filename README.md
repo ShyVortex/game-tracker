@@ -16,7 +16,7 @@ GameTracker è un'applicazione per Android e iOS che permette all'utente di aggi
 data e luogo di completamento, ed highlights, ovvero i ricordi più importanti che si vuole tenere a mente.  
 Questa repository che gestisce il frontend applicativo è stata creata per il conseguimento dell'esame 'Programmazione Mobile' della facoltà di Informatica presso l'Università degli Studi del Molise (UNIMOL),
 sede di Pesche.  
-Il frontend applicativo è stato sviluppato da [Angelo Trotta](https://github.com/ShyVortex) e [Mario Rascato](https://github.com/mariorascato), 
+Il frontend è stato sviluppato da [Angelo Trotta](https://github.com/ShyVortex) e [Mario Rascato](https://github.com/mariorascato), 
 così come il backend, accessibile a quest'altra [repository](https://github.com/mariorascato/GameManager-backend).
 
 ## ⚡ Funzionalità
