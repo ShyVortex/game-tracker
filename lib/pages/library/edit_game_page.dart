@@ -10,13 +10,11 @@ import 'package:game_tracker/pages/navigationBar/navigation_page.dart';
 import 'package:game_tracker/theme/app_theme.dart';
 import 'package:game_tracker/utilities/login_utilities.dart';
 import 'package:game_tracker/widgets/images_list.dart';
-import 'package:game_tracker/widgets/loading_screen.dart';
 import 'package:game_tracker/widgets/square_avatar.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../main.dart';
 import '../../models/player.dart';
-import '../profile/profile_page.dart';
 
 class EditGamePage extends StatefulWidget {
   const EditGamePage({super.key, required this.gameplayer, required this.player});
@@ -75,7 +73,7 @@ class _EditGamePageState extends State<EditGamePage> {
        Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => NavigationPage())
+                          builder: (context) => const NavigationPage())
                     );
       }
       catch(error){

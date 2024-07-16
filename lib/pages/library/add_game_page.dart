@@ -356,7 +356,8 @@ Future<void> _performInsert(int idPlayer) async {
                                                 if(int.parse(value!)  > int.parse(_trofeiTotaliController.text)){
                                                   return "Trofei ottenuti maggiori dei totali";
                                                 }
-                                              }},
+                                              }
+                                              return null;},
                                           )
                                       ),
                                       const SizedBox(height: 24),

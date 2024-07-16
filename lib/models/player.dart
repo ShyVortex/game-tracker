@@ -1,6 +1,5 @@
 import 'package:game_tracker/models/genere.dart';
 
-import 'game.dart';
 
 class Player {
   int? _id;

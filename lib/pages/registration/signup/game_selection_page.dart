@@ -22,7 +22,7 @@ class GameSelectPage extends StatefulWidget {
 class GameSelectPageState extends State<GameSelectPage> {
   bool isLoading = true;
   List<Game> _games = [];
-  List<Game> _networkGames = [];
+  final List<Game> _networkGames = [];
   Player _player = Player();
   final PlayerService _playerService = PlayerService();
   final Gameservice _gameservice = Gameservice();

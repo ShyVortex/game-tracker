@@ -90,7 +90,8 @@ class GamePlayer {
       dataCompletamento: json['dataCompletamento']
     );
   }
-   String toString() {
+   @override
+  String toString() {
     return 'GamePlayer(_id: $_id, '
            '_trofeiOttenuti: $_trofeiOttenuti, '
            '_valutazione: $_valutazione, '
