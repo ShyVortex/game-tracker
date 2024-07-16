@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:game_tracker/main.dart';
 import 'package:osm_nominatim/osm_nominatim.dart';
 
+import '../../theme/app_theme.dart';
+
 class SearchPlacePage extends StatefulWidget {
   const SearchPlacePage({super.key});
 
@@ -10,6 +12,7 @@ class SearchPlacePage extends StatefulWidget {
 }
 
 class SearchPlaceState extends State<SearchPlacePage> {
+  final ThemeData themeData = AppTheme.buildThemeData();
   final TextEditingController searchController = TextEditingController();
   List<Place> searchResults = [];
   bool isLoading = false;
@@ -60,7 +63,7 @@ class SearchPlaceState extends State<SearchPlacePage> {
                     ),
                   ),
                   color: GameTracker.isLightOrDark(context) == "Light"
-                      ? Colors.white
+                      ? themeData.textTheme.bodyLarge?.backgroundColor
                       : Colors.grey[300],
                   child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -84,7 +87,13 @@ class SearchPlaceState extends State<SearchPlacePage> {
                                     border: InputBorder.none,
                                     contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 14),
                                   ),
-                                  onSubmitted: (value) => searchLocation()
+                                  onSubmitted: (value) => searchLocation(),
+                                style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Inter',
+                                    color: Colors.black
+                                ),
                               )
                           )
                         ],

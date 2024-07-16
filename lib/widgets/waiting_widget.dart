@@ -19,7 +19,7 @@ class WaitingWidget extends StatelessWidget{
                 fontSize: 26,
                 fontFamily: 'Inter')),
         SizedBox(height: 24),
-        AppLogo(),
+        AppLogo(width: 135, height: 101.8),
         SizedBox(height: 40),
         Center(
           child: CircularProgressIndicator(),
