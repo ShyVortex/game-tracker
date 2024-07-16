@@ -215,7 +215,7 @@ void updateState(){
                               isNetworkImage: widget.gameplayer.game!.isNetworkImage!,
                               isTouchable: false,),
                             const SizedBox(
-                              width: 40,
+                              width: 18.5,
                             ),
                             Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
