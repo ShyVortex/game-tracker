@@ -43,7 +43,7 @@ class LoginPageState extends State<LoginPage> {
                 fontSize: 26,
                 fontFamily: 'Inter')),
         const SizedBox(height: 24),
-        const AppLogo(),
+        const AppLogo(width: 135, height: 101.8),
         const SizedBox(height: 32),
         SizedBox(
           width: 325,

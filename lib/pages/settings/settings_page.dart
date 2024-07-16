@@ -6,6 +6,7 @@ import 'package:game_tracker/pages/settings/theme/theme_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../theme/app_theme.dart';
+import 'info/info_page.dart';
 
 class SettingsPage extends StatefulWidget {
   final Player player;
@@ -26,7 +27,9 @@ class SettingsPageState extends State<SettingsPage> {
   }
 
   void routeToInfo() {
-
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => InfoPage())
+    );
   }
 
   Future<void> logout() async {

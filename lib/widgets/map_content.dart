@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:game_tracker/main.dart';
 import 'package:latlong2/latlong.dart';
 
 class MapContent extends StatefulWidget {
@@ -50,25 +51,35 @@ class MapContentState extends State<MapContent> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isLightTheme =
+        GameTracker.isLightOrDark(context) == "Light" ? true : false;
+
     return FlutterMap(
       mapController: mapController,
       options: MapOptions(
-        initialCenter: const LatLng(41.5972, 14.2345), // Isernia
-        initialZoom: 14,
-        interactionOptions: const InteractionOptions(flags: ~InteractiveFlag.doubleTapZoom),
-        onMapReady: () {
-          _mapReadyCompleter.complete();
-        }
+          initialCenter: const LatLng(41.5972, 14.2345), // Isernia
+          initialZoom: 14,
+          interactionOptions: const InteractionOptions(flags: ~InteractiveFlag.doubleTapZoom),
+          onMapReady: () {
+            _mapReadyCompleter.complete();
+          }
       ),
       children: [
-        osmTileLayer,
+        isLightTheme ? lightTileLayer : darkTileLayer,
         MarkerLayer(markers: markers),
       ],
     );
   }
 }
 
-TileLayer get osmTileLayer => TileLayer(
-  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+TileLayer get lightTileLayer => TileLayer(
+  urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  subdomains: const ['a', 'b', 'c'],
+  userAgentPackageName: 'dev.fleaflet.flutter_map_example',
+);
+
+TileLayer get darkTileLayer => TileLayer(
+  urlTemplate: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+  subdomains: const ['a', 'b', 'c'],
   userAgentPackageName: 'dev.fleaflet.flutter_map_example',
 );

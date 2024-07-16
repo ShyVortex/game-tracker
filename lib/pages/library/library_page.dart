@@ -120,7 +120,7 @@ class LibraryPageState extends State<LibraryPage> {
                                 Icons.settings,
                                 size: 28,
                                 color: GameTracker.isLightOrDark(context) == "Light" ?
-                                    Colors.black : Colors.white
+                                    Colors.black : Colors.grey[100]
                             )
                         )
                       ],
@@ -267,7 +267,7 @@ class LibraryPageState extends State<LibraryPage> {
             shape: const CircleBorder(),
             backgroundColor: Colors.purple,
             onPressed: onAddPress,
-            child: const Icon(Icons.add, color: Colors.white, size: 30),
+            child: Icon(Icons.add, color: Colors.grey[100], size: 30),
           )
               : null
         )

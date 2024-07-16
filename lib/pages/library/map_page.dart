@@ -131,26 +131,33 @@ class MapPageState extends State<MapPage> {
                         width: 2,
                       ),
                     ),
+                    color: GameTracker.isLightOrDark(context) == "Light"
+                        ? themeData.textTheme.bodyLarge?.backgroundColor
+                        : Colors.grey[300],
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                       child: TextField(
                           controller: searchController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Cerca luogo...',
                             hintStyle: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                                 fontFamily: 'Inter',
-                                color: GameTracker.isLightOrDark(context) == "Light"
-                                    ? Colors.grey
-                                    : Colors.grey[400]
+                                color: Colors.black
                             ),
                             border: InputBorder.none,
-                            prefixIcon: const Icon(Icons.search),
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
+                            prefixIcon: Icon(Icons.search, color: Colors.black),
+                            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 14),
                           ),
                           readOnly: true,
-                          onTap: onSearchTap
+                          onTap: onSearchTap,
+                          style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Inter',
+                              color: Colors.black
+                          )
                     ),
                   ),
                 ),
@@ -166,7 +173,7 @@ class MapPageState extends State<MapPage> {
                       shape: const CircleBorder(),
                       backgroundColor: Colors.purple,
                       onPressed: determinePosition,
-                      child: const Icon(Icons.my_location, color: Colors.white, size: 30),
+                      child: Icon(Icons.my_location, color: Colors.grey[100], size: 30),
                     ),
                   ),
                   if (searchController.text.isNotEmpty)
@@ -177,7 +184,7 @@ class MapPageState extends State<MapPage> {
                           shape: const CircleBorder(),
                           backgroundColor: Colors.green,
                           onPressed: confirmLocation,
-                          child: const Icon(Icons.check, color: Colors.white, size: 30),
+                          child: Icon(Icons.check, color: Colors.grey[100], size: 30),
                         )
                     )
                 ]

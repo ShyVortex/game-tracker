@@ -111,7 +111,7 @@ class _FavoritePageState extends State<FavoritePage> {
                     size: 28,
                     color: GameTracker.isLightOrDark(context) == "Light"
                         ? Colors.black
-                        : Colors.white))
+                        : Colors.grey[100]))
           ],
         ),
         const Row(

@@ -1,19 +1,24 @@
 import 'package:flutter/cupertino.dart';
 
 class AppLogo extends StatelessWidget {
+  final double width;
+  final double height;
+
   const AppLogo({
     super.key,
+    required this.width,
+    required this.height
   });
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image(
-            image: AssetImage('assets/logo.png'),
-            width: 135,
-            height: 101.8,
+            image: const AssetImage('assets/logo.png'),
+            width: width,
+            height: height,
           ),
         ]
     );
