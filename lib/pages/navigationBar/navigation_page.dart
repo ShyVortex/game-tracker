@@ -58,11 +58,14 @@ class NavigationState extends State<NavigationPage> {
   Widget build(BuildContext context) {
 
     return PopScope(
+      canPop: false,
       onPopInvoked: (didPop){
         if(didPop){
           return;
         }
+        else {
         SystemNavigator.pop();
+        }
       },
       child:Container(
         decoration: BoxDecoration(
