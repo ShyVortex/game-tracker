@@ -38,5 +38,7 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
-# Non è più necessaria la sincronizzazione della cartella android
-/android
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
