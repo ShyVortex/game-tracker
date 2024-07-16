@@ -188,7 +188,7 @@ Future<void> _performInsert(int idPlayer) async {
                                               shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(12),
                                                 side: BorderSide(
-                                                  color: GameTracker.isLightOrDark() ==
+                                                  color: GameTracker.isLightOrDark(context) ==
                                                               "Light"
                                                           ? Colors.black
                                                               .withOpacity(0.25)
@@ -376,7 +376,7 @@ Future<void> _performInsert(int idPlayer) async {
                                               Card.outlined(
                                                 shape: CircleBorder(
                                                   side: BorderSide(
-                                                    color: GameTracker.isLightOrDark()
+                                                    color: GameTracker.isLightOrDark(context)
                                                                 == "Light"
                                                               ? Colors.black
                                                                   .withOpacity(

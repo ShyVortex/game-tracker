@@ -59,7 +59,7 @@ class SearchPlaceState extends State<SearchPlacePage> {
                       width: 2,
                     ),
                   ),
-                  color: GameTracker.isLightOrDark() == "Light"
+                  color: GameTracker.isLightOrDark(context) == "Light"
                       ? Colors.white
                       : Colors.grey[300],
                   child: Padding(

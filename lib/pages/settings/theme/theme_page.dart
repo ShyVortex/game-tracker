@@ -15,24 +15,40 @@ class ThemePageState extends State<ThemePage> {
   ThemeData themeData = AppTheme.buildThemeData();
 
   Future<void> applyLightMode() async {
-    if (GameTracker.isLightOrDark() != "Light") {
+    if (GameTracker.isLightOrDark(context) != "Light") {
       final prefs = await SharedPreferences.getInstance();
 
-      GameTracker.of(context)?.setLightStream("Light");
+      setState(() {
+        GameTracker.of(context)?.setLightStream("Light");
+      });
+
       prefs.setString("theme", "light");
 
-      setState(() {});
+      if (mounted) {
+        Navigator.pop(context);
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => widget)
+        );
+      }
     }
   }
 
   Future<void> applyDarkMode() async {
-    if (GameTracker.isLightOrDark() != "Dark") {
+    if (GameTracker.isLightOrDark(context) != "Dark") {
       final prefs = await SharedPreferences.getInstance();
 
-      GameTracker.of(context)?.setLightStream("Dark");
+      setState(() {
+        GameTracker.of(context)?.setLightStream("Dark");
+      });
+
       prefs.setString("theme", "dark");
 
-      setState(() {});
+      if (mounted) {
+        Navigator.pop(context);
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => widget)
+        );
+      }
     }
   }
 
@@ -75,7 +91,7 @@ class ThemePageState extends State<ThemePage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                         side: BorderSide(
-                          color: GameTracker.isLightOrDark() == "Light"
+                          color: GameTracker.isLightOrDark(context) == "Light"
                         ? Colors.black.withOpacity(0.25)
                         : Colors.white.withOpacity(0.35),
                           width: 2,
@@ -112,7 +128,7 @@ class ThemePageState extends State<ThemePage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                         side: BorderSide(
-                          color: GameTracker.isLightOrDark() == "Light"
+                          color: GameTracker.isLightOrDark(context) == "Light"
                               ? Colors.black.withOpacity(0.25)
                               : Colors.white.withOpacity(0.35),
                           width: 2,

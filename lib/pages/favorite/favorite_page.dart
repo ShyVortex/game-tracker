@@ -108,7 +108,7 @@ class _FavoritePageState extends State<FavoritePage> {
                 onPressed: routeToSettings,
                 icon: Icon(Icons.settings,
                     size: 28,
-                    color: GameTracker.isLightOrDark() == "Light"
+                    color: GameTracker.isLightOrDark(context) == "Light"
                         ? Colors.black
                         : Colors.white))
           ],
@@ -171,11 +171,11 @@ class _FavoritePageState extends State<FavoritePage> {
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   fontFamily: 'Inter',
-                                  color: GameTracker.isLightOrDark() == "Light"
+                                  color: GameTracker.isLightOrDark(context) == "Light"
                                       ? Colors.grey[700]
                                       : Colors.grey[400]),
                               prefixIcon: Icon(Icons.search,
-                                  color: GameTracker.isLightOrDark() == "Light"
+                                  color: GameTracker.isLightOrDark(context) == "Light"
                                       ? Colors.grey[700]
                                       : Colors.grey[400]),
                               border: OutlineInputBorder(
@@ -185,7 +185,7 @@ class _FavoritePageState extends State<FavoritePage> {
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30.0),
                                 borderSide: BorderSide(
-                                  color: GameTracker.isLightOrDark() == "Light"
+                                  color: GameTracker.isLightOrDark(context) == "Light"
                                       ? const Color.fromARGB(155, 22, 18, 18)
                                       : Colors.white,
                                   width: 0.5,

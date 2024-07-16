@@ -235,7 +235,7 @@ void updateState(){
                                           fontWeight: FontWeight.w600,
                                           fontSize: 15,
                                           fontFamily: 'Inter',
-                                          color: GameTracker.isLightOrDark() == "Light"
+                                          color: GameTracker.isLightOrDark(context) == "Light"
                                               ? const Color.fromARGB(
                                                   136, 105, 105, 105)
                                               : Colors.grey)),
@@ -436,7 +436,7 @@ void updateState(){
                           Card.outlined(
                             shape: CircleBorder(
                               side: BorderSide(
-                                color: GameTracker.isLightOrDark() == "Light"
+                                color: GameTracker.isLightOrDark(context) == "Light"
                                     ? Colors.black.withOpacity(0.25)
                                     : Colors.white.withOpacity(0.4),
                                 width: 2,

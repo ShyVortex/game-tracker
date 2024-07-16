@@ -141,7 +141,7 @@ class MapPageState extends State<MapPage> {
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                                 fontFamily: 'Inter',
-                                color: GameTracker.isLightOrDark() == "Light"
+                                color: GameTracker.isLightOrDark(context) == "Light"
                                     ? Colors.grey
                                     : Colors.grey[400]
                             ),

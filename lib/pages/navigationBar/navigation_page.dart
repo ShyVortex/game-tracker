@@ -87,7 +87,7 @@ class NavigationState extends State<NavigationPage> {
                   ),
                 ],
                 currentIndex: navigationIndex,
-                unselectedItemColor: GameTracker.isLightOrDark() == "Light"
+                unselectedItemColor: GameTracker.isLightOrDark(context) == "Light"
                     ? Colors.black
                     : Colors.white,
                 unselectedLabelStyle: const TextStyle(

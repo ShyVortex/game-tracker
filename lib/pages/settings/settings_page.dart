@@ -88,7 +88,7 @@ class SettingsPageState extends State<SettingsPage> {
                             children: [
                               Icon(Icons.color_lens,
                                     color:
-                                        GameTracker.isLightOrDark() == "Light"
+                                        GameTracker.isLightOrDark(context) == "Light"
                                             ? Colors.black
                                             : Colors.white,
                                     size: 25
@@ -129,7 +129,7 @@ class SettingsPageState extends State<SettingsPage> {
                                   children: [
                                     Icon(Icons.info,
                                         color:
-                                        GameTracker.isLightOrDark() == "Light"
+                                        GameTracker.isLightOrDark(context) == "Light"
                                             ? Colors.black
                                             : Colors.white,
                                         size: 25
@@ -170,7 +170,7 @@ class SettingsPageState extends State<SettingsPage> {
                                   children: [
                                     Icon(Icons.logout,
                                         color:
-                                        GameTracker.isLightOrDark() == "Light"
+                                        GameTracker.isLightOrDark(context) == "Light"
                                             ? Colors.black
                                             : Colors.white,
                                         size: 25

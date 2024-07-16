@@ -369,7 +369,7 @@ class ProfilePageState extends State<ProfilePage> {
                         icon: Icon(
                             Icons.settings,
                             size: 28,
-                            color: GameTracker.isLightOrDark() == "Light" ?
+                            color: GameTracker.isLightOrDark(context) == "Light" ?
                             Colors.black : Colors.white
                         )
                     )
@@ -767,13 +767,13 @@ class ProfilePageState extends State<ProfilePage> {
                   FloatingActionButton(
                     heroTag: "restore_fields",
                     shape: const CircleBorder(),
-                    backgroundColor: GameTracker.isLightOrDark() == "Light"
+                    backgroundColor: GameTracker.isLightOrDark(context) == "Light"
                         ? Colors.black
                         : Colors.white,
                     onPressed: initializeFields,
                     child: Icon(
                         Icons.settings_backup_restore,
-                        color: GameTracker.isLightOrDark() == "Light"
+                        color: GameTracker.isLightOrDark(context) == "Light"
                             ? Colors.white
                             : Colors.black,
                         size: 30),
