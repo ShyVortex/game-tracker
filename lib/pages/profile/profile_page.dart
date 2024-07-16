@@ -15,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../main.dart';
 import '../../models/genere.dart';
+import '../navigationBar/navigation_page.dart';
 
 class ProfilePage extends StatefulWidget {
   static String oldPsw = "";
@@ -52,6 +53,7 @@ class ProfilePageState extends State<ProfilePage> {
   final TextEditingController favouriteController = TextEditingController();
 
   final _emailFormKey = GlobalKey<FormFieldState>();
+  final int settingsIndex = 3;
 
   bool isEditingEmail = false;
   bool isEditingPassword = false;
@@ -140,6 +142,13 @@ class ProfilePageState extends State<ProfilePage> {
       currentFavPlatform = platformController.text;
       currentFavGame = favouriteController.text;
     });
+  }
+
+  void routeToSettings() {
+    Navigator.push(context,
+        MaterialPageRoute(builder:
+            (context) => NavigationState.setCurrentPage(settingsIndex))
+    );
   }
 
   void handleChangePfp({required BuildContext context}) {
@@ -356,7 +365,7 @@ class ProfilePageState extends State<ProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
-                        onPressed: null,
+                        onPressed: routeToSettings,
                         icon: Icon(
                             Icons.settings,
                             size: 28,
