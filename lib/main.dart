@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -44,11 +43,8 @@ class GameTracker extends StatefulWidget {
 class GameTrackerState extends State<GameTracker> {
   final PlayerService _playerService = PlayerService();
 
-  Brightness getSystemTheme() {
-    Brightness brightness = SchedulerBinding.instance
-        .platformDispatcher.platformBrightness;
-
-    return brightness;
+  ThemeMode getSystemTheme() {
+    return ThemeMode.system;
   }
 
   Future<void> fetchTheme() async {
@@ -58,18 +54,16 @@ class GameTrackerState extends State<GameTracker> {
 
     if (value != null) {
       if (value == "light") {
-        isLightTheme.add(true);
-        currentStreamValue = "Light";
+        setLightStream("Light");
       } else {
-        isLightTheme.add(false);
-        currentStreamValue = "Dark";
+        setLightStream("Dark");
       }
 
     } else {
-      if (getSystemTheme() == Brightness.light) {
-        currentStreamValue = "Light";
+      if (getSystemTheme() == ThemeMode.light) {
+        setLightStream("Light");
       } else {
-        currentStreamValue = "Dark";
+        setLightStream("Dark");
       }
     }
   }
