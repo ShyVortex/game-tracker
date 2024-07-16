@@ -13,7 +13,7 @@ class WaitingWidget extends StatelessWidget{
                 child: Padding(
       padding: EdgeInsets.only(top: 32),
       child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-        Text("GAME MANAGER",
+        Text("Game Tracker",
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 26,

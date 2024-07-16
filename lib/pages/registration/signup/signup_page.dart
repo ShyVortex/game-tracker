@@ -223,7 +223,7 @@ class MyContainerWidget extends StatelessWidget {
               height: 70,
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage('assets/logo1.jpg'),
+                    image: AssetImage('assets/logo.png'),
                     opacity: 1,
                     fit: BoxFit.scaleDown),
               ),
