@@ -188,45 +188,67 @@ Future<void> _performInsert(int idPlayer) async {
                                       Row(
                                         children: [
                                           !isLoadedImage?
-                                          Card.outlined(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(12),
-                                                side: BorderSide(
-                                                  color: Colors.black.withOpacity(0.25),
-                                                  width: 2,
+                                          SizedBox(width: 100, height: 100,
+                                            child: Card.outlined(
+                                                shape: RoundedRectangleBorder(
+                                                  side: BorderSide(
+                                                    color: GameTracker.isLightOrDark(context) == "Light"
+                                                        ? Colors.black.withOpacity(0.25)
+                                                        : Colors.white.withOpacity(0.4),
+                                                    width: 2,
+                                                  ),
                                                 ),
-                                              ),
-                                              clipBehavior: Clip.hardEdge,
-                                              child: InkWell(
-                                                splashColor: Colors.purple.withAlpha(30),
-                                                onTap: onAddImage,
-                                                child: const Column(
-                                                  children: [
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                          bottom: 16, left: 20, right: 20),
-                                                      child: Column(
-                                                        children: [
-                                                          Text("+",
-                                                              style: TextStyle(
-                                                                  fontSize: 50,
-                                                                  fontWeight: FontWeight.w300,
-                                                                  fontFamily: 'Inter')),
-                                                          Text("Aggiungi\nimmagine",
-                                                              style: TextStyle(
-                                                                  fontSize: 14,
-                                                                  fontWeight: FontWeight.w500,
-                                                                  fontFamily: 'Inter'))
-                                                        ],
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              )
+                                                clipBehavior: Clip.hardEdge,
+                                                child: InkWell(
+                                                  splashColor: Colors.purple.withAlpha(30),
+                                                  onTap: onAddImage,
+                                                  child: const Column(
+                                                    children: [
+                                                      Padding(
+                                                        padding: EdgeInsets.only(
+                                                            bottom: 13,
+                                                            left: 16,
+                                                            right: 16
+                                                        ),
+                                                        child: Column(
+                                                          children: [
+                                                            Text("+",
+                                                                style: TextStyle(
+                                                                    fontSize: 30,
+                                                                    fontWeight: FontWeight.w300,
+                                                                    fontFamily: 'Inter'),
+                                                              textAlign: TextAlign.center,
+                                                            ),
+                                                            Text("Aggiungi\nimmagine",
+                                                                style: TextStyle(
+                                                                    fontSize: 12.5,
+                                                                    fontWeight: FontWeight.w500,
+                                                                    fontFamily: 'Inter'),
+                                                              textAlign: TextAlign.center,
+                                                            )
+                                                          ],
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                )
+                                            )
                                           )
-                                              : SquareAvatar(imageUrl: gameToInsert.immagineURL!, size: 100, isNetworkImage: gameToInsert.isNetworkImage!,updateParentState: (String value){
-                                            gameToInsert.immagineURL = value;
-                                          },isTouchable: true,),
+                                              : SizedBox(
+                                              width: 100, height: 100,
+                                              child: SquareAvatar(
+                                                imageUrl: gameToInsert
+                                                    .immagineURL!,
+                                                size: 100,
+                                                isNetworkImage: gameToInsert
+                                                    .isNetworkImage!,
+                                                updateParentState: (
+                                                    String value) {
+                                                  gameToInsert.immagineURL =
+                                                      value;
+                                                },
+                                                isTouchable: true,)
+                                          ),
 
                                           const SizedBox(width: 24),
                                           SizedBox(
@@ -374,7 +396,9 @@ Future<void> _performInsert(int idPlayer) async {
                                               Card.outlined(
                                                 shape: CircleBorder(
                                                   side: BorderSide(
-                                                    color: Colors.black.withOpacity(0.25),
+                                                    color: GameTracker.isLightOrDark(context) == "Light"
+                                                        ? Colors.black.withOpacity(0.25)
+                                                        : Colors.white.withOpacity(0.4),
                                                     width: 2,
                                                   ),
                                                 ),
