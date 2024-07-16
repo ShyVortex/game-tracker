@@ -130,7 +130,7 @@ Future<void> _performInsert(int idPlayer) async {
 
 
 
-
+      try{
       await _gamePlayerservice.performGameInsert(gameToInsert, idPlayer, gamePlayerToInsert);
 
      Navigator.push(
@@ -138,7 +138,11 @@ Future<void> _performInsert(int idPlayer) async {
                       MaterialPageRoute(
                           builder: (context) =>   const NavigationPage())
                     );
-
+      } catch(error){
+         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Problemi di connessione. Riprova più tardi'),
+                ));
+      }
 
 }
 
@@ -188,13 +192,7 @@ Future<void> _performInsert(int idPlayer) async {
                                               shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(12),
                                                 side: BorderSide(
-                                                  color: GameTracker.isLightOrDark(context) ==
-                                                              "Light"
-                                                          ? Colors.black
-                                                              .withOpacity(0.25)
-                                                          : Colors.white
-                                                              .withOpacity(
-                                                                  0.3),
+                                                  color: Colors.black.withOpacity(0.25),
                                                   width: 2,
                                                 ),
                                               ),
@@ -376,15 +374,8 @@ Future<void> _performInsert(int idPlayer) async {
                                               Card.outlined(
                                                 shape: CircleBorder(
                                                   side: BorderSide(
-                                                    color: GameTracker.isLightOrDark(context)
-                                                                == "Light"
-                                                              ? Colors.black
-                                                                  .withOpacity(
-                                                                      0.25)
-                                                              : Colors.white
-                                                                  .withOpacity(
-                                                                      0.4),
-                                                          width: 2,
+                                                    color: Colors.black.withOpacity(0.25),
+                                                    width: 2,
                                                   ),
                                                 ),
                                                 clipBehavior: Clip.hardEdge,

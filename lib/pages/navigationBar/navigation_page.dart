@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_tracker/main.dart';
 import 'package:game_tracker/pages/favorite/favorite_page.dart';
@@ -50,11 +51,20 @@ class NavigationState extends State<NavigationPage> {
     setState(() {
       navigationIndex = index;
     });
+    
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+
+    return PopScope(
+      onPopInvoked: (didPop){
+        if(didPop){
+          return;
+        }
+        SystemNavigator.pop();
+      },
+      child:Container(
         decoration: BoxDecoration(
           border: Border(
             top: BorderSide(
@@ -97,6 +107,6 @@ class NavigationState extends State<NavigationPage> {
                     fontWeight: FontWeight.w600, fontFamily: 'Inter'),
                 onTap: onItemTapped,
               ),
-            )));
+            ))));
   }
 }

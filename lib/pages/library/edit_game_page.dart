@@ -65,7 +65,7 @@ class _EditGamePageState extends State<EditGamePage> {
          Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>  NavigationPage())
+                          builder: (context) => const  NavigationPage())
                     );
       }
     else {

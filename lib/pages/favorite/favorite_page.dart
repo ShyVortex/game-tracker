@@ -96,7 +96,8 @@ class _FavoritePageState extends State<FavoritePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return 
+    SafeArea(
         child: Scaffold(
             body: Padding(
       padding: const EdgeInsets.only(top: 4),
