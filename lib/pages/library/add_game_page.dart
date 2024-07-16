@@ -130,7 +130,7 @@ Future<void> _performInsert(int idPlayer) async {
 
 
 
-
+      try{
       await _gamePlayerservice.performGameInsert(gameToInsert, idPlayer, gamePlayerToInsert);
 
      Navigator.push(
@@ -138,7 +138,11 @@ Future<void> _performInsert(int idPlayer) async {
                       MaterialPageRoute(
                           builder: (context) =>   const NavigationPage())
                     );
-
+      } catch(error){
+         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Problemi di connessione. Riprova più tardi'),
+                ));
+      }
 
 }
 
@@ -446,9 +450,16 @@ Future<void> _performInsert(int idPlayer) async {
                   FloatingActionButton(
                     heroTag: "add_game_page_selection-photo",
                     shape: const CircleBorder(),
-                    backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                    backgroundColor: GameTracker.isLightOrDark(context) == "Light"
+                        ? Colors.black
+                        : Colors.white,
                     onPressed:onAddHighlightsImage,
-                    child: const Icon(Icons.photo_library, color: Colors.black, size: 30),
+                    child: Icon(
+                        Icons.photo_library,
+                        color: GameTracker.isLightOrDark(context) == "Light"
+                            ? Colors.white
+                            : Colors.black,
+                        size: 30),
                   ): const SizedBox()
                   ,
                   const SizedBox(height: 10,),
@@ -461,7 +472,7 @@ Future<void> _performInsert(int idPlayer) async {
                       onPressed: () async {
                         await onConfirmPress(ref.watch(playerProvider).id!);
                       } ,
-                      child: const Icon(Icons.check, color: Colors.white, size: 30),
+                      child: Icon(Icons.check, color: Colors.grey[100], size: 30),
                     );
                   })
 

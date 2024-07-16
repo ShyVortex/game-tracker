@@ -1,17 +1,18 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_tracker/pages/library/add_game_page.dart';
 import 'package:game_tracker/controller/playerService.dart';
 import 'package:game_tracker/models/gamePlayer.dart';
 import 'package:game_tracker/pages/library/edit_game_page.dart';
+import 'package:game_tracker/pages/navigationBar/navigation_page.dart';
 import 'package:game_tracker/widgets/square_avatar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../main.dart';
 import '../../models/player.dart';
-import '../profile/profile_page.dart';
 
 class LibraryPage extends StatefulWidget {
   const LibraryPage({super.key, required this.player});
@@ -27,6 +28,8 @@ class LibraryPageState extends State<LibraryPage> {
   bool _isLoading = true;
   List<GamePlayer> searchResults = [];
   final TextEditingController searchController = TextEditingController();
+
+  final int settingsIndex = 3;
 
   void fetchData(){
       _playerService.getAllGiochiPosseduti(widget.player.id!).then((onValue){
@@ -72,6 +75,13 @@ class LibraryPageState extends State<LibraryPage> {
 
   }
 
+  void routeToSettings() {
+    Navigator.push(context,
+        MaterialPageRoute(builder:
+            (context) => NavigationState.setCurrentPage(settingsIndex))
+    );
+  }
+
   void onAddPress() {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => const AddGamePage())
@@ -93,19 +103,25 @@ class LibraryPageState extends State<LibraryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return 
+    SafeArea(
         child: Scaffold(
           body: Padding(
               padding: const EdgeInsets.only(top: 4),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         IconButton(
-                            onPressed: null,
-                            icon: Icon(Icons.settings, size: 28, color: Colors.black)
+                            onPressed: routeToSettings,
+                            icon: Icon(
+                                Icons.settings,
+                                size: 28,
+                                color: GameTracker.isLightOrDark(context) == "Light" ?
+                                    Colors.black : Colors.grey[100]
+                            )
                         )
                       ],
                     ),
@@ -157,26 +173,41 @@ class LibraryPageState extends State<LibraryPage> {
                     CircularProgressIndicator.adaptive()):
                      Column(children: [
                       const SizedBox(height:10),
-                      SizedBox(height: 50,width: 350,
-                        child: 
+                      SizedBox(height: 50,width: 325,
+                        child:
                         TextField(
                         controller: searchController,
                         decoration: InputDecoration(
                 hintText: 'Cerca gioco...',
-                prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                hintStyle: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Inter',
+                  color: GameTracker.isLightOrDark(context) == "Light"
+                    ? Colors.grey[700]
+                      : Colors.grey[400]
+                ),
+                prefixIcon: Icon(
+                    Icons.search,
+                    color: GameTracker.isLightOrDark(context) == "Light"
+                        ? Colors.grey[700]
+                        : Colors.grey[400]
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30.0),
                   borderSide: BorderSide.none,
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30.0),
-                  borderSide: const BorderSide(
-                    color: Color.fromARGB(155, 22, 18, 18),
+                  borderSide: BorderSide(
+                    color: GameTracker.isLightOrDark(context) == "Light"
+                    ? const Color.fromARGB(155, 22, 18, 18)
+                    : Colors.white,
                     width: 0.5,
                   ),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
+                  borderRadius: BorderRadius.circular(30.0),
                   borderSide: BorderSide(
                     color: Colors.grey[300]!,
                     width: 1.5,
@@ -185,11 +216,11 @@ class LibraryPageState extends State<LibraryPage> {
               ),
                         onChanged: (value) => searchGame()
                         )
-                        )
-                        ,
-                    const SizedBox(height: 10,),
-                    SizedBox(height: 600,
-                    child: 
+                        ),
+                    const SizedBox(height: 10),
+                    // 232px è la dimensione degli altri widget
+                    SizedBox(height: MediaQuery.sizeOf(context).height - 232,
+                    child:
                     ListView.separated(
                       itemCount: searchResults.length,
                       separatorBuilder: (context, index) => const Divider(),
@@ -226,7 +257,7 @@ class LibraryPageState extends State<LibraryPage> {
                     )
                     )
                   ])
-                    
+
                   ]
               )
           ),
@@ -236,7 +267,7 @@ class LibraryPageState extends State<LibraryPage> {
             shape: const CircleBorder(),
             backgroundColor: Colors.purple,
             onPressed: onAddPress,
-            child: const Icon(Icons.add, color: Colors.white, size: 30),
+            child: Icon(Icons.add, color: Colors.grey[100], size: 30),
           )
               : null
         )

@@ -43,7 +43,7 @@ class LoginPageState extends State<LoginPage> {
                 fontSize: 26,
                 fontFamily: 'Inter')),
         const SizedBox(height: 24),
-        const AppLogo(),
+        const AppLogo(width: 135, height: 101.8),
         const SizedBox(height: 32),
         SizedBox(
           width: 325,
@@ -104,6 +104,8 @@ class LoginPageState extends State<LoginPage> {
             title: const Text('Rimani connesso',
                 style: TextStyle(fontFamily: 'Inter')),
             value: rememberMe,
+            activeColor: Colors.purple,
+            checkColor: Colors.white,
             onChanged: (bool? value) {
               setState(() {
                 rememberMe = value! ? true : false;
@@ -154,6 +156,10 @@ class LoginPageState extends State<LoginPage> {
                     });
                 }
               } : null,
+              style: FilledButton.styleFrom(
+                backgroundColor: Colors.purple,
+                foregroundColor: Colors.white
+              ),
               child: !isLoading?
               const Text("LOGIN",
                   style: TextStyle(
@@ -178,9 +184,13 @@ class LoginPageState extends State<LoginPage> {
                   MaterialPageRoute(builder: (context) => const SignupPage()),
                 );
               },
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.purple,
+                shadowColor: Colors.white
+              ),
               child: const Text("Non hai un account? Registrati",
                   style: TextStyle(
-                      fontWeight: FontWeight.w600, fontFamily: 'Inter')));
+                      fontWeight: FontWeight.bold, fontFamily: 'Inter')));
         })
       ]),
     ))));

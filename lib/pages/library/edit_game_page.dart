@@ -65,7 +65,7 @@ class _EditGamePageState extends State<EditGamePage> {
          Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>  const NavigationPage())
+                          builder: (context) => const  NavigationPage())
                     );
       }
     else {
@@ -75,7 +75,7 @@ class _EditGamePageState extends State<EditGamePage> {
        Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const NavigationPage())
+                          builder: (context) => NavigationPage())
                     );
       }
       catch(error){
@@ -215,7 +215,7 @@ void updateState(){
                               isNetworkImage: widget.gameplayer.game!.isNetworkImage!,
                               isTouchable: false,),
                             const SizedBox(
-                              width: 40,
+                              width: 18.5,
                             ),
                             Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,11 +231,14 @@ void updateState(){
                                     softWrap: true,
                                   ),
                                   Text(widget.gameplayer.game!.sviluppatore!,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 15,
                                           fontFamily: 'Inter',
-                                          color: Color.fromARGB(136, 105, 105, 105))),
+                                          color: GameTracker.isLightOrDark(context) == "Light"
+                                              ? const Color.fromARGB(
+                                                  136, 105, 105, 105)
+                                              : Colors.grey)),
                                 ]),
                           ],
                         )
@@ -428,12 +431,14 @@ void updateState(){
                           const Text("Highlights", style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
-                              fontFamily: 'Inter'
+                              fontFamily: 'Inter',
                           )),
                           Card.outlined(
                             shape: CircleBorder(
                               side: BorderSide(
-                                color: Colors.black.withOpacity(0.25),
+                                color: GameTracker.isLightOrDark(context) == "Light"
+                                    ? Colors.black.withOpacity(0.25)
+                                    : Colors.white.withOpacity(0.4),
                                 width: 2,
                               ),
                             ),
@@ -463,11 +468,18 @@ void updateState(){
               children: [
                 _initialImagesList.isNotEmpty?
                 FloatingActionButton(
-                  heroTag: "selection-photo",
+                  heroTag: "selection_photo",
                   shape: const CircleBorder(),
-                  backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                  onPressed:  onSelectionPress,
-                  child: const Icon(Icons.photo_library, color: Colors.black, size: 30),
+                  backgroundColor: GameTracker.isLightOrDark(context) == "Light"
+                      ? Colors.black
+                      : Colors.white,
+                  onPressed: onSelectionPress,
+                  child: Icon(
+                      Icons.photo_library,
+                      color: GameTracker.isLightOrDark(context) == "Light"
+                          ? Colors.white
+                          : Colors.black,
+                      size: 30),
                 ) : const SizedBox(),
                 const SizedBox(height: 10,),
                 Consumer(builder: (context, ref, child) {
@@ -478,7 +490,7 @@ void updateState(){
                     onPressed: () {
                       onDeletePress(ref);
                     },
-                    child: const Icon(Icons.delete, color: Colors.white, size: 30),
+                    child: Icon(Icons.delete, color: Colors.grey[100], size: 30),
                   );
                 }),
                 const SizedBox(height: 10,),
@@ -487,7 +499,7 @@ void updateState(){
                   shape: const CircleBorder(),
                   backgroundColor: Colors.green,
                   onPressed:  onConfirmPress,
-                  child: const Icon(Icons.check, color: Colors.white, size: 30),
+                  child: Icon(Icons.check, color: Colors.grey[100], size: 30),
                 ),
               ],
             ))

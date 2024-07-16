@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:game_tracker/pages/library/search_place_page.dart';
 import 'package:osm_nominatim/osm_nominatim.dart';
+import '../../main.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/map_content.dart';
 import 'package:geolocator/geolocator.dart';
@@ -124,28 +125,43 @@ class MapPageState extends State<MapPage> {
                   right: 16,
                   child: Card.outlined(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(30),
                       side: BorderSide(
                         color: Colors.black.withOpacity(0.35),
                         width: 2,
                       ),
                     ),
+                    color: GameTracker.isLightOrDark(context) == "Light"
+                        ? themeData.textTheme.bodyLarge?.backgroundColor
+                        : Colors.grey[300],
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                       child: TextField(
                           controller: searchController,
                           decoration: const InputDecoration(
                             hintText: 'Cerca luogo...',
+                            hintStyle: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Inter',
+                                color: Colors.black
+                            ),
                             border: InputBorder.none,
-                            prefixIcon: Icon(Icons.search),
+                            prefixIcon: Icon(Icons.search, color: Colors.black),
                             contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 14),
                           ),
                           readOnly: true,
-                          onTap: onSearchTap
-                      ),
+                          onTap: onSearchTap,
+                          style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Inter',
+                              color: Colors.black
+                          )
                     ),
                   ),
                 ),
+                )
               ],
             ),
             floatingActionButton: Stack(
@@ -157,7 +173,7 @@ class MapPageState extends State<MapPage> {
                       shape: const CircleBorder(),
                       backgroundColor: Colors.purple,
                       onPressed: determinePosition,
-                      child: const Icon(Icons.my_location, color: Colors.white, size: 30),
+                      child: Icon(Icons.my_location, color: Colors.grey[100], size: 30),
                     ),
                   ),
                   if (searchController.text.isNotEmpty)
@@ -168,7 +184,7 @@ class MapPageState extends State<MapPage> {
                           shape: const CircleBorder(),
                           backgroundColor: Colors.green,
                           onPressed: confirmLocation,
-                          child: const Icon(Icons.check, color: Colors.white, size: 30),
+                          child: Icon(Icons.check, color: Colors.grey[100], size: 30),
                         )
                     )
                 ]

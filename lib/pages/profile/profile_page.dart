@@ -15,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../main.dart';
 import '../../models/genere.dart';
+import '../navigationBar/navigation_page.dart';
 
 class ProfilePage extends StatefulWidget {
   static String oldPsw = "";
@@ -52,6 +53,7 @@ class ProfilePageState extends State<ProfilePage> {
   final TextEditingController favouriteController = TextEditingController();
 
   final _emailFormKey = GlobalKey<FormFieldState>();
+  final int settingsIndex = 3;
 
   bool isEditingEmail = false;
   bool isEditingPassword = false;
@@ -142,6 +144,13 @@ class ProfilePageState extends State<ProfilePage> {
     });
   }
 
+  void routeToSettings() {
+    Navigator.push(context,
+        MaterialPageRoute(builder:
+            (context) => NavigationState.setCurrentPage(settingsIndex))
+    );
+  }
+
   void handleChangePfp({required BuildContext context}) {
     showModalBottomSheet(
       context: context,
@@ -194,7 +203,7 @@ class ProfilePageState extends State<ProfilePage> {
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString("profileImage", b64Img);
-    
+
     Uint8List bytes = ImageUtilities.instance.decodeImage(b64Img);
     setState(() {
       convertedImage = MemoryImage(bytes);
@@ -295,7 +304,7 @@ class ProfilePageState extends State<ProfilePage> {
         updated.piattaforma = currentFavPlatform;
         updated.giocoPreferito = currentFavGame;
 
-        
+
         playerService.updatePlayer(updated, idPlayer);
         prefs.setString("email",updated.email!);
 
@@ -320,7 +329,7 @@ class ProfilePageState extends State<ProfilePage> {
     }
     }
   }
-  
+
   Future<void> onAccountDelete() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -352,12 +361,16 @@ class ProfilePageState extends State<ProfilePage> {
             body: Padding(
               padding: const EdgeInsets.only(top: 4, bottom: 85),
               child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
-                        onPressed: null,
-                        icon: Icon(Icons.settings, size: 28, color: Colors.black))
+                        onPressed: routeToSettings,
+                        icon: Icon(Icons.settings,
+                            size: 28,
+                            color: GameTracker.isLightOrDark(context) == "Light"
+                                ? Colors.black
+                                : Colors.grey[100]))
                   ],
                 ),
                 const Row(
@@ -375,151 +388,158 @@ class ProfilePageState extends State<ProfilePage> {
                 const Divider(),
                 if (isLoading)
                   const Expanded(
-                      child: Center(
-                        child: CircularProgressIndicator.adaptive(),
-                      ),
+                    child: Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    ),
                   ),
                 if (!isLoading)
-                Expanded(
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 24, left: 30, right: 30),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Stack(
-                                  clipBehavior: Clip.none,
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 50,
-                                      backgroundImage: convertedImage,
-                                    ),
-                                    Positioned(
-                                        top: 75,
-                                        left: 25,
-                                        child: RawMaterialButton(
-                                          constraints: const BoxConstraints(
-                                              minWidth: 25,
-                                              minHeight: 25,
-                                              maxWidth: 25,
-                                              maxHeight: 25
-                                          ),
-                                          onPressed: () {
-                                            handleChangePfp(context: context);
-                                          },
-                                          fillColor: Colors.white,
-                                          shape: const CircleBorder(),
-                                          child: const Icon(
-                                            Icons.photo_camera,
-                                            size: 20,
-                                          ),
-                                        )
-                                    )
-                                  ],
-                                ),
-                                const SizedBox(width: 25),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(widget.player.username!, style: const TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                    )),
-                                    const SizedBox(height: 5),
-                                    Row(
-                                      children: <Widget>[
-                                        SizedBox(
-                                            width: 135,
-                                            child: TextFormField(
-                                              key: _emailFormKey,
-                                              controller: emailController,
-                                              decoration: const InputDecoration(
-                                                border:  null,
-                                                labelText: "Email",
-                                              ),
-                                              style: const TextStyle(fontSize: 15),
-                                              keyboardType: TextInputType.text,
-                                              readOnly: !isEditingEmail,
-                                              validator: (value){
-                                                if(value == null|| value == ""){
-                                                  return "Compilare il campo";
-                                                }
-                                                else if(LoginUtilities.isValidEmail(value)){
-                                                  return "Inserire un'email valida";
-                                                }
-                                                return null;
+                  Expanded(
+                      child: SingleChildScrollView(
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(top: 24, left: 30, right: 30),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Stack(
+                                clipBehavior: Clip.none,
+                                children: [
+                                  CircleAvatar(
+                                    radius: 50,
+                                    backgroundImage: convertedImage,
+                                  ),
+                                  Positioned(
+                                      top: 75,
+                                      left: 25,
+                                      child: RawMaterialButton(
+                                        constraints: const BoxConstraints(
+                                            minWidth: 25,
+                                            minHeight: 25,
+                                            maxWidth: 25,
+                                            maxHeight: 25),
+                                        onPressed: () {
+                                          handleChangePfp(context: context);
+                                        },
+                                        fillColor: Colors.white,
+                                        shape: const CircleBorder(),
+                                        child: const Icon(Icons.photo_camera,
+                                            size: 20, color: Colors.black),
+                                      ))
+                                ],
+                              ),
+                              const SizedBox(width: 25),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(widget.player.username!,
+                                      style: const TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                  const SizedBox(height: 5),
+                                  Row(
+                                    children: <Widget>[
+                                      SizedBox(
+                                          width: 135,
+                                          child: TextFormField(
+                                            key: _emailFormKey,
+                                            controller: emailController,
+                                            decoration: const InputDecoration(
+                                              border: null,
+                                              labelText: "Email",
+                                            ),
+                                            style:
+                                                const TextStyle(fontSize: 15),
+                                            keyboardType: TextInputType.text,
+                                            readOnly: !isEditingEmail,
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value == "") {
+                                                return "Compilare il campo";
+                                              } else if (LoginUtilities
+                                                  .isValidEmail(value)) {
+                                                return "Inserire un'email valida";
+                                              }
+                                              return null;
+                                            },
+                                          )),
+                                      Stack(
+                                        clipBehavior: Clip.none,
+                                        children: [
+                                          if (!isEditingEmail)
+                                            IconButton(
+                                              icon: const Icon(Icons.edit),
+                                              iconSize: 20,
+                                              onPressed: () {
+                                                setState(() {
+                                                  emailController.text =
+                                                      currentEmail;
+                                                  isEditingEmail = true;
+                                                });
                                               },
-                                            )
-                                        ),
-                                        Stack(
-                                          clipBehavior: Clip.none,
-                                          children: [
-                                            if (!isEditingEmail)
-                                              IconButton(
-                                                icon: const Icon(Icons.edit),
+                                            ),
+                                          if (!isEditingEmail &&
+                                              currentEmail !=
+                                                  widget.player.email)
+                                            Positioned(
+                                              top: 22.5,
+                                              child: IconButton(
+                                                icon: const Icon(Icons
+                                                    .settings_backup_restore),
                                                 iconSize: 20,
                                                 onPressed: () {
                                                   setState(() {
-                                                    emailController.text = currentEmail;
-                                                    isEditingEmail = true;
+                                                    currentEmail =
+                                                        widget.player.email!;
+                                                    emailController.text =
+                                                        currentEmail;
                                                   });
                                                 },
                                               ),
-                                            if (!isEditingEmail && currentEmail != widget.player.email)
-                                              Positioned(
+                                            ),
+                                          if (isEditingEmail)
+                                            IconButton(
+                                                icon: const Icon(Icons.cancel),
+                                                iconSize: 20,
+                                                onPressed: () {
+                                                  setState(() {
+                                                    emailController.text =
+                                                        currentEmail;
+                                                    isEditingEmail = false;
+                                                  });
+                                                }),
+                                          if (isEditingEmail)
+                                            Positioned(
                                                 top: 22.5,
                                                 child: IconButton(
-                                                  icon: const Icon(Icons.settings_backup_restore),
-                                                  iconSize: 20,
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      currentEmail = widget.player.email!;
-                                                      emailController.text = currentEmail;
-                                                    });
-                                                  },
-                                                ),
-                                              ),
+                                                    icon: const Icon(
+                                                        Icons.check_circle),
+                                                    iconSize: 20,
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        isEditingEmail = false;
 
-                                            if (isEditingEmail)
-                                              IconButton(
-                                                  icon: const Icon(Icons.cancel),
-                                                  iconSize: 20,
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      emailController.text = currentEmail;
-                                                      isEditingEmail = false;
-                                                    });
-                                                  }
-                                              ),
-                                            if (isEditingEmail)
-                                              Positioned(
-                                                  top: 22.5,
-                                                  child: IconButton(
-                                                      icon: const Icon(Icons.check_circle),
-                                                      iconSize: 20,
-                                                      onPressed: () {
-                                                        setState(() {
-                                                          isEditingEmail = false;
-
-                                                          if (emailController.text.isEmpty) {
-                                                            emailController.text = currentEmail;
-                                                          } else {
-                                                            currentEmail = emailController.text;
-                                                          }
-                                                        });
-                                                      }
-                                                  )
-                                              )
-                                          ],
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                            const SizedBox(height: 38),
+                                                        if (emailController
+                                                            .text.isEmpty) {
+                                                          emailController.text =
+                                                              currentEmail;
+                                                        } else {
+                                                          currentEmail =
+                                                              emailController
+                                                                  .text;
+                                                        }
+                                                      });
+                                                    }))
+                                        ],
+                                      )
+                                    ],
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                          const SizedBox(height: 38),
                             Row(
                               children: <Widget>[
                                 Expanded(
@@ -718,8 +738,14 @@ class ProfilePageState extends State<ProfilePage> {
                                     ],
                                   ),
                                 ),
-                                label: const Text("Cancella account"),
-                              icon: const Icon(Icons.warning),
+                                label: const Text("Cancella account",
+                                    style: TextStyle(
+                                  color: Colors.white
+                                )),
+                              icon: const Icon(
+                                  Icons.warning,
+                                color: Colors.white,
+                              ),
                               style: FilledButton.styleFrom(
                                 backgroundColor: Colors.red,
                                 textStyle: const TextStyle(
@@ -745,9 +771,16 @@ class ProfilePageState extends State<ProfilePage> {
                   FloatingActionButton(
                     heroTag: "restore_fields",
                     shape: const CircleBorder(),
-                    backgroundColor: Colors.black,
+                    backgroundColor: GameTracker.isLightOrDark(context) == "Light"
+                        ? Colors.black
+                        : Colors.white,
                     onPressed: initializeFields,
-                    child: const Icon(Icons.settings_backup_restore, color: Colors.white, size: 30),
+                    child: Icon(
+                        Icons.settings_backup_restore,
+                        color: GameTracker.isLightOrDark(context) == "Light"
+                            ? Colors.white
+                            : Colors.black,
+                        size: 30),
                   ),
                 const SizedBox(width: 16),
                 if (!isLoading && !isEditingEmail

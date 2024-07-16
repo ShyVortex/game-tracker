@@ -66,7 +66,7 @@ class GameSelectPageState extends State<GameSelectPage> {
             appBar: AppBar(
               forceMaterialTransparency: true,
               automaticallyImplyLeading: false,
-              flexibleSpace: const AppLogo(),
+              flexibleSpace: const AppLogo(width: 135, height: 101.8),
             ),
             body: isLoading
                 ? const Center(
