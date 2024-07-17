@@ -89,10 +89,14 @@ class ProfilePageState extends State<ProfilePage> {
 
   Future<void> loadProfileImage() async {
     // Carica immagine nuovo utente
-    galleryFile = File("assets/new-user.png");
+    setState(() {
+      convertedImage = const AssetImage('assets/new-user.png');
+    });
 
     final prefs = await SharedPreferences.getInstance();
-    String? encoded = prefs.getString('profileImage');
+    String associatedUser = widget.player.username!;
+    String? encoded = prefs.getString('profileImage_$associatedUser');
+
     if (encoded != null && encoded.isNotEmpty) {
       // Se l'utente ha già impostato un avatar allora caricalo
       try {
@@ -202,7 +206,7 @@ class ProfilePageState extends State<ProfilePage> {
     String b64Img = ImageUtilities.instance.encodeImage(galleryFile!);
 
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString("profileImage", b64Img);
+    await prefs.setString("profileImage_${widget.player.username}", b64Img);
 
     Uint8List bytes = ImageUtilities.instance.decodeImage(b64Img);
     setState(() {

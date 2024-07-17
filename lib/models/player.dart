@@ -6,6 +6,7 @@ class Player {
   String? _username;
   String? _email;
   String? _password;
+  String? _avatar;
   Genere? _genere;
   String? _birthday;
   String? _piattaformaPreferita;
@@ -17,6 +18,7 @@ class Player {
     required String? username,
     required String? email,
     required String? password,
+    required String? avatar,
     required Genere? genere,
     required String? birthday,
     required String? piattaformaPreferita,
@@ -27,6 +29,7 @@ class Player {
     _username = username;
     _email = email;
     _password = password;
+    _avatar = avatar;
     _genere = genere;
     _birthday = birthday;
     _piattaformaPreferita = piattaformaPreferita;
@@ -36,29 +39,33 @@ class Player {
 
   int? get id => _id;
   String? get username => _username;
-  String? get password => _password;
   String? get email => _email;
+  String? get password => _password;
+  String? get avatar => _avatar;
   Genere? get genere => _genere;
   String? get birthday => _birthday;
   String? get piattaforma => _piattaformaPreferita;
   String? get giocoPreferito => _giocoPreferito;
 
-  set username(String? value){
+  set username(String? value) {
       _username = value;
   }
-  set email(String? value){
+  set email(String? value) {
     _email = value;
   }
-  set password(String? value){
+  set password(String? value) {
     _password = value;
   }
-  set genere(Genere? value){
+  set avatar(String? value) {
+    _avatar = value;
+  }
+  set genere(Genere? value) {
     _genere = value;
   }
-  set birthday(String? value){
+  set birthday(String? value) {
     _birthday = value;
   }
-  set piattaforma(String? value){
+  set piattaforma(String? value) {
     _piattaformaPreferita = value;
   }
   set giocoPreferito(String? value) {
@@ -69,6 +76,7 @@ class Player {
     'username': _username,
     'email': _email,
     'password': _password,
+    'avatar': _avatar,
     'birthday': _birthday,
     'piattaformaPreferita': _piattaformaPreferita,
     'giocoPreferito': _giocoPreferito
@@ -79,9 +87,10 @@ class Player {
       username: json['username'],
       email: json['email'],
       password: json['password'],
-        genere: json['genere'] == null
-            ? json['genere']
-            : GenereExtension.genereFromBackend(json['genere']),
+      avatar: json['avatar'],
+      genere: json['genere'] == null
+          ? json['genere']
+          : GenereExtension.genereFromBackend(json['genere']),
       birthday: json['birthday'],
       piattaformaPreferita : json['piattaformaPreferita'],
       giocoPreferito: json['giocoPreferito']
