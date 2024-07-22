@@ -63,7 +63,7 @@ class InfoPage extends StatelessWidget {
                           fontFamily: 'Inter'
                       )),
                       SizedBox(height: 8),
-                      Text("1.0.1", style: TextStyle(
+                      Text("1.0.2", style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Inter'
