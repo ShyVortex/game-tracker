@@ -94,7 +94,7 @@ class ProfilePageState extends State<ProfilePage> {
     });
 
     final prefs = await SharedPreferences.getInstance();
-    String associatedUser = widget.player.email!;
+    String associatedUser = widget.player.id.toString();
     String? encoded = prefs.getString('profileImage_$associatedUser');
 
     if (encoded != null && encoded.isNotEmpty) {
@@ -206,7 +206,7 @@ class ProfilePageState extends State<ProfilePage> {
     String b64Img = ImageUtilities.instance.encodeImage(galleryFile!);
 
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString("profileImage_${widget.player.email}", b64Img);
+    await prefs.setString("profileImage_${widget.player.id.toString()}", b64Img);
 
     Uint8List bytes = ImageUtilities.instance.decodeImage(b64Img);
     setState(() {
